@@ -1,22 +1,26 @@
+import 'dart:io';
+
 import 'package:taskido/app_config.dart';
 import 'package:http/http.dart' as http;
 
 class Api {
-  static String baseUrl = baseUrl = 'https://127.0.0.1:8000/api/v1/';
+  static String baseUrl = baseUrl = 'http://127.0.0.1:8000/api/v1/';
 
   static var client = http.Client();
 
   static Future<http.Response> login(String email, String password) async {
+    print("API Email $email");
     var response = await client.post(
       Uri.parse('${baseUrl}login/'),
       headers: {
-        'Content-Type': 'application/json',
+        HttpHeaders.contentTypeHeader: 'application/json',
       },
       body: {
         'email': email,
         'password': password,
       },
     );
+    print(response);
     return response;
   }
 
