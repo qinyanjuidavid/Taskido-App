@@ -6,16 +6,9 @@ class Api {
 
   static var client = http.Client();
 
-  // login
-  // static Future<http.Response> login(String email, String password) {
-  //   var url = baseUrl + 'login/';
-  //   return http.post(url, body: {'email': email, 'password': password});
-  // }
-
-  static Future login({required email, required password}) async {
-    var url = baseUrl + 'login/';
+  static Future<http.Response> login(String email, String password) async {
     var response = await client.post(
-      Uri.parse(url),
+      Uri.parse('${baseUrl}login/'),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -24,10 +17,29 @@ class Api {
         'password': password,
       },
     );
-    if (response.statusCode == 200) {
-      return response.body;
-    } else {
-      return response.statusCode;
-    }
+    return response;
+  }
+
+  static Future<http.Response> register(
+    String phone,
+    String email,
+    String full_name,
+    String password,
+    String password_confirmation,
+  ) async {
+    var response = await client.post(
+      Uri.parse("${baseUrl}register/"),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: {
+        "phone": phone,
+        'email': email,
+        "full_name": full_name,
+        'password': password,
+        "password_confirmation": password_confirmation
+      },
+    );
+    return response;
   }
 }
