@@ -36,7 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
-              Navigator.of(context).popAndPushNamed(RouteGenerator.homePage);
+              Navigator.of(context).popAndPushNamed(RouteGenerator.welcomePage);
             },
           ),
           title: const Text(
@@ -58,6 +58,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   decoration: const InputDecoration(
                     labelText: "Email",
                   ),
+                  validator: (val) {
+                    if (val != null) {
+                      return "Email field can not be empty.";
+                    }
+                  },
                 ),
                 TextFormField(
                   obscureText: obsecureText,
@@ -65,13 +70,15 @@ class _LoginScreenState extends State<LoginScreen> {
                   decoration: const InputDecoration(
                     labelText: "Password",
                   ),
+                  validator: (val) {
+                    if (val != null) {
+                      return "Password field can not be empty.";
+                    }
+                  },
                 ),
                 MaterialButton(
                   color: Colors.brown,
                   onPressed: () async {
-                    print(emailTextEditingController.text);
-                    print(passwordTextEditingController.text);
-                    print(loginFormKey.currentState!.validate());
                     if (loginFormKey.currentState!.validate()) {
                       await authService
                           .login(
@@ -93,6 +100,32 @@ class _LoginScreenState extends State<LoginScreen> {
                     "Login",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: 5,
+                ),
+                Center(
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.of(context)
+                          .pushNamed(RouteGenerator.signUpPage);
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Text(
+                          "Don't have an account?",
+                        ),
+                        Text(
+                          "Register",
+                          style: TextStyle(
+                            color: Colors.blue,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 )
