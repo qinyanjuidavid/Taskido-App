@@ -24,7 +24,6 @@ class Api {
   }
 
   static Future<http.Response> register(
-    String username,
     String phone,
     String email,
     String full_name,
@@ -37,7 +36,6 @@ class Api {
         HttpHeaders.contentTypeHeader: 'application/json',
       },
       body: jsonEncode({
-        "username": username,
         "phone": phone,
         'email': email,
         "full_name": full_name,

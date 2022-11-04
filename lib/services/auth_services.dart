@@ -25,7 +25,6 @@ class AuthService extends ChangeNotifier {
   }
 
   Future signup(
-    String username,
     String phone,
     String email,
     String full_name,
@@ -33,7 +32,6 @@ class AuthService extends ChangeNotifier {
     String password_confirmation,
   ) async {
     return Api.register(
-      username,
       phone,
       email,
       full_name,

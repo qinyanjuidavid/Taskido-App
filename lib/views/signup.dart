@@ -25,7 +25,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
     if (signupFormKey.currentState!.validate()) {
       await authService
           .signup(
-        usernameTextEditingController.text,
         phoneNumberTextEditingController.text,
         emailTextEditingController.text,
         fullnameTextEditingController.text,
@@ -67,12 +66,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
               key: signupFormKey,
               child: Column(
                 children: [
-                  TextFormField(
-                    controller: usernameTextEditingController,
-                    decoration: const InputDecoration(
-                      labelText: "Username",
-                    ),
-                  ),
                   TextFormField(
                     controller: emailTextEditingController,
                     decoration: const InputDecoration(
