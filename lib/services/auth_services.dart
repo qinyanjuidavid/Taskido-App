@@ -55,7 +55,19 @@ class AuthService extends ChangeNotifier {
   }
 
   Future otp(String phone, String token) async {
-    //
+    return await Api.Otp(phone, token).then((response) {
+      if (response.statusCode == 200) {
+        var payload = json.decode(response.body);
+
+        notifyListeners();
+        return payload;
+      } else {
+        var payload = json.decode(response.body);
+        print(payload);
+      }
+    }).catchError((error) {
+      print("error occured during user login $error");
+    });
   }
 }
 
