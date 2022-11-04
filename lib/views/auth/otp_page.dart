@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:taskido/configs/routes.dart';
+import 'package:taskido/services/auth_services.dart';
 
 class OtpScreen extends StatefulWidget {
   OtpScreen({Key? key}) : super(key: key);
@@ -11,6 +12,17 @@ class OtpScreen extends StatefulWidget {
 class _OtpScreenState extends State<OtpScreen> {
   final GlobalKey<FormState> otpFormKey = GlobalKey<FormState>();
   TextEditingController otpTextEditingController = TextEditingController();
+
+  void otpSubmit() async {
+    if (otpFormKey.currentState!.validate()) {
+      await authService.otp(otpTextEditingController.text).then((value) {
+        if (value != null) {
+          print(value);
+          Navigator.of(context).pushNamed(RouteGenerator.loginPage);
+        }
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +57,7 @@ class _OtpScreenState extends State<OtpScreen> {
                 ),
               ),
               MaterialButton(
-                onPressed: () {},
+                onPressed: otpSubmit,
                 color: Colors.brown,
                 child: const Text(
                   "Verify",

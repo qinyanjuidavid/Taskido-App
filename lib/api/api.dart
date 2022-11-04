@@ -48,7 +48,7 @@ class Api {
 
   static Future<http.Response> Otp(String phone, String token) async {
     var response = await client.post(
-      Uri.parse("${baseUrl}/activate/"),
+      Uri.parse("${baseUrl}activate/"),
       headers: {
         HttpHeaders.contentTypeHeader: 'application/json',
       },
@@ -56,6 +56,18 @@ class Api {
         "phone": phone,
         "token": token,
       }),
+    );
+    return response;
+  }
+
+  static Future<http.Response> category(int? categoryId) async {
+    String accessToken = "";
+    var response = await client.get(
+      Uri.parse("${baseUrl}category/"),
+      headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+        "Authorization": "Bearer $accessToken",
+      },
     );
     return response;
   }

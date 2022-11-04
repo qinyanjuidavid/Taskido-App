@@ -38,7 +38,7 @@ class AuthService extends ChangeNotifier {
       password,
       password_confirmation,
     ).then((response) async {
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         var payload = json.decode(response.body);
 
         SignUp signupDetails = SignUp.fromJson(payload);
@@ -54,7 +54,9 @@ class AuthService extends ChangeNotifier {
     });
   }
 
-  Future otp(String phone, String token) async {
+  Future otp(String token) async {
+    //622067
+    String phone = "254720215645";
     return await Api.Otp(phone, token).then((response) {
       if (response.statusCode == 200) {
         var payload = json.decode(response.body);
@@ -63,7 +65,7 @@ class AuthService extends ChangeNotifier {
         return payload;
       } else {
         var payload = json.decode(response.body);
-        print(payload);
+        print("exception $payload");
       }
     }).catchError((error) {
       print("error occured during user login $error");

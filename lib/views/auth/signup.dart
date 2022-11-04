@@ -32,9 +32,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
         confirmPasswordTextEditingController.text,
       )
           .then((value) {
+        print("++++------------------------+$value");
         if (value != null) {
           Navigator.of(context).pushNamed(RouteGenerator.otpPage);
-          print("++++++$value");
+          print("++++------------------------+$value");
         }
       });
     }
@@ -115,6 +116,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   GestureDetector(
                     onTap: () {},
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: const [
                         Text(
                           "Already have an Account?",
@@ -127,6 +129,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                         )
                       ],
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Navigator.of(context).pushNamed(RouteGenerator.otpPage);
+                    },
+                    child: const Text(
+                      "OTP",
+                      style: TextStyle(
+                        color: Colors.blue,
+                      ),
                     ),
                   )
                 ],
