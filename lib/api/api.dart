@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:taskido/app_config.dart';
@@ -9,18 +10,16 @@ class Api {
   static var client = http.Client();
 
   static Future<http.Response> login(String email, String password) async {
-    print("API Email $email");
     var response = await client.post(
       Uri.parse('${baseUrl}login/'),
       headers: {
         HttpHeaders.contentTypeHeader: 'application/json',
       },
-      body: {
+      body: jsonEncode({
         'email': email,
         'password': password,
-      },
+      }),
     );
-    print(response);
     return response;
   }
 

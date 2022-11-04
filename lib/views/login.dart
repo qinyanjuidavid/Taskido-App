@@ -74,13 +74,19 @@ class _LoginScreenState extends State<LoginScreen> {
                     print(loginFormKey.currentState!.validate());
                     if (loginFormKey.currentState!.validate()) {
                       await authService
-                          .login(emailTextEditingController.text,
-                              passwordTextEditingController.text)
-                          .then((value) {
-                        if (value) {
-                          print("hello");
-                        }
-                      });
+                          .login(
+                        emailTextEditingController.text,
+                        passwordTextEditingController.text,
+                      )
+                          .then(
+                        (value) {
+                          if (value != null) {
+                            print(value);
+                            Navigator.of(context)
+                                .pushNamed(RouteGenerator.homePage);
+                          }
+                        },
+                      );
                     }
                   },
                   child: const Text(
