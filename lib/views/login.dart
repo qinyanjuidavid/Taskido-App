@@ -12,14 +12,15 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   bool obsecureText = true;
   final GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
-  TextEditingController emailTextEditingController = TextEditingController();
+  TextEditingController phoneNumberTextEditingController =
+      TextEditingController();
   TextEditingController passwordTextEditingController = TextEditingController();
 
   void loginSubmit() async {
     if (loginFormKey.currentState!.validate()) {
       await authService
           .login(
-        emailTextEditingController.text,
+        phoneNumberTextEditingController.text,
         passwordTextEditingController.text,
       )
           .then(
@@ -59,9 +60,9 @@ class _LoginScreenState extends State<LoginScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 TextFormField(
-                  controller: emailTextEditingController,
+                  controller: phoneNumberTextEditingController,
                   decoration: const InputDecoration(
-                    labelText: "Email",
+                    labelText: "Phone number",
                   ),
                 ),
                 TextFormField(

@@ -7,8 +7,8 @@ import '../api/api.dart';
 import '../data/models/login_models.dart';
 
 class AuthService extends ChangeNotifier {
-  Future login(String email, String password) async {
-    return Api.login(email, password).then((response) async {
+  Future login(String phone, String password) async {
+    return Api.login(phone, password).then((response) async {
       if (response.statusCode == 200) {
         var payload = json.decode(response.body);
         Login loginDetails = Login.fromJson(payload);

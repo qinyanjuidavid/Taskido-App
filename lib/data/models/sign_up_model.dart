@@ -30,28 +30,24 @@ class SignUp {
 
 class User {
   User({
-    this.username,
-    this.fullName,
-    this.email,
     this.phone,
+    this.email,
+    this.fullName,
   });
 
-  String? username;
-  String? fullName;
-  String? email;
   String? phone;
+  String? email;
+  String? fullName;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-        username: json["username"],
-        fullName: json["full_name"],
-        email: json["email"],
         phone: json["phone"],
+        email: json["email"],
+        fullName: json["full_name"],
       );
 
   Map<String, dynamic> toJson() => {
-        "username": username,
-        "full_name": fullName,
-        "email": email,
         "phone": phone,
+        "email": email,
+        "full_name": fullName,
       };
 }

@@ -31,35 +31,35 @@ class Login {
 class User {
   User({
     this.id,
-    this.username,
-    this.fullName,
-    this.email,
     this.phone,
+    this.email,
+    this.fullName,
+    this.role,
     this.timestamp,
   });
 
   int? id;
-  String? username;
-  String? fullName;
-  String? email;
   String? phone;
+  String? email;
+  String? fullName;
+  String? role;
   String? timestamp;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
         id: json["id"],
-        username: json["username"],
-        fullName: json["full_name"],
-        email: json["email"],
         phone: json["phone"],
+        email: json["email"],
+        fullName: json["full_name"],
+        role: json["role"],
         timestamp: json["timestamp"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "username": username,
-        "full_name": fullName,
-        "email": email,
         "phone": phone,
+        "email": email,
+        "full_name": fullName,
+        "role": role,
         "timestamp": timestamp,
       };
 }

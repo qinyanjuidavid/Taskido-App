@@ -9,14 +9,14 @@ class Api {
 
   static var client = http.Client();
 
-  static Future<http.Response> login(String email, String password) async {
+  static Future<http.Response> login(String phone, String password) async {
     var response = await client.post(
       Uri.parse('${baseUrl}login/'),
       headers: {
         HttpHeaders.contentTypeHeader: 'application/json',
       },
       body: jsonEncode({
-        'email': email,
+        'phone': phone,
         'password': password,
       }),
     );
