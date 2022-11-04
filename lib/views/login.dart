@@ -18,13 +18,18 @@ class _LoginScreenState extends State<LoginScreen> {
   void loginSubmit() async {
     if (loginFormKey.currentState!.validate()) {
       await authService
-          .login(emailTextEditingController.text,
-              passwordTextEditingController.text)
-          .then((value) {
-        if (value) {
-          print("Hello");
-        }
-      });
+          .login(
+        emailTextEditingController.text,
+        passwordTextEditingController.text,
+      )
+          .then(
+        (value) {
+          if (value != null) {
+            print(value);
+            Navigator.of(context).pushNamed(RouteGenerator.homePage);
+          }
+        },
+      );
     }
   }
 
@@ -58,11 +63,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   decoration: const InputDecoration(
                     labelText: "Email",
                   ),
-                  validator: (val) {
-                    if (val != null) {
-                      return "Email field can not be empty.";
-                    }
-                  },
                 ),
                 TextFormField(
                   obscureText: obsecureText,
@@ -70,32 +70,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   decoration: const InputDecoration(
                     labelText: "Password",
                   ),
-                  validator: (val) {
-                    if (val != null) {
-                      return "Password field can not be empty.";
-                    }
-                  },
                 ),
                 MaterialButton(
                   color: Colors.brown,
-                  onPressed: () async {
-                    if (loginFormKey.currentState!.validate()) {
-                      await authService
-                          .login(
-                        emailTextEditingController.text,
-                        passwordTextEditingController.text,
-                      )
-                          .then(
-                        (value) {
-                          if (value != null) {
-                            print(value);
-                            Navigator.of(context)
-                                .pushNamed(RouteGenerator.homePage);
-                          }
-                        },
-                      );
-                    }
-                  },
+                  onPressed: loginSubmit,
                   child: const Text(
                     "Login",
                     style: TextStyle(
@@ -105,7 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 SizedBox(
                   width: MediaQuery.of(context).size.width,
-                  height: 5,
+                  height: 7,
                 ),
                 Center(
                   child: GestureDetector(
@@ -126,6 +104,20 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                       ],
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: 7,
+                ),
+                InkWell(
+                  onTap: () {},
+                  child: const Text(
+                    "Forgot Password",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue,
                     ),
                   ),
                 )

@@ -24,6 +24,7 @@ class Api {
   }
 
   static Future<http.Response> register(
+    String username,
     String phone,
     String email,
     String full_name,
@@ -33,15 +34,16 @@ class Api {
     var response = await client.post(
       Uri.parse("${baseUrl}register/"),
       headers: {
-        'Content-Type': 'application/json',
+        HttpHeaders.contentTypeHeader: 'application/json',
       },
-      body: {
+      body: jsonEncode({
+        "username": username,
         "phone": phone,
         'email': email,
         "full_name": full_name,
         'password': password,
         "password_confirmation": password_confirmation
-      },
+      }),
     );
     return response;
   }
