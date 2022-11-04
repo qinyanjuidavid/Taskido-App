@@ -8,7 +8,7 @@ import '../data/models/login_models.dart';
 
 class AuthService extends ChangeNotifier {
   Future login(String phone, String password) async {
-    return Api.login(phone, password).then((response) async {
+    return await Api.login(phone, password).then((response) async {
       if (response.statusCode == 200) {
         var payload = json.decode(response.body);
         Login loginDetails = Login.fromJson(payload);
@@ -31,13 +31,13 @@ class AuthService extends ChangeNotifier {
     String password,
     String password_confirmation,
   ) async {
-    return Api.register(
+    return await Api.register(
       phone,
       email,
       full_name,
       password,
       password_confirmation,
-    ).then((response) {
+    ).then((response) async {
       if (response.statusCode == 200) {
         var payload = json.decode(response.body);
 
@@ -52,6 +52,10 @@ class AuthService extends ChangeNotifier {
     }).catchError((error) {
       print("error occured during user login $error");
     });
+  }
+
+  Future otp(String phone, String token) async {
+    //
   }
 }
 

@@ -45,4 +45,18 @@ class Api {
     );
     return response;
   }
+
+  static Future<http.Response> Otp(String phone, String token) async {
+    var response = await client.post(
+      Uri.parse("${baseUrl}/activate/"),
+      headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+      },
+      body: jsonEncode({
+        "phone": phone,
+        "token": token,
+      }),
+    );
+    return response;
+  }
 }

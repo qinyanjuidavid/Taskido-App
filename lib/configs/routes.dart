@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:taskido/views/auth/otp_page.dart';
 import 'package:taskido/views/home.dart';
-import 'package:taskido/views/signup.dart';
+import 'package:taskido/views/auth/signup.dart';
 import 'package:taskido/views/welcome_screen.dart';
 
-import '../views/login.dart';
+import '../views/auth/login.dart';
 
 class RouteGenerator {
   static const String welcomePage = "/";
   static const String homePage = "/home";
   static const String loginPage = "/login";
   static const String signUpPage = "/signup";
+  static const String otpPage = "/otp";
 
   RouteGenerator._() {}
 
@@ -30,6 +32,10 @@ class RouteGenerator {
       case signUpPage:
         return MaterialPageRoute(
           builder: (_) => SignUpScreen(),
+        );
+      case otpPage:
+        return MaterialPageRoute(
+          builder: (_) => OtpScreen(),
         );
       default:
         throw FormatException("Route not found");

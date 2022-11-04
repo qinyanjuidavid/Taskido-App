@@ -33,8 +33,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
       )
           .then((value) {
         if (value != null) {
-          print(value);
-          Navigator.of(context).popAndPushNamed(RouteGenerator.loginPage);
+          Navigator.of(context).pushNamed(RouteGenerator.otpPage);
+          print("++++++$value");
         }
       });
     }
