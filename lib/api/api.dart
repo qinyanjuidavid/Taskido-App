@@ -116,7 +116,7 @@ class Api {
     return response;
   }
 
-  Future<http.Response> addTask(
+  static Future<http.Response> addTask(
     String? task,
     int? category,
     String? note,

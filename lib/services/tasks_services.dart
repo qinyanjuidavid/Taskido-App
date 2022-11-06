@@ -99,6 +99,31 @@ class TaskService extends ChangeNotifier {
       print("error occured while adding category $error");
     });
   }
+
+  Future addTask(
+    String? task,
+    int? category,
+    String? note,
+    String? dueDate,
+    bool? important,
+  ) async {
+    return await Api.addTask(task, category, note, dueDate, important)
+        .then((response) {
+      if (response.statusCode == 201) {
+        var payload = json.decode(response.body);
+        Tasks taskDetails = Tasks.fromJson(payload);
+
+        print("Task Added********** $taskDetails");
+        notifyListeners();
+        return taskDetails;
+      } else {
+        var payload = json.decode(response.body);
+        print("payload---> $payload");
+      }
+    }).catchError((error) {
+      print("error occured while adding task $task");
+    });
+  }
 }
 
 TaskService taskService = TaskService();
