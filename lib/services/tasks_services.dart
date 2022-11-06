@@ -81,6 +81,24 @@ class TaskService extends ChangeNotifier {
       print("error occured while fetching tasks $error");
     });
   }
+
+  Future addCategory(String? category) async {
+    return await Api.addCategory(category).then((response) {
+      if (response.statusCode == 201) {
+        var payload = json.decode(response.body);
+        Category categoryDetails = Category.fromJson(payload);
+
+        print("Category Added############ $categoryDetails");
+        notifyListeners();
+        return categoryDetails;
+      } else {
+        var payload = json.decode(response.body);
+        print("payload----> $payload");
+      }
+    }).catchError((error) {
+      print("error occured while adding category $error");
+    });
+  }
 }
 
 TaskService taskService = TaskService();

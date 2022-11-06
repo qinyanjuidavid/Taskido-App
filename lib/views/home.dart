@@ -14,7 +14,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<FormState> categoryAddFormKey = GlobalKey<FormState>();
-  TextEditingController taskTextEditingController = TextEditingController();
+  TextEditingController categoryTextEditingController = TextEditingController();
 
   @override
   void initState() {
@@ -54,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Form(
                       key: categoryAddFormKey,
                       child: TextFormField(
-                        controller: taskTextEditingController,
+                        controller: categoryTextEditingController,
                         decoration: const InputDecoration(
                           labelText: "Category",
                         ),
@@ -66,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     MaterialButton(
                       color: Colors.brown,
-                      onPressed: () {},
+                      onPressed: _categorySubmit,
                       child: const Text(
                         "Add Category",
                         style: TextStyle(
@@ -81,6 +81,25 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           );
         });
+  }
+
+  void _categorySubmit() async {
+    if (categoryAddFormKey.currentState!.validate()) {
+      await taskService
+          .addCategory(
+        categoryTextEditingController.text,
+      )
+          .then(
+        (value) {
+          print("Value^^^^^^ $value");
+          if (value != null) {
+            Navigator.pop(context);
+            _refresh();
+            categoryTextEditingController.text = "";
+          }
+        },
+      );
+    }
   }
 
   @override

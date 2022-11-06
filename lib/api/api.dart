@@ -86,7 +86,7 @@ class Api {
     return response;
   }
 
-  static Future<http.Response> addCategory() async {
+  static Future<http.Response> addCategory(String? category) async {
     String accessToken =
         "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjcwMjI0Njk5LCJpYXQiOjE2Njc2MzI2OTksImp0aSI6ImE1ZjM3MjE2ZjQ4OTQ3ZTY4MDU3MzM1ZWU2ZWIyZmU4IiwidXNlcl9pZCI6Mn0.i_A_mJ0BqrOC_LGRo0gkMEhBvmNoIa_gZl_jhqXC6Pk";
     var response = await client.post(
@@ -95,11 +95,34 @@ class Api {
         HttpHeaders.contentTypeHeader: 'application/json',
         "Authorization": "Bearer $accessToken",
       },
+      body: jsonEncode({
+        "category": category,
+      }),
     );
     return response;
   }
 
-  static Future<http.Response> getTasks(String? category) async {
+  static Future<http.Response> getTasks() async {
+    String accessToken =
+        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjcwMjI0Njk5LCJpYXQiOjE2Njc2MzI2OTksImp0aSI6ImE1ZjM3MjE2ZjQ4OTQ3ZTY4MDU3MzM1ZWU2ZWIyZmU4IiwidXNlcl9pZCI6Mn0.i_A_mJ0BqrOC_LGRo0gkMEhBvmNoIa_gZl_jhqXC6Pk";
+    var response = await client.get(
+      Uri.parse("${baseUrl}tasks/"),
+      headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+        "Authorization": "Bearer $accessToken",
+      },
+    );
+    print(response.body);
+    return response;
+  }
+
+  Future<http.Response> addTask(
+    String? task,
+    int? category,
+    String? note,
+    String? dueDate,
+    bool? important,
+  ) async {
     String accessToken =
         "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjcwMjI0Njk5LCJpYXQiOjE2Njc2MzI2OTksImp0aSI6ImE1ZjM3MjE2ZjQ4OTQ3ZTY4MDU3MzM1ZWU2ZWIyZmU4IiwidXNlcl9pZCI6Mn0.i_A_mJ0BqrOC_LGRo0gkMEhBvmNoIa_gZl_jhqXC6Pk";
     var response = await client.post(
@@ -109,10 +132,13 @@ class Api {
         "Authorization": "Bearer $accessToken",
       },
       body: jsonEncode({
+        "task": task,
         "category": category,
+        "note": note,
+        "dueDate": dueDate,
+        "important": important,
       }),
     );
-
     print(response.body);
     return response;
   }
