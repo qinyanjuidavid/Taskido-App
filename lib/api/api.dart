@@ -83,6 +83,7 @@ class Api {
         "Authorization": "Bearer $accessToken",
       },
     );
+    print(response.body);
     return response;
   }
 }

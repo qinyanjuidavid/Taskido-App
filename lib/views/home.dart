@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:taskido/configs/routes.dart';
 import 'package:taskido/data/models/category_models.dart';
 import 'package:taskido/services/tasks_services.dart';
+import 'package:taskido/views/auth/tasks_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key? key}) : super(key: key);
@@ -36,11 +37,19 @@ class _HomeScreenState extends State<HomeScreen> {
               return ListView.builder(
                 itemCount: value.categories.length,
                 itemBuilder: ((context, index) {
-                  return Text(
-                    "${value.categories[index].category}",
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24,
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (context) {
+                        return TasksScreen(category: value.categories[index]);
+                      }));
+                    },
+                    child: Text(
+                      "${value.categories[index].category}",
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
+                      ),
                     ),
                   );
                 }),

@@ -28,6 +28,28 @@ class TaskService extends ChangeNotifier {
       print("error occured while fetching categories $error");
     });
   }
+
+  List<Category> _categoryDetails = [];
+  List<Category> get categoryDetails => _categoryDetails;
+
+  Future fetchCategoryDetails(int? categoryId) async {
+    print("fetching category $categoryId Details--------------");
+    return await Api.getCategoryDetails(categoryId).then((response) async {
+      if (response.statusCode == 200) {
+        var payload = json.decode(response.body);
+        // payload is not lst its map
+        _categoryDetails.add(Category.fromJson(payload));
+        print("Category Details++++++: ${_categoryDetails[0].category}");
+        notifyListeners();
+      } else {
+        var payload = json.decode(response.body);
+        print("Failed to load Category $payload");
+        notifyListeners();
+      }
+    }).catchError((error) {
+      print("error occcured while fetching categories $error");
+    });
+  }
 }
 
 TaskService taskService = TaskService();
