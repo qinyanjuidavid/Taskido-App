@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:taskido/configs/routes.dart';
+import 'package:taskido/data/models/category_models.dart';
+import 'package:taskido/services/tasks_services.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key? key}) : super(key: key);
@@ -10,35 +13,40 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   @override
+  void initState() {
+    super.initState();
+    _refresh();
+  }
+
+// refresh
+  Future<void> _refresh() async {
+    await Provider.of<TaskService>(context, listen: false).fetchCategories();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        drawer: const Drawer(
-          backgroundColor: Colors.orange,
-        ),
+    return Scaffold(
         appBar: AppBar(
-          backgroundColor: const Color.fromARGB(255, 56, 1, 180),
-          title: const Text(
-            "Taskido",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 30,
-            ),
-          ),
+          title: Text("Taskido"),
         ),
-        body: Center(
-            child: ElevatedButton(
-          onPressed: () {
-            Navigator.of(context).pushNamed(RouteGenerator.loginPage);
-          },
-          child: const Text(
-            "login",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
+        body: RefreshIndicator(
+          onRefresh: _refresh,
+          child: Consumer<TaskService>(
+            builder: (BuildContext context, value, child) {
+              return ListView.builder(
+                itemCount: value.categories.length,
+                itemBuilder: ((context, index) {
+                  return Text(
+                    "${value.categories[index].category}",
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24,
+                    ),
+                  );
+                }),
+              );
+            },
           ),
-        )),
-      ),
-    );
+        ));
   }
 }

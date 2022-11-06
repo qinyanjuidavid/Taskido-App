@@ -113,9 +113,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: 7,
                 ),
                 InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).pushNamed(RouteGenerator.homePage);
+                  },
                   child: const Text(
-                    "Forgot Password",
+                    "Categories",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.blue,
