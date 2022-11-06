@@ -21,8 +21,11 @@ class _TasksScreenState extends State<TasksScreen> {
   Future<void> _refresh() async {
     await Provider.of<TaskService>(context, listen: false)
         .fetchCategoryDetails(widget.category.id);
-    // Future.delayed(Duration(milliseconds: 100),
-    // () => bookService.loadCategoryBooks(widget.category.id));
+
+    Future.delayed(
+      Duration(milliseconds: 0),
+      (() => taskService.fetchTasks(widget.category.id)),
+    );
   }
 
   @override
@@ -35,7 +38,26 @@ class _TasksScreenState extends State<TasksScreen> {
         onRefresh: _refresh,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
-          children: [],
+          children: [
+            Expanded(
+              child: Consumer<TaskService>(
+                builder: (context, value, child) {
+                  return ListView.builder(
+                    itemCount: value.tasks.length,
+                    itemBuilder: ((context, index) {
+                      return Text(
+                        "${value.tasks[index].task}",
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24,
+                        ),
+                      );
+                    }),
+                  );
+                },
+              ),
+            )
+          ],
         ),
       ),
     );
