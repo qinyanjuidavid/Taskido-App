@@ -100,6 +100,25 @@ class TaskService extends ChangeNotifier {
     });
   }
 
+  Future updateCategory(int? categoryId, String? category) async {
+    return await Api.updateCategory(categoryId, category).then((response) {
+      if (response.statusCode == 200) {
+        var payload = json.decode(response.body);
+        Category categoryDetails = Category.fromJson(payload);
+
+        print("Category updated #### $categoryDetails");
+
+        notifyListeners();
+        return categoryDetails;
+      } else {
+        var payload = json.decode(response.body);
+        print("payload----> $payload");
+      }
+    }).catchError((error) {
+      print("error occured while updating category $error");
+    });
+  }
+
   Future addTask(
     String? task,
     int? category,
