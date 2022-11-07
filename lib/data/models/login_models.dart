@@ -1,9 +1,14 @@
 import 'dart:convert';
 
+import 'package:hive/hive.dart';
+
+part '../adapters/login_models.g.dart';
+
 Login loginFromJson(String str) => Login.fromJson(json.decode(str));
 
 String loginToJson(Login data) => json.encode(data.toJson());
 
+@HiveType(typeId: 0)
 class Login {
   Login({
     this.refresh,
@@ -11,8 +16,12 @@ class Login {
     this.user,
   });
 
+  @HiveField(0)
   String? refresh;
+  @HiveField(1)
   String? access;
+  //Class  User what Hive does is it creates a new box for the class User
+  @HiveField(2)
   User? user;
 
   factory Login.fromJson(Map<String, dynamic> json) => Login(
@@ -28,6 +37,7 @@ class Login {
       };
 }
 
+@HiveType(typeId: 1)
 class User {
   User({
     this.id,
@@ -38,11 +48,17 @@ class User {
     this.timestamp,
   });
 
+  @HiveField(0)
   int? id;
+  @HiveField(1)
   String? phone;
+  @HiveField(2)
   String? email;
+  @HiveField(3)
   String? fullName;
+  @HiveField(4)
   String? role;
+  @HiveField(5)
   String? timestamp;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
