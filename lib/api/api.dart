@@ -102,6 +102,25 @@ class Api {
     return response;
   }
 
+  static Future<http.Response> updateCategory(
+    int? categoryId,
+    String? category,
+  ) async {
+    String accessToken =
+        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjcwMjI0Njk5LCJpYXQiOjE2Njc2MzI2OTksImp0aSI6ImE1ZjM3MjE2ZjQ4OTQ3ZTY4MDU3MzM1ZWU2ZWIyZmU4IiwidXNlcl9pZCI6Mn0.i_A_mJ0BqrOC_LGRo0gkMEhBvmNoIa_gZl_jhqXC6Pk";
+    var response = await client.put(
+      Uri.parse("$baseUrl/category/$categoryId/"),
+      headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+        "Authorization": "Bearer $accessToken",
+      },
+      body: jsonEncode({
+        "category": category,
+      }),
+    );
+    return response;
+  }
+
   static Future<http.Response> getTasks() async {
     String accessToken =
         "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjcwMjI0Njk5LCJpYXQiOjE2Njc2MzI2OTksImp0aSI6ImE1ZjM3MjE2ZjQ4OTQ3ZTY4MDU3MzM1ZWU2ZWIyZmU4IiwidXNlcl9pZCI6Mn0.i_A_mJ0BqrOC_LGRo0gkMEhBvmNoIa_gZl_jhqXC6Pk";
