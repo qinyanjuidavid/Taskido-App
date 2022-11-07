@@ -135,7 +135,7 @@ class Api {
         "task": task,
         "category": category,
         "note": note,
-        "dueDate": dueDate,
+        "due_date": dueDate,
         "important": important,
       }),
     );

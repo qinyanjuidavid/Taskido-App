@@ -34,7 +34,8 @@ class _TasksScreenState extends State<TasksScreen> {
       lastDate: DateTime(2027),
     );
     if (picked != null) {
-      dueDateTextEditingController.text = picked.toString();
+      String formatedDate = DateFormat("yyyy-MM-dd").format(picked);
+      dueDateTextEditingController.text = formatedDate.toString();
     }
   }
 
@@ -44,7 +45,7 @@ class _TasksScreenState extends State<TasksScreen> {
       initialTime: TimeOfDay.now(),
     );
     if (pickedTime != null) {
-      print("picked ${pickedTime.format(context)}");
+      // print("picked ${pickedTime.format(context)}");
       final now = DateTime.now();
       DateTime convertedDateTime = DateTime(
         now.year,
@@ -53,9 +54,7 @@ class _TasksScreenState extends State<TasksScreen> {
         pickedTime.hour,
         pickedTime.minute,
       );
-      print("Converted $convertedDateTime");
       String formatedTime = DateFormat("HH:mm:ss").format(convertedDateTime);
-      print("FormatedTime $formatedTime");
       dueTimeTextEditingController.text = formatedTime.toString();
     }
   }
@@ -72,22 +71,13 @@ class _TasksScreenState extends State<TasksScreen> {
 
   void taskSubmit() async {
     if (taskAddFormKey.currentState!.validate()) {
-      // Due date is dueDateTextEditingController.text + dueTimeTextEditingController.text in format of "2022-11-06T16:40:42Z",
-      // but we need to convert it to "2022-11-06 16:40:42"
-      // 2022-11-10 00:00:00.000
-      // TimeOfDay(10:00)
-      print(dueDateTextEditingController.text);
-      print(dueTimeTextEditingController.text);
-      // var dueDate = dueDateTextEditingController.text +
-      //     " " +
-      //     dueTimeTextEditingController.text;
+      // Due date is dueDateTextEditingController.text + dueTimeTextEditingController.text
+      var dueDate =
+          "${dueDateTextEditingController.text} ${dueTimeTextEditingController.text}";
+      print("Due Date $dueDate");
       await taskService
-          .addTask(
-              taskTaskEditingController.text,
-              widget.category.id,
-              noteTextEditingController.text,
-              dueDateTextEditingController.text,
-              isImportant)
+          .addTask(taskTaskEditingController.text, widget.category.id,
+              noteTextEditingController.text, dueDate, isImportant)
           .then((value) {
         if (value != null) {
           Navigator.pop(context);
@@ -95,7 +85,7 @@ class _TasksScreenState extends State<TasksScreen> {
           taskTaskEditingController.text = "";
           noteTextEditingController.text = "";
           dueDateTextEditingController.text = "";
-          // dueTimeTextEditingController.text = "";
+          dueTimeTextEditingController.text = "";
           isImportant = false;
         }
       });
@@ -191,7 +181,7 @@ class _TasksScreenState extends State<TasksScreen> {
                             print("Before $isImportant");
 
                             setState(() {
-                              // isImportant = value!;
+                              isImportant = value!;
                             });
                             print("After: $isImportant");
                           },
@@ -202,7 +192,7 @@ class _TasksScreenState extends State<TasksScreen> {
                           style:
                               ElevatedButton.styleFrom(primary: Colors.brown),
                           child: const Text(
-                            "Add",
+                            "Add Task",
                             style: TextStyle(color: Colors.white),
                           ),
                         )
@@ -255,7 +245,5 @@ class _TasksScreenState extends State<TasksScreen> {
     );
   }
 }
-
-
 
 //
