@@ -30,18 +30,19 @@ class TaskService extends ChangeNotifier {
     });
   }
 
-  List<Category> _categoryDetails = [];
-  List<Category> get categoryDetails => _categoryDetails;
+  Category _categoryDetails = Category();
+  Category get categoryDetails => _categoryDetails;
 
   Future fetchCategoryDetails(int? categoryId) async {
-    _categoryDetails = [];
+    _categoryDetails;
     print("fetching category $categoryId Details--------------");
     return await Api.getCategoryDetails(categoryId).then((response) async {
       if (response.statusCode == 200) {
         var payload = json.decode(response.body);
-
-        _categoryDetails.add(Category.fromJson(payload));
-        print("Category Details++++++: ${_categoryDetails[0].category}");
+        print("Category Details33333333----> $payload");
+        _categoryDetails = Category.fromJson(payload);
+        // _categoryDetails.add(Category.fromJson(payload));
+        // print("Category Details++++++: ${_categoryDetails[0].category}");
 
         notifyListeners();
       } else {
@@ -102,7 +103,7 @@ class TaskService extends ChangeNotifier {
 
   Future updateCategory(int? categoryId, String? category) async {
     return await Api.updateCategory(categoryId, category).then((response) {
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         var payload = json.decode(response.body);
         Category categoryDetails = Category.fromJson(payload);
 

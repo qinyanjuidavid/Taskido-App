@@ -24,6 +24,7 @@ class _TasksScreenState extends State<TasksScreen> {
   void initState() {
     super.initState();
     _refresh();
+    categoryTextUpdateController.text = widget.category.category!;
   }
 
   _selectDate(BuildContext context) async {
@@ -62,11 +63,24 @@ class _TasksScreenState extends State<TasksScreen> {
   Future<void> _refresh() async {
     await Provider.of<TaskService>(context, listen: false)
         .fetchCategoryDetails(widget.category.id);
-
+    await Provider.of<TaskService>(context, listen: false).fetchCategories();
     Future.delayed(
       Duration(milliseconds: 0),
       (() => taskService.fetchTasks(widget.category.id)),
     );
+  }
+
+  void categoryUpdateFnc() async {
+    if (categoryUpdateKey.currentState!.validate()) {
+      await taskService
+          .updateCategory(widget.category.id, categoryTextUpdateController.text)
+          .then((value) async {
+        if (value != null) {
+          Navigator.pop(context);
+          _refresh();
+        }
+      });
+    }
   }
 
   void taskSubmit() async {
@@ -90,6 +104,69 @@ class _TasksScreenState extends State<TasksScreen> {
         }
       });
     }
+  }
+
+  final GlobalKey<FormState> categoryUpdateKey = GlobalKey<FormState>();
+  TextEditingController categoryTextUpdateController = TextEditingController();
+  void _updateCategoryDialog() async {
+    await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return SimpleDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            title: const Text(
+              "Update Category",
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.w600,
+                fontSize: 20,
+              ),
+            ),
+            children: [
+              Container(
+                padding: const EdgeInsets.only(
+                  left: 20,
+                  right: 20,
+                ),
+                child: Form(
+                  key: categoryUpdateKey,
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        controller: categoryTextUpdateController,
+                        decoration: const InputDecoration(
+                          labelText: "Category",
+                        ),
+                        validator: (String? value) {
+                          if (value == null || value.isEmpty) {
+                            return "Task is required";
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        height: 10,
+                      ),
+                      MaterialButton(
+                        color: Colors.brown,
+                        onPressed: categoryUpdateFnc,
+                        child: const Text(
+                          "Update",
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          );
+        });
   }
 
   bool isImportant = false;
@@ -210,7 +287,36 @@ class _TasksScreenState extends State<TasksScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("${widget.category.category}"),
+        title: Consumer<TaskService>(
+          builder: (context, value, child) {
+            //flatten list with single map
+
+            return Text(
+              "${value.categoryDetails.category}",
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+                fontSize: 20,
+              ),
+            );
+            // return Text("${widget.category.category}");
+          },
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(
+              right: 10,
+            ),
+            child: IconButton(
+              iconSize: 30,
+              onPressed: _updateCategoryDialog,
+              icon: const Icon(
+                Icons.edit_note,
+                // size: 10,
+              ),
+            ),
+          )
+        ],
       ),
       body: RefreshIndicator(
         onRefresh: _refresh,
