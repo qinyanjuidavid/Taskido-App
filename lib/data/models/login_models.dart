@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:hive/hive.dart';
 
-part '../adapters/login_models.g.dart';
+part 'login_models.g.dart';
 
 Login loginFromJson(String str) => Login.fromJson(json.decode(str));
 

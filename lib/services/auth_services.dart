@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:taskido/data/db.dart';
 import 'package:taskido/data/models/sign_up_model.dart';
 
 import '../api/api.dart';
@@ -9,6 +10,8 @@ import '../data/models/login_models.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class AuthService extends ChangeNotifier {
+  // db
+  Login get loginDetails => db.loginDetailsBox!.getAt(0)!;
   bool _loadingLogin = false;
   bool get loadingLogin => _loadingLogin;
 
@@ -45,9 +48,13 @@ class AuthService extends ChangeNotifier {
     loadingLogin = true;
 
     return await Api.login(phone, password).then((response) async {
+      print("Phone $phone password $password");
       if (response.statusCode == 200) {
         var payload = json.decode(response.body);
         Login loginDetails = Login.fromJson(payload);
+        await db.loginDetailsBox!.clear();
+        await db.loginDetailsBox!.add(loginDetails);
+        print("Login Details++++++: ${loginDetails.access}");
 
         notifyListeners();
         loginToast();

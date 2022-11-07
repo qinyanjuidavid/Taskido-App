@@ -10,9 +10,15 @@ class DataBase {
     loginDetailsBox = await Hive.openBox('loginUserBox');
   }
 
+  _loginAdapters() async {
+    Hive.registerAdapter(LoginAdapter());
+    Hive.registerAdapter(UserAdapter());
+  }
+
   init() async {
     await Hive.initFlutter();
     await _initBoxes();
+    await _loginAdapters();
   }
 }
 
