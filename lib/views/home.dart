@@ -101,11 +101,27 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  void _logoutFnc() async {}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("Taskido"),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(
+              right: 10,
+            ),
+            child: IconButton(
+              iconSize: 30,
+              onPressed: () {},
+              icon: const Icon(
+                Icons.logout,
+                // size: 10,
+              ),
+            ),
+          )
+        ],
       ),
       body: RefreshIndicator(
         onRefresh: _refresh,

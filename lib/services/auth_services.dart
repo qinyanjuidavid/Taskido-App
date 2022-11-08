@@ -74,6 +74,18 @@ class AuthService extends ChangeNotifier {
     });
   }
 
+  Future logout() async {
+    return await Api.logout().then((response) async {
+      var payload = json.decode(response.body);
+      print("Logout Details++++++: $payload");
+      await db.loginAllDetailsBox!.clear();
+      notifyListeners();
+      return payload;
+    }).catchError((error) {
+      print("error occured during user logout $error");
+    });
+  }
+
   Future refreshToken(String? refreshToken) async {
     return await Api.refreshToken(refreshToken).then((response) {
       if (response.statusCode == 200) {

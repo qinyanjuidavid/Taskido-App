@@ -35,9 +35,9 @@ class Api {
     return response;
   }
 
-  static Future<http.Response> logout(String? refresh) async {
+  static Future<http.Response> logout() async {
     String? token = authService.loginDetails.access;
-
+    String? refresh = authService.loginDetails.refresh;
     var response = await client2.post(
       Uri.parse("${baseUrl}logout/"),
       headers: {
