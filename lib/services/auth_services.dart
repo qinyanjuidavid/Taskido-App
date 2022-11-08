@@ -306,7 +306,7 @@ class AuthService extends ChangeNotifier {
         return payload;
       } else {
         var payload = json.decode(response.body);
-        print("Password Reset Payload")
+        print("Password Reset Payload");
       }
     }).catchError((error) {
       print("error occured during password reset $error");

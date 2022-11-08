@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:taskido/configs/routes.dart';
 import 'package:taskido/services/auth_services.dart';
 
 class PasswordResetScreen extends StatefulWidget {
@@ -17,7 +18,16 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
   bool obsecureText = true;
   void _passwordResetFnc() async {
     if (passwordResetFormKey.currentState!.validate()) {
-      print("Change Password");
+      await authService
+          .passwordReset(passwordTextEditingController.text,
+              confirmPasswordTextEditingController.text)
+          .then((value) {
+        if (value != null) {
+          Navigator.of(context).popAndPushNamed(RouteGenerator.loginPage);
+          passwordTextEditingController.text = "";
+          confirmPasswordTextEditingController.text = "";
+        }
+      });
     }
   }
 
