@@ -120,7 +120,8 @@ class Api {
   }
 
   static Future<http.Response> passwordResetTokenCheck(String? token) async {
-    String? phone = authService.loginDetails.user!.phone;
+    // String? phone = authService.loginDetails.user!.phone;
+    String? phone = authService.otpCheckDetails.otpData!.phone;
 
     var response = await client.post(
       Uri.parse("${baseUrl}password-reset-token-check/"),

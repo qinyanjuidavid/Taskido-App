@@ -87,7 +87,7 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
                 ),
                 MaterialButton(
                   color: Colors.brown,
-                  onPressed: () {},
+                  onPressed: _passwordResetFnc,
                   child: const Text(
                     "Sign Up",
                     style: TextStyle(
