@@ -2,14 +2,15 @@ import 'dart:ffi';
 
 import "package:flutter/material.dart";
 
-class ForgotPasswordOtp extends StatefulWidget {
-  ForgotPasswordOtp({Key? key}) : super(key: key);
+class ForgotPasswordOtpScreen extends StatefulWidget {
+  ForgotPasswordOtpScreen({Key? key}) : super(key: key);
 
   @override
-  State<ForgotPasswordOtp> createState() => _ForgotPasswordOtpState();
+  State<ForgotPasswordOtpScreen> createState() =>
+      _ForgotPasswordOtpScreenState();
 }
 
-class _ForgotPasswordOtpState extends State<ForgotPasswordOtp> {
+class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
