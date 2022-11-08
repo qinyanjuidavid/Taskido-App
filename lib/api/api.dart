@@ -25,14 +25,14 @@ class Api {
     return response;
   }
 
-  static Future<http.Response> refreshToken(String? refreshToken) async {
+  static Future<http.Response> refreshToken(String? refresh_token) async {
     var response = await client.post(
       Uri.parse('${baseUrl}auth/refresh/'),
       headers: {
         HttpHeaders.contentTypeHeader: 'application/json',
       },
       body: jsonEncode({
-        "refresh": refreshToken,
+        "refresh": refresh_token,
       }),
     );
     return response;

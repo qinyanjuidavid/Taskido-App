@@ -74,6 +74,8 @@ class AuthService extends ChangeNotifier {
     });
   }
 
+  Future refreshToken(String? refresh_token) async {}
+
   Future signup(
     String phone,
     String email,
