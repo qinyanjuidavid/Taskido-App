@@ -91,7 +91,6 @@ class _HomeScreenState extends State<HomeScreen> {
       )
           .then(
         (value) {
-          print("Value^^^^^^ $value");
           if (value != null) {
             Navigator.pop(context);
             _refresh();

@@ -49,14 +49,12 @@ class AuthService extends ChangeNotifier {
     loadingLogin = true;
 
     return await Api.login(phone, password).then((response) async {
-      print("Phone $phone password $password");
-      print("Login Response ${response.statusCode}");
       if (response.statusCode == 200) {
         var payload = json.decode(response.body);
         Login loginDetails = Login.fromJson(payload);
         await db.loginAllDetailsBox!.clear();
         await db.loginAllDetailsBox!.add(loginDetails);
-        print("Login Details++++++: ${loginDetails.access}");
+        // print("Login Details++++++: ${loginDetails.access}");
 
         notifyListeners();
         loginToast();
@@ -81,8 +79,18 @@ class AuthService extends ChangeNotifier {
       if (response.statusCode == 200) {
         var payload = json.decode(response.body);
         RefreshToken refreshTokenDetails = RefreshToken.fromJson(payload);
+
+        // print old accessToken
+        print("Old Access Token ${loginDetails.access}");
+        print("Old refresh token ${loginDetails.refresh}");
+        // update accessToken
+        loginDetails.access = refreshTokenDetails.access;
+        loginDetails.refresh = refreshTokenDetails.refresh;
+        // save new accessToken
+        db.loginAllDetailsBox!.putAt(0, loginDetails);
         print("New Access Token ${refreshTokenDetails.access}");
         print("New refresh token ${refreshTokenDetails.refresh}");
+        // update the access token and refresh token
 
         notifyListeners();
       } else {

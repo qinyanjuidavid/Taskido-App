@@ -5,6 +5,7 @@ import 'package:http_interceptor/http/http.dart';
 import 'package:taskido/api/interceptors/authorization_interceptor.dart';
 import 'package:taskido/app_config.dart';
 import 'package:http/http.dart' as http;
+import 'package:taskido/data/models/category_models.dart';
 import 'package:taskido/services/auth_services.dart';
 import 'package:taskido/services/tasks_services.dart';
 
@@ -12,6 +13,13 @@ class Api {
   static String baseUrl = baseUrl = 'http://127.0.0.1:8000/api/v1/';
 
   static var client = http.Client();
+  //interceptor client
+  static final client2 = InterceptedClient.build(
+    interceptors: [
+      AuthorizationInterceptor(),
+    ],
+    requestTimeout: Duration(seconds: 5),
+  );
 
   static Future<http.Response> login(String phone, String password) async {
     var response = await client.post(
@@ -78,30 +86,20 @@ class Api {
   }
 
   static Future<http.Response> getCategories() async {
-    String accessToken =
-        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjcwMjI0Njk5LCJpYXQiOjE2Njc2MzI2OTksImp0aSI6ImE1ZjM3MjE2ZjQ4OTQ3ZTY4MDU3MzM1ZWU2ZWIyZmU4IiwidXNlcl9pZCI6Mn0.i_A_mJ0BqrOC_LGRo0gkMEhBvmNoIa_gZl_jhqXC6Pk";
-
-    // implement interceptor
-    final client2 = InterceptedClient.build(interceptors: [
-      AuthorizationInterceptor(),
-      // ExpiredTokenRetryPolicy(),
-    ]);
     // get token from db
     String? token = authService.loginDetails.access;
-    print("Token.........000000000 $token");
-    var response = await client2.get(
+    return await client2.get(
       Uri.parse("${baseUrl}category/"),
       headers: {
         HttpHeaders.contentTypeHeader: 'application/json',
-        "Authorization": "Bearer $accessToken",
+        HttpHeaders.authorizationHeader: 'Bearer $token',
       },
     );
-    return response;
   }
 
   static Future<http.Response> getCategoryDetails(int? categoryId) async {
     String? token = authService.loginDetails.access;
-    var response = await client.get(
+    var response = await client2.get(
       Uri.parse("${baseUrl}category/$categoryId/"),
       headers: {
         HttpHeaders.contentTypeHeader: 'application/json',
@@ -113,7 +111,7 @@ class Api {
 
   static Future<http.Response> addCategory(String? category) async {
     String? token = authService.loginDetails.access;
-    var response = await client.post(
+    var response = await client2.post(
       Uri.parse("${baseUrl}category/"),
       headers: {
         HttpHeaders.contentTypeHeader: 'application/json',
@@ -131,7 +129,7 @@ class Api {
     String? category,
   ) async {
     String? token = authService.loginDetails.access;
-    var response = await client.put(
+    var response = await client2.put(
       Uri.parse("${baseUrl}category/$categoryId/"),
       headers: {
         HttpHeaders.contentTypeHeader: 'application/json',
@@ -146,7 +144,7 @@ class Api {
 
   static Future<http.Response> getTasks() async {
     String? token = authService.loginDetails.access;
-    var response = await client.get(
+    var response = await client2.get(
       Uri.parse("${baseUrl}tasks/"),
       headers: {
         HttpHeaders.contentTypeHeader: 'application/json',
@@ -159,7 +157,7 @@ class Api {
 
   static Future<http.Response> getTaskDetails(int? taskId) async {
     String? token = authService.loginDetails.access;
-    var response = await client.get(
+    var response = await client2.get(
       Uri.parse("${baseUrl}tasks/$taskId/"),
       headers: {
         HttpHeaders.contentTypeHeader: 'application/json',
@@ -179,7 +177,7 @@ class Api {
   ) async {
     String accessToken =
         "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjcwMjI0Njk5LCJpYXQiOjE2Njc2MzI2OTksImp0aSI6ImE1ZjM3MjE2ZjQ4OTQ3ZTY4MDU3MzM1ZWU2ZWIyZmU4IiwidXNlcl9pZCI6Mn0.i_A_mJ0BqrOC_LGRo0gkMEhBvmNoIa_gZl_jhqXC6Pk";
-    var response = await client.post(
+    var response = await client2.post(
       Uri.parse("${baseUrl}tasks/"),
       headers: {
         HttpHeaders.contentTypeHeader: 'application/json',
