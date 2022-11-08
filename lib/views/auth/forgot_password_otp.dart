@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import 'package:taskido/configs/routes.dart';
 import 'package:taskido/services/auth_services.dart';
 
 class ForgotPasswordOtpScreen extends StatefulWidget {
@@ -19,6 +20,7 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
           .passwordResetTokenCheck(otpTextEditingController.text)
           .then((value) {
         if (value != null) {
+          Navigator.of(context).pushNamed(RouteGenerator.passwordResetPage);
           otpTextEditingController.text = "";
         }
       });

@@ -135,6 +135,26 @@ class Api {
     return response;
   }
 
+  static Future<http.Response> passwordReset(
+      String? password, String? password_confirm) async {
+    String? phone = authService.otpCheckDetails.otpData!.phone;
+    String? token = authService.otpCheckDetails.otpData!.token;
+
+    var response = await client.post(
+      Uri.parse("${baseUrl}password-reset-complete/"),
+      headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+      },
+      body: jsonEncode({
+        "password": password,
+        "password_confirm": password_confirm,
+        "phone": phone,
+        "token": token,
+      }),
+    );
+    return response;
+  }
+
   static Future<http.Response> getCategories() async {
     // get token from db
     String? token = authService.loginDetails.access;

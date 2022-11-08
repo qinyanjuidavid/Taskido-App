@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:taskido/services/auth_services.dart';
 
 class PasswordResetScreen extends StatefulWidget {
   PasswordResetScreen({Key? key}) : super(key: key);
@@ -8,15 +9,20 @@ class PasswordResetScreen extends StatefulWidget {
 }
 
 class _PasswordResetScreenState extends State<PasswordResetScreen> {
+  GlobalKey<FormState> passwordResetFormKey = GlobalKey<FormState>();
+  TextEditingController passwordTextEditingController = TextEditingController();
+
+  TextEditingController confirmPasswordTextEditingController =
+      TextEditingController();
+  bool obsecureText = true;
+  void _passwordResetFnc() async {
+    if (passwordResetFormKey.currentState!.validate()) {
+      print("Change Password");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    GlobalKey<FormState> passwordResetFormKey = GlobalKey<FormState>();
-    TextEditingController passwordTextEditingController =
-        TextEditingController();
-
-    TextEditingController confirmPasswordTextEditingController =
-        TextEditingController();
-    bool obsecureText = true;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
