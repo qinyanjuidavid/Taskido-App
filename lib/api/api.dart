@@ -106,8 +106,9 @@ class Api {
 
   static Future<http.Response> passwordResetPhoneNumber(
       String? phoneNumber) async {
+    print("Password Rest Phone #### $phoneNumber");
     var response = await client.post(
-      Uri.parse("$baseUrl}password-reset/"),
+      Uri.parse("${baseUrl}password-reset/"),
       headers: {
         HttpHeaders.contentTypeHeader: 'application/json',
       },

@@ -16,8 +16,8 @@ class RouteGenerator {
   static const String loginPage = "/login";
   static const String signUpPage = "/signup";
   static const String otpPage = "/otp";
-  static const String forgotPasswordPage = "/forgotpassword";
-  static const String forgotPasswordOtpPage = "/forgotpasswordotp";
+  static const String forgotPasswordPage = "/forgotPassword";
+  static const String forgotPasswordOtpPage = "forgotPasswordOtp";
 
   RouteGenerator._() {}
 

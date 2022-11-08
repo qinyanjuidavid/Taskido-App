@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:taskido/configs/routes.dart';
 import 'package:taskido/services/auth_services.dart';
+// import 'package:taskido/services/auth_services.dart';
 
 class PasswordResetPhoneScreen extends StatefulWidget {
   PasswordResetPhoneScreen({Key? key}) : super(key: key);
@@ -14,11 +16,17 @@ class _PasswordResetPhoneScreenState extends State<PasswordResetPhoneScreen> {
   TextEditingController phoneNumberTextEditingController =
       TextEditingController();
 
-  void _forgotPasswordPhone() async {
+  void _forgotPasswordPhoneFnc() async {
     if (passwordResetPhoneKey.currentState!.validate()) {
       await authService
           .passwordResetPhoneNumber(phoneNumberTextEditingController.text)
-          .then((value) {});
+          .then((value) {
+        if (value != null) {
+          Navigator.of(context).pushNamed(
+            RouteGenerator.forgotPasswordOtpPage,
+          );
+        }
+      });
     }
   }
 
@@ -39,6 +47,7 @@ class _PasswordResetPhoneScreenState extends State<PasswordResetPhoneScreen> {
           child: Form(
             key: passwordResetPhoneKey,
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 TextFormField(
                   controller: phoneNumberTextEditingController,
@@ -57,10 +66,12 @@ class _PasswordResetPhoneScreenState extends State<PasswordResetPhoneScreen> {
                   height: 10,
                 ),
                 MaterialButton(
-                  onPressed: _forgotPasswordPhone,
+                  onPressed: _forgotPasswordPhoneFnc,
+                  color: Colors.brown,
                   child: const Text(
                     "Next",
                     style: TextStyle(
+                      color: Colors.white,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
