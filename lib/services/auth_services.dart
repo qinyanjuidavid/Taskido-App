@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:taskido/data/db.dart';
 import 'package:taskido/data/models/category_models.dart';
+import 'package:taskido/data/models/otp_check_model.dart';
 import 'package:taskido/data/models/password_reset_phone_number.dart';
 import 'package:taskido/data/models/refresh_token_model.dart';
 import 'package:taskido/data/models/sign_up_model.dart';
@@ -16,6 +17,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 class AuthService extends ChangeNotifier {
   // db
   Login get loginDetails => db.loginAllDetailsBox!.getAt(0)!;
+  TokenCheck get otpCheckDetails => db.otpDetailsBox!.getAt(0)!;
+
   bool _loadingLogin = false;
   bool get loadingLogin => _loadingLogin;
 
@@ -237,9 +240,20 @@ class AuthService extends ChangeNotifier {
           user: User(phone: passwordResetDetails.data!.phone),
         );
 
+        TokenCheck passwordOtpDetails = TokenCheck(
+          otpData: OtpData(
+            phone: passwordResetDetails.data!.phone,
+          ),
+        );
+
         await db.loginAllDetailsBox!.clear();
         await db.loginAllDetailsBox!.add(passwordPhoneNumber);
+        await db.otpDetailsBox!.clear();
+        await db.otpDetailsBox!.add(passwordOtpDetails);
 
+        //print phone number from db
+        print("Phone number from db ${loginDetails.user!.phone}");
+        print("OTP 2 Phone number from db ${otpCheckDetails.otpData!.phone}");
         notifyListeners();
         return payload;
       } else {
@@ -252,10 +266,27 @@ class AuthService extends ChangeNotifier {
   }
 
   Future passwordResetTokenCheck(String? token) async {
-    return await Api.passwordResetTokenCheck(token).then((response) {
+    return await Api.passwordResetTokenCheck(token).then((response) async {
       if (response.statusCode == 200) {
         var payload = json.decode(response.body);
+        TokenCheck tokenDetails = TokenCheck.fromJson(payload);
+        TokenCheck passwordOtpDetails = TokenCheck(
+          otpData: OtpData(
+            token: tokenDetails.otpData!.token,
+            phone: tokenDetails.otpData!.phone,
+          ),
+        );
 
+        // add token to the otp db
+        await db.otpDetailsBox!.clear();
+        await db.otpDetailsBox!.add(passwordOtpDetails);
+        // print the token from db
+        print("Token from db ${otpCheckDetails.otpData!.token}");
+        // print phone number from db
+        print(
+          "OTP Check 2 Phone number from db ${otpCheckDetails.otpData!.phone}",
+        );
+        print("Password Check ##### Payload $payload");
         notifyListeners();
         return payload;
       } else {

@@ -10,12 +10,14 @@ class DataBase {
   Box<User>? loginUserDetailsBox;
   Box<SignUp>? signUpDetailsBox;
   Box<TokenCheck>? otpDetailsBox;
+  Box<OtpData>? otpDataDetailsBox;
 
   _initBoxes() async {
     loginAllDetailsBox = await Hive.openBox('loginUserBox');
     loginUserDetailsBox = await Hive.openBox("userDetailsBox");
     signUpDetailsBox = await Hive.openBox("signUpDetailsBox");
     otpDetailsBox = await Hive.openBox("passwordTokenDetailsBox");
+    otpDataDetailsBox = await Hive.openBox("otpDataDetailsBox");
   }
 
   _loginAdapters() async {
@@ -28,7 +30,8 @@ class DataBase {
   }
 
   _otpAdapters() async {
-    // Hive.registerAdapter();
+    Hive.registerAdapter(TokenCheckAdapter());
+    Hive.registerAdapter(OtpDataAdapter());
   }
 
   init() async {
