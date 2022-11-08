@@ -23,7 +23,7 @@ class AuthService extends ChangeNotifier {
 
   void loginToast() {
     Fluttertoast.showToast(
-      msg: "Login Successful",
+      msg: "Login Successly",
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
       timeInSecForIosWeb: 3,
@@ -74,15 +74,38 @@ class AuthService extends ChangeNotifier {
     });
   }
 
+  void logoutToastError() {
+    Fluttertoast.showToast(
+      msg: "Can't logout at the moment",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 3,
+      backgroundColor: Colors.redAccent,
+      textColor: Colors.white,
+      fontSize: 18.0,
+    );
+  }
+
+  void logoutToast() {
+    Fluttertoast.showToast(
+      msg: "Logout Successful",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 3,
+      backgroundColor: Colors.green,
+      textColor: Colors.white,
+      fontSize: 18.0,
+    );
+  }
+
   Future logout() async {
     return await Api.logout().then((response) async {
-      var payload = json.decode(response.body);
-      print("Logout Details++++++: $payload");
       await db.loginAllDetailsBox!.clear();
-      notifyListeners();
-      return payload;
+      logoutToast();
+      print("************************Logged Out*******************");
     }).catchError((error) {
-      print("error occured during user logout $error");
+      logoutToastError();
+      print("error occured during user logout ${error.toString()}");
     });
   }
 

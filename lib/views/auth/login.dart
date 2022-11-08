@@ -26,8 +26,9 @@ class _LoginScreenState extends State<LoginScreen> {
           .then(
         (value) {
           if (value != null) {
-            print(value);
             Navigator.of(context).pushNamed(RouteGenerator.homePage);
+            phoneNumberTextEditingController.text = "";
+            passwordTextEditingController.text = "";
           }
         },
       );
@@ -125,11 +126,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: 7,
                 ),
                 InkWell(
-                  onTap: () {
-                    Navigator.of(context).pushNamed(RouteGenerator.homePage);
-                  },
+                  onTap: () {},
                   child: const Text(
-                    "Categories",
+                    "Forgot Password?",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.blue,

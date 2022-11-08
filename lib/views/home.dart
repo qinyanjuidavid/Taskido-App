@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taskido/configs/routes.dart';
 import 'package:taskido/data/models/category_models.dart';
+import 'package:taskido/services/auth_services.dart';
 import 'package:taskido/services/tasks_services.dart';
 import 'package:taskido/views/auth/tasks_screen.dart';
 
@@ -101,7 +102,12 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  void _logoutFnc() async {}
+  void _logoutFnc() async {
+    await authService.logout().then((value) {
+      Navigator.of(context).pop(RouteGenerator.loginPage);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -114,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             child: IconButton(
               iconSize: 30,
-              onPressed: () {},
+              onPressed: _logoutFnc,
               icon: const Icon(
                 Icons.logout,
                 // size: 10,

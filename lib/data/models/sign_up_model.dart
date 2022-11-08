@@ -1,18 +1,24 @@
 import 'dart:convert';
 
+import 'package:hive/hive.dart';
+part 'sign_up_model.g.dart';
+
 SignUp signUpFromJson(String str) => SignUp.fromJson(json.decode(str));
 
 String signUpToJson(SignUp data) => json.encode(data.toJson());
 
+@HiveType(typeId: 2)
 class SignUp {
   SignUp({
     this.user,
     this.refresh,
     this.token,
   });
-
+  @HiveField(0)
   User? user;
+  @HiveField(1)
   String? refresh;
+  @HiveField(2)
   String? token;
 
   factory SignUp.fromJson(Map<String, dynamic> json) => SignUp(
@@ -28,6 +34,7 @@ class SignUp {
       };
 }
 
+@HiveType(typeId: 3)
 class User {
   User({
     this.phone,
@@ -35,8 +42,11 @@ class User {
     this.fullName,
   });
 
+  @HiveField(0)
   String? phone;
+  @HiveField(1)
   String? email;
+  @HiveField(2)
   String? fullName;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
