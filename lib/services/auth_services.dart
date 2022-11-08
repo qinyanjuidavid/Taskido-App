@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:taskido/data/db.dart';
+import 'package:taskido/data/models/refresh_token_model.dart';
 import 'package:taskido/data/models/sign_up_model.dart';
 
 import '../api/api.dart';
@@ -74,7 +75,23 @@ class AuthService extends ChangeNotifier {
     });
   }
 
-  Future refreshToken(String? refresh_token) async {}
+  Future refreshToken(String? refreshToken) async {
+    return await Api.refreshToken(refreshToken).then((response) {
+      if (response.statusCode == 200) {
+        var payload = json.decode(response.body);
+        RefreshToken refreshTokenDetails = RefreshToken.fromJson(payload);
+        print("New Access Token ${refreshTokenDetails.access}");
+        print("New refresh token ${refreshTokenDetails.refresh}");
+
+        notifyListeners();
+      } else {
+        var payload = json.decode(response.body);
+        print(payload);
+      }
+    }).catchError((error) {
+      print("error occured during token refresh auth $error");
+    });
+  }
 
   Future signup(
     String phone,
