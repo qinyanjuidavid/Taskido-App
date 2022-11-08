@@ -250,6 +250,22 @@ class AuthService extends ChangeNotifier {
       print("error occured while requesting for an otp $error");
     });
   }
+
+  Future passwordResetTokenCheck(String? token) async {
+    return await Api.passwordResetTokenCheck(token).then((response) {
+      if (response.statusCode == 200) {
+        var payload = json.decode(response.body);
+
+        notifyListeners();
+        return payload;
+      } else {
+        var payload = json.decode(response.body);
+        print("Password Token Check $payload");
+      }
+    }).catchError((error) {
+      print("error occurred during otp check $error");
+    });
+  }
 }
 
 AuthService authService = AuthService();
