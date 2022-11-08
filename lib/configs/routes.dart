@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:taskido/views/auth/forgot_password_otp.dart';
 import 'package:taskido/views/auth/forgot_password_screen.dart';
 import 'package:taskido/views/auth/otp_page.dart';
+import 'package:taskido/views/auth/password_reset_screen.dart';
 import 'package:taskido/views/home.dart';
 import 'package:taskido/views/auth/signup.dart';
 import 'package:taskido/views/splash_screen.dart';
@@ -17,7 +18,8 @@ class RouteGenerator {
   static const String signUpPage = "/signup";
   static const String otpPage = "/otp";
   static const String forgotPasswordPage = "/forgotPassword";
-  static const String forgotPasswordOtpPage = "forgotPasswordOtp";
+  static const String forgotPasswordOtpPage = "/forgotPasswordOtp";
+  static const String passwordResetPage = "/passwordReset";
 
   RouteGenerator._() {}
 
@@ -54,6 +56,10 @@ class RouteGenerator {
       case forgotPasswordOtpPage:
         return MaterialPageRoute(
           builder: (_) => ForgotPasswordOtpScreen(),
+        );
+      case passwordResetPage:
+        return MaterialPageRoute(
+          builder: (_) => PasswordResetScreen(),
         );
       default:
         throw FormatException("Route not found");
