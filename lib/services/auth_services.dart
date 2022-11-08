@@ -209,7 +209,7 @@ class AuthService extends ChangeNotifier {
     });
   }
 
-  Future otp(String token) async {
+  Future otp(String? token) async {
     return await Api.Otp(token).then((response) {
       if (response.statusCode == 200) {
         var payload = json.decode(response.body);

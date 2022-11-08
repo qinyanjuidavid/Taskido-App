@@ -87,7 +87,7 @@ class Api {
     return response;
   }
 
-  static Future<http.Response> Otp(String token) async {
+  static Future<http.Response> Otp(String? token) async {
     String? phone = authService.loginDetails.user!.phone;
     print("OTP phone.......... $phone");
     print("OTP Phone............$phone");
@@ -99,6 +99,20 @@ class Api {
       body: jsonEncode({
         "phone": phone,
         "token": token,
+      }),
+    );
+    return response;
+  }
+
+  static Future<http.Response> passwordResetPhoneNumber(
+      String? phoneNumber) async {
+    var response = await client.post(
+      Uri.parse("$baseUrl}password-reset/"),
+      headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+      },
+      body: jsonEncode({
+        "phone": phoneNumber,
       }),
     );
     return response;
