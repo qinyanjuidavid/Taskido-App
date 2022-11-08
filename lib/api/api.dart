@@ -35,6 +35,22 @@ class Api {
     return response;
   }
 
+  static Future<http.Response> logout(String? refresh) async {
+    String? token = authService.loginDetails.access;
+
+    var response = await client2.post(
+      Uri.parse("${baseUrl}logout/"),
+      headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+        "Authorization": "Bearer $token",
+      },
+      body: jsonEncode({
+        "refresh": refresh,
+      }),
+    );
+    return response;
+  }
+
   static Future<http.Response> refreshToken(String? refreshToken) async {
     var response = await client.post(
       Uri.parse('${baseUrl}auth/refresh/'),
