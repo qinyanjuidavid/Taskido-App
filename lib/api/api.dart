@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:http_interceptor/http/http.dart';
+import 'package:taskido/api/interceptors/authorization_interceptor.dart';
 import 'package:taskido/app_config.dart';
 import 'package:http/http.dart' as http;
 import 'package:taskido/services/auth_services.dart';
@@ -78,14 +80,20 @@ class Api {
   static Future<http.Response> getCategories() async {
     String accessToken =
         "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjcwMjI0Njk5LCJpYXQiOjE2Njc2MzI2OTksImp0aSI6ImE1ZjM3MjE2ZjQ4OTQ3ZTY4MDU3MzM1ZWU2ZWIyZmU4IiwidXNlcl9pZCI6Mn0.i_A_mJ0BqrOC_LGRo0gkMEhBvmNoIa_gZl_jhqXC6Pk";
+
+    // implement interceptor
+    final client2 = InterceptedClient.build(interceptors: [
+      AuthorizationInterceptor(),
+      // ExpiredTokenRetryPolicy(),
+    ]);
     // get token from db
     String? token = authService.loginDetails.access;
     print("Token.........000000000 $token");
-    var response = await client.get(
+    var response = await client2.get(
       Uri.parse("${baseUrl}category/"),
       headers: {
         HttpHeaders.contentTypeHeader: 'application/json',
-        "Authorization": "Bearer $token",
+        "Authorization": "Bearer $accessToken",
       },
     );
     return response;

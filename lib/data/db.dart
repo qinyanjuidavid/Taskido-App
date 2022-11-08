@@ -4,10 +4,11 @@ import 'package:hive/hive.dart';
 import 'models/login_models.dart';
 
 class DataBase {
-  Box<Login>? loginDetailsBox;
+  Box<Login>? loginAllDetailsBox;
+  Box<User>? loginUserDetailsBox;
 
   _initBoxes() async {
-    loginDetailsBox = await Hive.openBox('loginUserBox');
+    loginAllDetailsBox = await Hive.openBox('loginUserBox');
   }
 
   _loginAdapters() async {

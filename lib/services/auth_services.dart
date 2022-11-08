@@ -12,7 +12,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 class AuthService extends ChangeNotifier {
   // db
-  Login get loginDetails => db.loginDetailsBox!.getAt(0)!;
+  Login get loginDetails => db.loginAllDetailsBox!.getAt(0)!;
   bool _loadingLogin = false;
   bool get loadingLogin => _loadingLogin;
 
@@ -54,8 +54,8 @@ class AuthService extends ChangeNotifier {
       if (response.statusCode == 200) {
         var payload = json.decode(response.body);
         Login loginDetails = Login.fromJson(payload);
-        await db.loginDetailsBox!.clear();
-        await db.loginDetailsBox!.add(loginDetails);
+        await db.loginAllDetailsBox!.clear();
+        await db.loginAllDetailsBox!.add(loginDetails);
         print("Login Details++++++: ${loginDetails.access}");
 
         notifyListeners();
