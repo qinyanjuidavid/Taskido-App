@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:taskido/services/auth_services.dart';
 
 class PasswordResetPhoneScreen extends StatefulWidget {
   PasswordResetPhoneScreen({Key? key}) : super(key: key);
@@ -13,7 +14,14 @@ class _PasswordResetPhoneScreenState extends State<PasswordResetPhoneScreen> {
   TextEditingController phoneNumberTextEditingController =
       TextEditingController();
 
-  void _forgotPasswordPhone() {}
+  void _forgotPasswordPhone() async {
+    if (passwordResetPhoneKey.currentState!.validate()) {
+      await authService
+          .passwordResetPhoneNumber(phoneNumberTextEditingController.text)
+          .then((value) {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
