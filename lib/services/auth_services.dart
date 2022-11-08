@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:taskido/data/db.dart';
 import 'package:taskido/data/models/category_models.dart';
+import 'package:taskido/data/models/password_reset_phone_number.dart';
 import 'package:taskido/data/models/refresh_token_model.dart';
 import 'package:taskido/data/models/sign_up_model.dart';
 
@@ -222,6 +223,31 @@ class AuthService extends ChangeNotifier {
       }
     }).catchError((error) {
       print("error occured during user login $error");
+    });
+  }
+
+  Future passwordResetPhoneNumber(String? phoneNumber) async {
+    return await Api.passwordResetPhoneNumber(phoneNumber)
+        .then((response) async {
+      if (response.statusCode == 200) {
+        var payload = json.decode(response.body);
+        PasswordResetPhoneNumber passwordResetDetails =
+            PasswordResetPhoneNumber.fromJson(payload);
+        Login passwordPhoneNumber = Login(
+          user: User(phone: passwordResetDetails.data!.phone),
+        );
+
+        await db.loginAllDetailsBox!.clear();
+        await db.loginAllDetailsBox!.add(passwordPhoneNumber);
+
+        notifyListeners();
+        return payload;
+      } else {
+        var payload = json.decode(response.body);
+        print("Password Reset Phone $payload");
+      }
+    }).catchError((error) {
+      print("error occured while requesting for an otp $error");
     });
   }
 }
