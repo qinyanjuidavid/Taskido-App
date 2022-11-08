@@ -55,6 +55,12 @@ class _OtpScreenState extends State<OtpScreen> {
                   labelText: "OTP",
                   hintText: "Enter OTP",
                 ),
+                validator: (String? value) {
+                  if (value == null || value.isEmpty) {
+                    return "otp is required";
+                  }
+                  return null;
+                },
               ),
               MaterialButton(
                 onPressed: otpSubmit,

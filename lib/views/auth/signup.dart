@@ -72,18 +72,36 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     decoration: const InputDecoration(
                       labelText: "Email",
                     ),
+                    validator: (String? value) {
+                      if (value == null || value.isEmpty) {
+                        return "email address is required";
+                      }
+                      return null;
+                    },
                   ),
                   TextFormField(
                     controller: phoneNumberTextEditingController,
                     decoration: const InputDecoration(
                       labelText: "Phone number",
                     ),
+                    validator: (String? value) {
+                      if (value == null || value.isEmpty) {
+                        return "phone number is required";
+                      }
+                      return null;
+                    },
                   ),
                   TextFormField(
                     controller: fullnameTextEditingController,
                     decoration: const InputDecoration(
                       labelText: "Full name",
                     ),
+                    validator: (String? value) {
+                      if (value == null || value.isEmpty) {
+                        return "full name is required";
+                      }
+                      return null;
+                    },
                   ),
                   TextFormField(
                     obscureText: obsecureText,
@@ -91,6 +109,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     decoration: const InputDecoration(
                       labelText: "Password",
                     ),
+                    validator: (String? value) {
+                      if (value == null || value.isEmpty) {
+                        return "password is required";
+                      }
+                      if (value.length < 6) {
+                        return "password must be at least 6 characters";
+                      }
+
+                      return null;
+                    },
                   ),
                   TextFormField(
                     obscureText: obsecureText,
@@ -98,6 +126,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     decoration: const InputDecoration(
                       labelText: "Password Confirm",
                     ),
+                    validator: (String? value) {
+                      if (value == null || value.isEmpty) {
+                        return "password confirm is required";
+                      }
+
+                      if (value != passwordTextEditingController.text) {
+                        return "password confirm must be equal to password";
+                      }
+
+                      return null;
+                    },
                   ),
                   MaterialButton(
                     color: Colors.brown,

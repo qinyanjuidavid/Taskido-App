@@ -17,7 +17,7 @@ class SignUpAdapter extends TypeAdapter<SignUp> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return SignUp(
-      user: fields[0] as User?,
+      user: fields[0] as UserDetails?,
       refresh: fields[1] as String?,
       token: fields[2] as String?,
     );
@@ -46,17 +46,17 @@ class SignUpAdapter extends TypeAdapter<SignUp> {
           typeId == other.typeId;
 }
 
-class UserAdapter extends TypeAdapter<User> {
+class UserDetailsAdapter extends TypeAdapter<UserDetails> {
   @override
   final int typeId = 3;
 
   @override
-  User read(BinaryReader reader) {
+  UserDetails read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return User(
+    return UserDetails(
       phone: fields[0] as String?,
       email: fields[1] as String?,
       fullName: fields[2] as String?,
@@ -64,7 +64,7 @@ class UserAdapter extends TypeAdapter<User> {
   }
 
   @override
-  void write(BinaryWriter writer, User obj) {
+  void write(BinaryWriter writer, UserDetails obj) {
     writer
       ..writeByte(3)
       ..writeByte(0)
@@ -81,7 +81,7 @@ class UserAdapter extends TypeAdapter<User> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is UserAdapter &&
+      other is UserDetailsAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

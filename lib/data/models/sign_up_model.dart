@@ -14,15 +14,16 @@ class SignUp {
     this.refresh,
     this.token,
   });
+
   @HiveField(0)
-  User? user;
+  UserDetails? user;
   @HiveField(1)
   String? refresh;
   @HiveField(2)
   String? token;
 
   factory SignUp.fromJson(Map<String, dynamic> json) => SignUp(
-        user: User.fromJson(json["user"]),
+        user: UserDetails.fromJson(json["user"]),
         refresh: json["refresh"],
         token: json["token"],
       );
@@ -35,8 +36,8 @@ class SignUp {
 }
 
 @HiveType(typeId: 3)
-class User {
-  User({
+class UserDetails {
+  UserDetails({
     this.phone,
     this.email,
     this.fullName,
@@ -49,7 +50,7 @@ class User {
   @HiveField(2)
   String? fullName;
 
-  factory User.fromJson(Map<String, dynamic> json) => User(
+  factory UserDetails.fromJson(Map<String, dynamic> json) => UserDetails(
         phone: json["phone"],
         email: json["email"],
         fullName: json["full_name"],

@@ -1,10 +1,8 @@
 import 'dart:convert';
 
-List<Category> categoryFromJson(String str) =>
-    List<Category>.from(json.decode(str).map((x) => Category.fromJson(x)));
+Category categoryFromJson(String str) => Category.fromJson(json.decode(str));
 
-String categoryToJson(List<Category> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String categoryToJson(Category data) => json.encode(data.toJson());
 
 class Category {
   Category({
@@ -18,7 +16,7 @@ class Category {
 
   int? id;
   String? category;
-  Owner? owner;
+  CategoryOwner? owner;
   bool? completed;
   String? createdAt;
   String? updatedAt;
@@ -26,7 +24,7 @@ class Category {
   factory Category.fromJson(Map<String, dynamic> json) => Category(
         id: json["id"],
         category: json["category"],
-        owner: Owner.fromJson(json["owner"]),
+        owner: CategoryOwner.fromJson(json["owner"]),
         completed: json["completed"],
         createdAt: json["created_at"],
         updatedAt: json["updated_at"],
@@ -42,8 +40,8 @@ class Category {
       };
 }
 
-class Owner {
-  Owner({
+class CategoryOwner {
+  CategoryOwner({
     this.id,
     this.user,
     this.bio,
@@ -51,13 +49,13 @@ class Owner {
   });
 
   int? id;
-  User? user;
+  CategoryUser? user;
   String? bio;
   String? profilePicture;
 
-  factory Owner.fromJson(Map<String, dynamic> json) => Owner(
+  factory CategoryOwner.fromJson(Map<String, dynamic> json) => CategoryOwner(
         id: json["id"],
-        user: User.fromJson(json["user"]),
+        user: CategoryUser.fromJson(json["user"]),
         bio: json["bio"],
         profilePicture: json["profile_picture"],
       );
@@ -70,8 +68,8 @@ class Owner {
       };
 }
 
-class User {
-  User({
+class CategoryUser {
+  CategoryUser({
     this.id,
     this.phone,
     this.email,
@@ -87,7 +85,7 @@ class User {
   String? role;
   String? timestamp;
 
-  factory User.fromJson(Map<String, dynamic> json) => User(
+  factory CategoryUser.fromJson(Map<String, dynamic> json) => CategoryUser(
         id: json["id"],
         phone: json["phone"],
         email: json["email"],

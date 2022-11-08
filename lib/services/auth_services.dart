@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:taskido/data/db.dart';
+import 'package:taskido/data/models/category_models.dart';
 import 'package:taskido/data/models/refresh_token_model.dart';
 import 'package:taskido/data/models/sign_up_model.dart';
 
@@ -137,6 +139,30 @@ class AuthService extends ChangeNotifier {
     });
   }
 
+  void signUpToast() {
+    Fluttertoast.showToast(
+      msg: "OTP sent to your phone",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 4,
+      backgroundColor: Colors.green,
+      textColor: Colors.white,
+      fontSize: 18.0,
+    );
+  }
+
+  void signUpErrorToast(var msg) {
+    Fluttertoast.showToast(
+      msg: msg.toString(),
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 4,
+      backgroundColor: Colors.red,
+      textColor: Colors.white,
+      fontSize: 18.0,
+    );
+  }
+
   Future signup(
     String phone,
     String email,
@@ -154,23 +180,37 @@ class AuthService extends ChangeNotifier {
       if (response.statusCode == 201) {
         var payload = json.decode(response.body);
 
+        print("Register*******************$payload");
         SignUp signupDetails = SignUp.fromJson(payload);
+        Login allDetails = Login(
+          access: signupDetails.token,
+          refresh: signupDetails.refresh,
+          user: User(
+            email: signupDetails.user!.email,
+            phone: signupDetails.user!.phone,
+            fullName: signupDetails.user!.fullName,
+          ),
+        );
+
+        await db.loginAllDetailsBox!.clear();
+        await db.loginAllDetailsBox!.add(allDetails);
 
         notifyListeners();
+        signUpToast();
         return payload;
       } else {
         var payload = json.decode(response.body);
         print(payload);
+        signUpErrorToast(payload);
       }
     }).catchError((error) {
-      print("error occured during user login $error");
+      signUpErrorToast("Account sign up failed!");
+      print("error occured during user signup $error");
     });
   }
 
   Future otp(String token) async {
-    //622067
-    String phone = "254720215645";
-    return await Api.Otp(phone, token).then((response) {
+    return await Api.Otp(token).then((response) {
       if (response.statusCode == 200) {
         var payload = json.decode(response.body);
 
