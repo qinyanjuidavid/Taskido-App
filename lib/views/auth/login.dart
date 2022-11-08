@@ -64,6 +64,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   decoration: const InputDecoration(
                     labelText: "Phone number",
                   ),
+                  validator: (String? value) {
+                    if (value == null || value.isEmpty) {
+                      return "phone is required";
+                    }
+                    return null;
+                  },
                 ),
                 TextFormField(
                   obscureText: obsecureText,
@@ -71,6 +77,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   decoration: const InputDecoration(
                     labelText: "Password",
                   ),
+                  validator: (String? value) {
+                    if (value == null || value.isEmpty) {
+                      return "password is required";
+                    }
+                    return null;
+                  },
                 ),
                 MaterialButton(
                   color: Colors.brown,

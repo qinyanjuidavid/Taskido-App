@@ -17,8 +17,8 @@ class DataBase {
 
   init() async {
     await Hive.initFlutter();
-    await _initBoxes();
     await _loginAdapters();
+    await _initBoxes(); //Set this at the bottom
   }
 }
 

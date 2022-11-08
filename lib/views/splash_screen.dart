@@ -20,6 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     goNext();
     super.initState();
+    print("Initialize DB......");
     initDatabase();
   }
 

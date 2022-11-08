@@ -22,6 +22,8 @@ class TaskService extends ChangeNotifier {
         notifyListeners();
       } else {
         var payload = json.decode(response.body);
+        print(payload["detail"]);
+
         print("Load.... $payload");
         notifyListeners();
       }

@@ -50,6 +50,7 @@ class AuthService extends ChangeNotifier {
 
     return await Api.login(phone, password).then((response) async {
       print("Phone $phone password $password");
+      print("Login Response ${response.statusCode}");
       if (response.statusCode == 200) {
         var payload = json.decode(response.body);
         Login loginDetails = Login.fromJson(payload);
