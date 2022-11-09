@@ -34,12 +34,11 @@ class TaskService extends ChangeNotifier {
     _scrollController!.addListener(() {
       int page = 1;
       if (_scrollController!.position.pixels ==
-          _scrollController!.position.maxScrollExtent) {
+          _scrollController!.position.maxScrollExtent - 5) {
         print("Fetching more data");
         print("Next: $_next");
         page++;
         fetchCategories(page: page); //printing nothing
-
         // if (_next != null) {
         //   fetchCategories(page);
         // }
@@ -61,23 +60,24 @@ class TaskService extends ChangeNotifier {
       if (response.statusCode == 200) {
         var payload = json.decode(response.body);
         // Before pagination and after pagination
-
+//===============================================================
         Category categoryDetails = Category.fromJson(payload);
 
         _count = categoryDetails.count;
         _next = categoryDetails.next;
         _previous = categoryDetails.previous;
-        // if (_previous == null) {
-        _categories = categoryDetails.results!;
-        // }
+        if (_previous == null) {
+          _categories = categoryDetails.results!;
+        }
         _count = categoryDetails.count;
         _next = categoryDetails.next;
         _previous = categoryDetails.previous;
         //if _next iS NOT NULL and _categories.length is less than _count
         // if (_next != null && _categories.length < _count!) {
-        //   //append the new data to the list
-        //   _categories.addAll(categoryDetails.results!);
+        //append the new data to the list
+        // _categories.addAll(categoryDetails.results!);
         // }
+        //==========================================================
         notifyListeners();
         _categoryLoading = false;
       } else if (response.statusCode == 401) {

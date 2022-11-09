@@ -170,6 +170,7 @@ class Api {
         HttpHeaders.authorizationHeader: 'Bearer $token',
       },
     );
+    print(response.body);
     var l = json.decode(response.body);
     Category c = Category.fromJson(l);
     print("Response.........))))${c.results!.length}");
