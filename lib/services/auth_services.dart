@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
@@ -13,9 +14,28 @@ import 'package:taskido/data/models/sign_up_model.dart';
 import '../api/api.dart';
 import '../data/models/login_models.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 class AuthService extends ChangeNotifier {
-  // db
+  //check internet connectivity
+  // bool? _isConnected = true;
+  // bool? get isConnected => _isConnected;
+
+  // checkInternet() async {
+  //   return InternetConnectionChecker().onStatusChange.listen((status) {
+  //     switch (status) {
+  //       case InternetConnectionStatus.connected:
+  //         _isConnected = true;
+  //         notifyListeners();
+  //         break;
+  //       case InternetConnectionStatus.disconnected:
+  //         _isConnected = false;
+  //         notifyListeners();
+  //         break;
+  //     }
+  //   });
+  // }
+
   Login get loginDetails => db.loginAllDetailsBox!.getAt(0)!;
   TokenCheck get otpCheckDetails => db.otpDetailsBox!.getAt(0)!;
 

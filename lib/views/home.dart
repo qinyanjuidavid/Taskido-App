@@ -22,68 +22,71 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     _refresh();
   }
+// set scroll listener
 
 // refresh
   Future<void> _refresh() async {
     await Provider.of<TaskService>(context, listen: false).fetchCategories();
+    await Provider.of<TaskService>(context, listen: false)
+        .setScrollController();
   }
 
-  void _addCategoryDialog() async {
-    await showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return SimpleDialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            title: const Text(
-              "Add Category",
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.w600,
-                fontSize: 20,
-              ),
-            ),
-            children: [
-              Container(
-                padding: const EdgeInsets.only(
-                  left: 20,
-                  right: 20,
-                ),
-                child: Column(
-                  children: [
-                    Form(
-                      key: categoryAddFormKey,
-                      child: TextFormField(
-                        controller: categoryTextEditingController,
-                        decoration: const InputDecoration(
-                          labelText: "Category",
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      height: 15,
-                    ),
-                    MaterialButton(
-                      color: Colors.brown,
-                      onPressed: () {},
-                      // _categorySubmit,
-                      child: const Text(
-                        "Add Category",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              )
-            ],
-          );
-        });
-  }
+  // void _addCategoryDialog() async {
+  //   await showDialog(
+  //       context: context,
+  //       builder: (BuildContext context) {
+  //         return SimpleDialog(
+  //           shape: RoundedRectangleBorder(
+  //             borderRadius: BorderRadius.circular(10),
+  //           ),
+  //           title: const Text(
+  //             "Add Category",
+  //             style: TextStyle(
+  //               color: Colors.black,
+  //               fontWeight: FontWeight.w600,
+  //               fontSize: 20,
+  //             ),
+  //           ),
+  //           children: [
+  //             Container(
+  //               padding: const EdgeInsets.only(
+  //                 left: 20,
+  //                 right: 20,
+  //               ),
+  //               child: Column(
+  //                 children: [
+  //                   Form(
+  //                     key: categoryAddFormKey,
+  //                     child: TextFormField(
+  //                       controller: categoryTextEditingController,
+  //                       decoration: const InputDecoration(
+  //                         labelText: "Category",
+  //                       ),
+  //                     ),
+  //                   ),
+  //                   SizedBox(
+  //                     width: MediaQuery.of(context).size.width,
+  //                     height: 15,
+  //                   ),
+  //                   MaterialButton(
+  //                     color: Colors.brown,
+  //                     onPressed: () {},
+  //                     // _categorySubmit,
+  //                     child: const Text(
+  //                       "Add Category",
+  //                       style: TextStyle(
+  //                         fontWeight: FontWeight.bold,
+  //                         color: Colors.white,
+  //                       ),
+  //                     ),
+  //                   )
+  //                 ],
+  //               ),
+  //             )
+  //           ],
+  //         );
+  //       });
+  // }
 
   // void _categorySubmit() async {
   //   if (categoryAddFormKey.currentState!.validate()) {
@@ -130,7 +133,46 @@ class _HomeScreenState extends State<HomeScreen> {
           )
         ],
       ),
-      body: Text("Category"),
+      //implement categories with pagination
+      body: RefreshIndicator(
+        onRefresh: _refresh,
+        child: Consumer<TaskService>(
+          builder: (context, value, child) {
+            if (value.categoryLoading == true) {
+              return const Center(
+                child: Padding(
+                  padding: EdgeInsets.all(8),
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            } else {
+              return ListView.builder(
+                controller: value.scrollController,
+                itemCount: value.categories.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    onTap: () {},
+                    title: Text(
+                      value.categories[index].category.toString(),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 60,
+                      ),
+                    ),
+                    trailing: IconButton(
+                      onPressed: () {},
+                      icon: const Icon(
+                        Icons.delete,
+                        color: Colors.red,
+                      ),
+                    ),
+                  );
+                },
+              );
+            }
+          },
+        ),
+      ),
       // body: RefreshIndicator(
       //   onRefresh: _refresh,
       //   child: Consumer<TaskService>(
@@ -160,7 +202,8 @@ class _HomeScreenState extends State<HomeScreen> {
       //   ),
       // ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _addCategoryDialog,
+        onPressed: () {},
+        //  _addCategoryDialog,
         child: const Icon(Icons.add),
       ),
     );

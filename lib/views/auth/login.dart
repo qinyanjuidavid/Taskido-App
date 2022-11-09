@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:taskido/configs/routes.dart';
 import 'package:taskido/services/auth_services.dart';
 
@@ -15,6 +16,11 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController phoneNumberTextEditingController =
       TextEditingController();
   TextEditingController passwordTextEditingController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   void loginSubmit() async {
     if (loginFormKey.currentState!.validate()) {

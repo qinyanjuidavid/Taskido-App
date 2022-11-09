@@ -7,63 +7,87 @@ import 'package:taskido/data/models/task_model.dart';
 import 'package:taskido/services/auth_services.dart';
 
 class TaskService extends ChangeNotifier {
-  List<Category> _categories = [];
-  List<Category> get categories => _categories;
+  //fetchCategories with pagination
+  //pagination variables
+  int? _count;
+  String? _next;
+  String? _previous;
+  bool? _categoryLoading = false;
+  bool? _categoryOnError = false;
+  //ScrollController
+  ScrollController? _scrollController;
+  List<Result> _categories = [];
 
-  Future fetchCategories() async {
-    print("fetching categories.....");
-    _categories = [];
+  int? get count => _count;
+  String? get next => _next;
+  String? get previous => _previous;
+  bool? get categoryLoading => _categoryLoading;
+  bool? get categoryOnError => _categoryOnError;
+  ScrollController? get scrollController => _scrollController;
+
+  List<Result> get categories => _categories;
+
+  // setting listener to scrollController
+  Future<void> setScrollController() async {
+    _scrollController = ScrollController();
+
+    _scrollController!.addListener(() {
+      int page = 1;
+      if (_scrollController!.position.pixels ==
+          _scrollController!.position.maxScrollExtent) {
+        print("Fetching more data");
+        print("Next: $_next");
+        page++;
+        fetchCategories(page: page); //printing nothing
+
+        // if (_next != null) {
+        //   fetchCategories(page);
+        // }
+      }
+    });
+    notifyListeners();
+  }
+
+  Future fetchCategories({int? page}) async {
+    _categoryLoading = true;
+    if (_previous == null) {
+      _categories = [];
+    }
+
     String? refreshToken = authService.loginDetails.refresh;
-    return Api.getCategories().then((response) async {
-      print("RESPONSE:::::::::::::::::::: ${response.statusCode}");
+
+    var response = await Api.getCategories(page).then((response) async {
+      print("Response on Service ${response.statusCode}");
       if (response.statusCode == 200) {
         var payload = json.decode(response.body);
-        //payload in the format of
-//         {
-//   "count": 19,
-//   "next": "http://127.0.0.1:8000/api/v1/category/?page=2",
-//   "previous": null,
-//   "results": [
-//     {
-//       "id": 1,
-//       "category": "Tasks",
-//       "CategoryOwner": {
-//         "id": 1,
-//         "CategoryUser": {
-//           "id": 2,
-//           "phone": "+254700215646",
-//           "email": "gracy@gmail.com",
-//           "full_name": "Grace Gaciuki",
-//           "role": "Owner",
-//           "timestamp": "2022-11-04T13:06:11.521147Z"
-//         },
-//         "bio": null,
-//         "profile_picture": "http://127.0.0.1:8000/media/default.png"
-//       },
-//       "completed": false,
-//       "created_at": "2022-11-04T13:06:11.552044Z",
-//       "updated_at": "2022-11-04T13:06:11.552044Z"
-//     }
-//   ]
-// }
-        var results = payload["results"];
-        for (var result in results) {
-          Category category = Category.fromJson(result);
-          _categories.add(category);
-        }
-        print(_categories);
+        // Before pagination and after pagination
+
+        Category categoryDetails = Category.fromJson(payload);
+
+        _count = categoryDetails.count;
+        _next = categoryDetails.next;
+        _previous = categoryDetails.previous;
+        // if (_previous == null) {
+        _categories = categoryDetails.results!;
+        // }
+        _count = categoryDetails.count;
+        _next = categoryDetails.next;
+        _previous = categoryDetails.previous;
+        //if _next iS NOT NULL and _categories.length is less than _count
+        // if (_next != null && _categories.length < _count!) {
+        //   //append the new data to the list
+        //   _categories.addAll(categoryDetails.results!);
+        // }
         notifyListeners();
+        _categoryLoading = false;
       } else if (response.statusCode == 401) {
         await authService.refreshToken(refreshToken);
         fetchCategories();
-      } else {
-        var payload = json.decode(response.body);
-
-        print("Load.... $payload");
-        notifyListeners();
       }
     }).catchError((error) {
-      print("error occured while fetching categories $error");
+      print(error.toString());
+      _categoryLoading = false;
+      _categoryOnError = true;
     });
   }
 
