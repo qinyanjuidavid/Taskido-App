@@ -67,7 +67,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     MaterialButton(
                       color: Colors.brown,
-                      onPressed: _categorySubmit,
+                      onPressed: () {},
+                      // _categorySubmit,
                       child: const Text(
                         "Add Category",
                         style: TextStyle(
@@ -84,23 +85,23 @@ class _HomeScreenState extends State<HomeScreen> {
         });
   }
 
-  void _categorySubmit() async {
-    if (categoryAddFormKey.currentState!.validate()) {
-      await taskService
-          .addCategory(
-        categoryTextEditingController.text,
-      )
-          .then(
-        (value) {
-          if (value != null) {
-            Navigator.pop(context);
-            _refresh();
-            categoryTextEditingController.text = "";
-          }
-        },
-      );
-    }
-  }
+  // void _categorySubmit() async {
+  //   if (categoryAddFormKey.currentState!.validate()) {
+  //     await taskService
+  //         .addCategory(
+  //       categoryTextEditingController.text,
+  //     )
+  //         .then(
+  //       (value) {
+  //         if (value != null) {
+  //           Navigator.pop(context);
+  //           _refresh();
+  //           categoryTextEditingController.text = "";
+  //         }
+  //       },
+  //     );
+  //   }
+  // }
 
   void _logoutFnc() async {
     await authService.logout().then((value) {
@@ -129,33 +130,35 @@ class _HomeScreenState extends State<HomeScreen> {
           )
         ],
       ),
-      body: RefreshIndicator(
-        onRefresh: _refresh,
-        child: Consumer<TaskService>(
-          builder: (BuildContext context, value, child) {
-            return ListView.builder(
-              itemCount: value.categories.length,
-              itemBuilder: ((context, index) {
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.of(context)
-                        .push(MaterialPageRoute(builder: (context) {
-                      return TasksScreen(category: value.categories[index]);
-                    }));
-                  },
-                  child: Text(
-                    "${value.categories[index].category}",
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24,
-                    ),
-                  ),
-                );
-              }),
-            );
-          },
-        ),
-      ),
+      body: Text("Category"),
+      // body: RefreshIndicator(
+      //   onRefresh: _refresh,
+      //   child: Consumer<TaskService>(
+      //     builder: (BuildContext context, value, child) {
+      //       return ListView.builder(
+      //         itemCount: value.categories.length,
+      //         itemBuilder: ((context, index) {
+      //           return GestureDetector(
+      //             onTap: () {
+      //               // Navigator.of(context)
+      //               //     .push(MaterialPageRoute(builder: (context) {
+      //               //   return TasksScreen(category: value.categories[index]);
+      //               // }));
+      //             },
+      //             child: const Text(
+      //               "Category",
+      //               // "${value.categories[index].category}",
+      //               style: TextStyle(
+      //                 fontWeight: FontWeight.bold,
+      //                 fontSize: 24,
+      //               ),
+      //             ),
+      //           );
+      //         }),
+      //       );
+      //     },
+      //   ),
+      // ),
       floatingActionButton: FloatingActionButton(
         onPressed: _addCategoryDialog,
         child: const Icon(Icons.add),

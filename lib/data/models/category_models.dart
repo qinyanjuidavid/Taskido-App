@@ -6,6 +6,35 @@ String categoryToJson(Category data) => json.encode(data.toJson());
 
 class Category {
   Category({
+    this.count,
+    this.next,
+    this.previous,
+    this.results,
+  });
+
+  int? count;
+  String? next;
+  String? previous;
+  List<Result>? results;
+
+  factory Category.fromJson(Map<String, dynamic> json) => Category(
+        count: json["count"],
+        next: json["next"],
+        previous: json["previous"],
+        results:
+            List<Result>.from(json["results"].map((x) => Result.fromJson(x))),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "count": count,
+        "next": next,
+        "previous": previous,
+        "results": List<dynamic>.from(results!.map((x) => x.toJson())),
+      };
+}
+
+class Result {
+  Result({
     this.id,
     this.category,
     this.owner,
@@ -21,7 +50,7 @@ class Category {
   String? createdAt;
   String? updatedAt;
 
-  factory Category.fromJson(Map<String, dynamic> json) => Category(
+  factory Result.fromJson(Map<String, dynamic> json) => Result(
         id: json["id"],
         category: json["category"],
         owner: CategoryOwner.fromJson(json["owner"]),

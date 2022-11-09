@@ -18,9 +18,40 @@ class TaskService extends ChangeNotifier {
       print("RESPONSE:::::::::::::::::::: ${response.statusCode}");
       if (response.statusCode == 200) {
         var payload = json.decode(response.body);
-        for (var category in payload) {
-          _categories.add(Category.fromJson(category));
+        //payload in the format of
+//         {
+//   "count": 19,
+//   "next": "http://127.0.0.1:8000/api/v1/category/?page=2",
+//   "previous": null,
+//   "results": [
+//     {
+//       "id": 1,
+//       "category": "Tasks",
+//       "CategoryOwner": {
+//         "id": 1,
+//         "CategoryUser": {
+//           "id": 2,
+//           "phone": "+254700215646",
+//           "email": "gracy@gmail.com",
+//           "full_name": "Grace Gaciuki",
+//           "role": "Owner",
+//           "timestamp": "2022-11-04T13:06:11.521147Z"
+//         },
+//         "bio": null,
+//         "profile_picture": "http://127.0.0.1:8000/media/default.png"
+//       },
+//       "completed": false,
+//       "created_at": "2022-11-04T13:06:11.552044Z",
+//       "updated_at": "2022-11-04T13:06:11.552044Z"
+//     }
+//   ]
+// }
+        var results = payload["results"];
+        for (var result in results) {
+          Category category = Category.fromJson(result);
+          _categories.add(category);
         }
+        print(_categories);
         notifyListeners();
       } else if (response.statusCode == 401) {
         await authService.refreshToken(refreshToken);

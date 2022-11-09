@@ -156,11 +156,12 @@ class Api {
     return response;
   }
 
-  static Future<http.Response> getCategories() async {
+  //get categories, implement search query and pagination
+  static Future<http.Response> getCategories(String? query, int? page) async {
     // get token from db
     String? token = authService.loginDetails.access;
     return await client2.get(
-      Uri.parse("${baseUrl}category/"),
+      Uri.parse("${baseUrl}category/?q=$query&page=$page"),
       headers: {
         HttpHeaders.contentTypeHeader: 'application/json',
         HttpHeaders.authorizationHeader: 'Bearer $token',
