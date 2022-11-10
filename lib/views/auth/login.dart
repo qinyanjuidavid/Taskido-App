@@ -17,7 +17,7 @@ class _LoginScreenState extends State<LoginScreen> {
       TextEditingController();
   TextEditingController passwordTextEditingController = TextEditingController();
   //obsecure for password
-  bool obsecure = true;
+  bool _obsecure = true;
 
   @override
   void initState() {
@@ -165,7 +165,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       TextFormField(
                         autofocus: false,
                         controller: passwordTextEditingController,
-                        obscureText: obsecure,
+                        obscureText: _obsecure,
                         validator: (String? value) {
                           if (value == null || value.isEmpty) {
                             return "password is required";
@@ -187,10 +187,10 @@ class _LoginScreenState extends State<LoginScreen> {
                           suffixIcon: IconButton(
                             onPressed: () {
                               setState(() {
-                                obsecure = !obsecure;
+                                _obsecure = !_obsecure;
                               });
                             },
-                            icon: Icon(obsecure
+                            icon: Icon(_obsecure
                                 ? Icons.visibility
                                 : Icons.visibility_off),
                           ),
@@ -249,7 +249,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               }
 
                               return const Text(
-                                "Login",
+                                "Sign In",
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 22,

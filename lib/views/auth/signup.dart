@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 import 'package:taskido/configs/routes.dart';
 import 'package:taskido/services/auth_services.dart';
 
@@ -11,7 +12,6 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  bool _obsecure = true;
   final GlobalKey<FormState> signupFormKey = GlobalKey<FormState>();
   TextEditingController usernameTextEditingController = TextEditingController();
   TextEditingController emailTextEditingController = TextEditingController();
@@ -21,6 +21,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController fullnameTextEditingController = TextEditingController();
   TextEditingController phoneNumberTextEditingController =
       TextEditingController();
+  bool _obsecure = true;
+  bool _obsecureConfirm = true;
 
   void registerSubmit() async {
     if (signupFormKey.currentState!.validate()) {
@@ -44,6 +46,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final String text1 = "By sign up, you accept to our ";
+    final String text2 = "Terms & Conditions";
     return SafeArea(
       child: Scaffold(
         body: Container(
@@ -245,7 +249,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       TextFormField(
                         autofocus: false,
                         controller: passwordTextEditingController,
-                        obscureText: true,
+                        obscureText: _obsecure,
                         validator: (String? value) {
                           if (value == null || value.isEmpty) {
                             return "password is required";
@@ -269,8 +273,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             borderRadius: BorderRadius.circular(5),
                           ),
                           suffixIcon: IconButton(
-                            onPressed: () {},
-                            icon: const Icon(Icons.visibility),
+                            onPressed: () {
+                              setState(() {
+                                _obsecure = !_obsecure;
+                              });
+                            },
+                            icon: Icon(_obsecure
+                                ? Icons.visibility
+                                : Icons.visibility_off),
                           ),
                           prefixIcon: const Icon(
                             Icons.lock,
@@ -293,7 +303,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       TextFormField(
                         autofocus: false,
                         controller: confirmPasswordTextEditingController,
-                        obscureText: true,
+                        obscureText: _obsecureConfirm,
                         validator: (String? value) {
                           if (value == null || value.isEmpty) {
                             return "password confirmation is required";
@@ -318,8 +328,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             borderRadius: BorderRadius.circular(5),
                           ),
                           suffixIcon: IconButton(
-                            onPressed: () {},
-                            icon: const Icon(Icons.visibility),
+                            onPressed: () {
+                              setState(() {
+                                _obsecureConfirm = !_obsecureConfirm;
+                              });
+                            },
+                            icon: Icon(_obsecureConfirm
+                                ? Icons.visibility
+                                : Icons.visibility_off),
                           ),
                           prefixIcon: const Icon(
                             Icons.lock,
@@ -335,23 +351,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         children: [
                           Row(
                             children: [
-                              Expanded(
-                                child: const Text(
-                                  "By sign up, you accept to our ",
-                                  style: TextStyle(
-                                    fontSize: 15,
+                              Flexible(
+                                flex: text1.length,
+                                child: Text(
+                                  text1,
+                                  style: const TextStyle(
+                                    fontSize: 14,
                                     color: Colors.black,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
                               ),
-                              Expanded(
+                              Flexible(
+                                flex: text2.length,
                                 child: InkWell(
                                   onTap: () {},
-                                  child: const Text(
-                                    "Terms & Conditions",
-                                    style: TextStyle(
-                                      fontSize: 15,
+                                  child: Text(
+                                    text2,
+                                    style: const TextStyle(
+                                      fontSize: 14,
                                       color: Colors.orange,
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -365,7 +383,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               const Text(
                                 "and ",
                                 style: TextStyle(
-                                  fontSize: 15,
+                                  fontSize: 14,
                                   color: Colors.black,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -375,7 +393,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 child: const Text(
                                   "Privacy Policy",
                                   style: TextStyle(
-                                    fontSize: 15,
+                                    fontSize: 14,
                                     color: Colors.orange,
                                     fontWeight: FontWeight.w500,
                                   ),
@@ -385,28 +403,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           )
                         ],
                       ),
-                      // InkWell(
-                      //   onTap: () {
-                      //     Navigator.of(context)
-                      //         .pushNamed(RouteGenerator.forgotPasswordPage);
-                      //   },
-                      //   child: const Text(
-                      //     "",
-                      //     style: TextStyle(
-                      //       fontSize: 12,
-                      //       color: Color.fromARGB(255, 20, 106, 218),
-                      //       fontWeight: FontWeight.w500,
-                      //     ),
-                      //   ),
-                      // ),
                       const SizedBox(
                         height: 20,
                       ),
-                      Container(
+                      SizedBox(
                         width: double.infinity,
                         child: RawMaterialButton(
                           onPressed: registerSubmit,
-                          fillColor: const Color.fromARGB(255, 20, 106, 218),
+                          fillColor: const Color.fromARGB(255, 60, 55, 255),
                           elevation: 5,
                           padding: const EdgeInsets.symmetric(
                             vertical: 13,
@@ -414,13 +418,27 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          child: const Text(
-                            "Sign Up",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 22,
-                              fontWeight: FontWeight.w400,
-                            ),
+                          child: Consumer<AuthService>(
+                            builder: (context, value, child) {
+                              if (value.loadingSignup == true) {
+                                return const Center(
+                                    child: Padding(
+                                  padding: EdgeInsets.all(0),
+                                  child: CircularProgressIndicator(
+                                    color: Colors.orange,
+                                  ),
+                                ));
+                              }
+
+                              return const Text(
+                                "Sign Up",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              );
+                            },
                           ),
                         ),
                       ),
@@ -434,7 +452,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: const [
                             Text(
-                              "Joined us before? ",
+                              "Already have an account? ",
                               style: TextStyle(
                                 fontWeight: FontWeight.w700,
                                 fontSize: 12,
@@ -451,6 +469,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             ),
                           ],
                         ),
+                      ),
+                      const SizedBox(
+                        height: 10,
                       ),
                     ],
                   ),
