@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taskido/configs/routes.dart';
+import 'package:taskido/data/data_search.dart';
 import 'package:taskido/data/models/category_models.dart';
 import 'package:taskido/services/auth_services.dart';
 import 'package:taskido/services/tasks_services.dart';
@@ -114,98 +115,123 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return SafeArea(
+        child: Scaffold(
       appBar: AppBar(
-        title: Text("Taskido"),
+        backgroundColor: Color.fromRGBO(7, 94, 84, 1),
+        elevation: 10,
+        titleSpacing: 20,
+        automaticallyImplyLeading: false,
+        title: const Text(
+          "Taskido",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 28,
+          ),
+        ),
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(
-              right: 10,
-            ),
-            child: IconButton(
-              iconSize: 30,
-              onPressed: _logoutFnc,
-              icon: const Icon(
-                Icons.logout,
-                // size: 10,
-              ),
-            ),
+          IconButton(
+            onPressed: () {
+              showSearch(context: context, delegate: DataSearch());
+            },
+            icon: Icon(Icons.search),
           )
         ],
       ),
-      //implement categories with pagination
-      body: RefreshIndicator(
-        onRefresh: _refresh,
-        child: Consumer<TaskService>(
-          builder: (context, value, child) {
-            if (value.categoryLoading == true) {
-              return const Center(
-                child: Padding(
-                  padding: EdgeInsets.all(8),
-                  child: CircularProgressIndicator(),
-                ),
-              );
-            } else {
-              return ListView.builder(
-                controller: value.scrollController,
-                itemCount: value.categories.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    onTap: () {},
-                    title: Text(
-                      value.categories[index].category.toString(),
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 60,
-                      ),
-                    ),
-                    trailing: IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Icons.delete,
-                        color: Colors.red,
-                      ),
-                    ),
-                  );
-                },
-              );
-            }
-          },
-        ),
-      ),
-      // body: RefreshIndicator(
-      //   onRefresh: _refresh,
-      //   child: Consumer<TaskService>(
-      //     builder: (BuildContext context, value, child) {
-      //       return ListView.builder(
-      //         itemCount: value.categories.length,
-      //         itemBuilder: ((context, index) {
-      //           return GestureDetector(
-      //             onTap: () {
-      //               // Navigator.of(context)
-      //               //     .push(MaterialPageRoute(builder: (context) {
-      //               //   return TasksScreen(category: value.categories[index]);
-      //               // }));
-      //             },
-      //             child: const Text(
-      //               "Category",
-      //               // "${value.categories[index].category}",
-      //               style: TextStyle(
-      //                 fontWeight: FontWeight.bold,
-      //                 fontSize: 24,
-      //               ),
-      //             ),
-      //           );
-      //         }),
-      //       );
-      //     },
-      //   ),
-      // ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        //  _addCategoryDialog,
-        child: const Icon(Icons.add),
-      ),
-    );
+    ));
+
+    // Scaffold(
+    //   appBar: AppBar(
+    //     title: Text("Taskido"),
+    //     actions: [
+    //       Padding(
+    //         padding: const EdgeInsets.only(
+    //           right: 10,
+    //         ),
+    //         child: IconButton(
+    //           iconSize: 30,
+    //           onPressed: _logoutFnc,
+    //           icon: const Icon(
+    //             Icons.logout,
+    //             // size: 10,
+    //           ),
+    //         ),
+    //       )
+    //     ],
+    //   ),
+    //   //implement categories with pagination
+    //   body: RefreshIndicator(
+    //     onRefresh: _refresh,
+    //     child: Consumer<TaskService>(
+    //       builder: (context, value, child) {
+    //         if (value.categoryLoading == true) {
+    //           return const Center(
+    //             child: Padding(
+    //               padding: EdgeInsets.all(8),
+    //               child: CircularProgressIndicator(),
+    //             ),
+    //           );
+    //         } else {
+    //           return ListView.builder(
+    //             controller: value.scrollController,
+    //             itemCount: value.categories.length,
+    //             itemBuilder: (context, index) {
+    //               return ListTile(
+    //                 onTap: () {},
+    //                 title: Text(
+    //                   value.categories[index].category.toString(),
+    //                   style: const TextStyle(
+    //                     fontWeight: FontWeight.bold,
+    //                     fontSize: 60,
+    //                   ),
+    //                 ),
+    //                 trailing: IconButton(
+    //                   onPressed: () {},
+    //                   icon: const Icon(
+    //                     Icons.delete,
+    //                     color: Colors.red,
+    //                   ),
+    //                 ),
+    //               );
+    //             },
+    //           );
+    //         }
+    //       },
+    //     ),
+    //   ),
+    //   // body: RefreshIndicator(
+    //   //   onRefresh: _refresh,
+    //   //   child: Consumer<TaskService>(
+    //   //     builder: (BuildContext context, value, child) {
+    //   //       return ListView.builder(
+    //   //         itemCount: value.categories.length,
+    //   //         itemBuilder: ((context, index) {
+    //   //           return GestureDetector(
+    //   //             onTap: () {
+    //   //               // Navigator.of(context)
+    //   //               //     .push(MaterialPageRoute(builder: (context) {
+    //   //               //   return TasksScreen(category: value.categories[index]);
+    //   //               // }));
+    //   //             },
+    //   //             child: const Text(
+    //   //               "Category",
+    //   //               // "${value.categories[index].category}",
+    //   //               style: TextStyle(
+    //   //                 fontWeight: FontWeight.bold,
+    //   //                 fontSize: 24,
+    //   //               ),
+    //   //             ),
+    //   //           );
+    //   //         }),
+    //   //       );
+    //   //     },
+    //   //   ),
+    //   // ),
+    //   floatingActionButton: FloatingActionButton(
+    //     onPressed: () {},
+    //     //  _addCategoryDialog,
+    //     child: const Icon(Icons.add),
+    //   ),
+    // );
   }
 }
