@@ -42,11 +42,6 @@ class AuthService extends ChangeNotifier {
   bool _loadingLogin = false;
   bool get loadingLogin => _loadingLogin;
 
-  set loadingLogin(bool val) {
-    _loadingLogin = val;
-    notifyListeners();
-  }
-
   void loginToast() {
     Fluttertoast.showToast(
       msg: "Login Successly",
@@ -59,9 +54,9 @@ class AuthService extends ChangeNotifier {
     );
   }
 
-  void loginToastError() {
+  void loginToastError(msg) {
     Fluttertoast.showToast(
-      msg: "Incorrect phone or password",
+      msg: msg,
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
       timeInSecForIosWeb: 3,
@@ -72,7 +67,7 @@ class AuthService extends ChangeNotifier {
   }
 
   Future login(String phone, String password) async {
-    loadingLogin = true;
+    _loadingLogin = true;
 
     return await Api.login(phone, password).then((response) async {
       if (response.statusCode == 200) {
@@ -85,17 +80,19 @@ class AuthService extends ChangeNotifier {
         notifyListeners();
         loginToast();
 
-        loadingLogin = false;
+        _loadingLogin = false;
         return payload;
       } else {
         var payload = json.decode(response.body);
-        loginToastError();
-        loadingLogin = false;
+        loginToastError(
+          "Incorrect phone or password",
+        );
+        _loadingLogin = false;
         print(payload);
       }
     }).catchError((error) {
-      loginToastError();
-      loadingLogin = false;
+      loginToastError("Login Failed!");
+      _loadingLogin = false;
       print("error occured during user login $error");
     });
   }

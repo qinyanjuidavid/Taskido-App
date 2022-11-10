@@ -12,11 +12,12 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  bool obsecureText = true;
   final GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
   TextEditingController phoneNumberTextEditingController =
       TextEditingController();
   TextEditingController passwordTextEditingController = TextEditingController();
+  //obsecure for password
+  bool obsecure = true;
 
   @override
   void initState() {
@@ -87,7 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ],
                       ),
                       const SizedBox(height: 8),
-                      Container(
+                      SizedBox(
                         height: 200,
                         width: double.infinity,
                         child: SvgPicture.asset(
@@ -164,7 +165,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       TextFormField(
                         autofocus: false,
                         controller: passwordTextEditingController,
-                        obscureText: true,
+                        obscureText: obsecure,
                         validator: (String? value) {
                           if (value == null || value.isEmpty) {
                             return "password is required";
@@ -184,8 +185,14 @@ class _LoginScreenState extends State<LoginScreen> {
                             borderRadius: BorderRadius.circular(5),
                           ),
                           suffixIcon: IconButton(
-                            onPressed: () {},
-                            icon: const Icon(Icons.visibility),
+                            onPressed: () {
+                              setState(() {
+                                obsecure = !obsecure;
+                              });
+                            },
+                            icon: Icon(obsecure
+                                ? Icons.visibility
+                                : Icons.visibility_off),
                           ),
                           prefixIcon: const Icon(
                             Icons.lock,
@@ -214,7 +221,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(
                         height: 20,
                       ),
-                      Container(
+                      SizedBox(
                         width: double.infinity,
                         child: RawMaterialButton(
                           onPressed: loginSubmit,
@@ -228,13 +235,28 @@ class _LoginScreenState extends State<LoginScreen> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          child: const Text(
-                            "Login",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 22,
-                              fontWeight: FontWeight.w400,
-                            ),
+                          child: Consumer<AuthService>(
+                            builder: ((context, value, child) {
+                              if (value.loadingLogin == true) {
+                                return const Center(
+                                  child: Padding(
+                                    padding: EdgeInsets.all(0),
+                                    child: CircularProgressIndicator(
+                                      color: Colors.orange,
+                                    ),
+                                  ),
+                                );
+                              }
+
+                              return const Text(
+                                "Login",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              );
+                            }),
                           ),
                         ),
                       ),
@@ -275,7 +297,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ],
                       ),
                       const SizedBox(height: 20),
-                      Container(
+                      SizedBox(
                         width: double.infinity,
                         child: RawMaterialButton(
                             onPressed: () {},
