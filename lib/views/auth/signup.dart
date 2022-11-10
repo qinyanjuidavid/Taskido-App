@@ -10,7 +10,7 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  bool obsecureText = true;
+  bool _obsecure = true;
   final GlobalKey<FormState> signupFormKey = GlobalKey<FormState>();
   TextEditingController usernameTextEditingController = TextEditingController();
   TextEditingController emailTextEditingController = TextEditingController();
@@ -45,148 +45,201 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            onPressed: () {
-              Navigator.of(context).popAndPushNamed(RouteGenerator.welcomePage);
-            },
-            icon: const Icon(Icons.arrow_back),
+        body: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 5),
+          height: double.infinity,
+          width: MediaQuery.of(context).size.width,
+          child: Column(
+            children: [
+              Form(
+                key: signupFormKey,
+                child: Container(
+                  padding: const EdgeInsets.only(
+                    top: 10,
+                    left: 7,
+                    right: 7,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Stack(
+                        children: [
+                          Material(
+                            child: Align(
+                              alignment: Alignment.topLeft,
+                              child: InkWell(
+                                splashColor: Theme.of(context).splashColor,
+                                onTap: () {
+                                  Navigator.of(context)
+                                      .pop(RouteGenerator.welcomePage);
+                                },
+                                child: const Padding(
+                                  padding: EdgeInsets.only(left: 0),
+                                  child: Icon(
+                                    Icons.arrow_back,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              )
+            ],
           ),
-          title: const Text(
-            "Sign up",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 30,
-            ),
-          ),
-        ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Form(
-              key: signupFormKey,
-              child: Column(
-                children: [
-                  TextFormField(
-                    controller: emailTextEditingController,
-                    decoration: const InputDecoration(
-                      labelText: "Email",
-                    ),
-                    validator: (String? value) {
-                      if (value == null || value.isEmpty) {
-                        return "email address is required";
-                      }
-                      return null;
-                    },
-                  ),
-                  TextFormField(
-                    controller: phoneNumberTextEditingController,
-                    decoration: const InputDecoration(
-                      labelText: "Phone number",
-                    ),
-                    validator: (String? value) {
-                      if (value == null || value.isEmpty) {
-                        return "phone number is required";
-                      }
-                      return null;
-                    },
-                  ),
-                  TextFormField(
-                    controller: fullnameTextEditingController,
-                    decoration: const InputDecoration(
-                      labelText: "Full name",
-                    ),
-                    validator: (String? value) {
-                      if (value == null || value.isEmpty) {
-                        return "full name is required";
-                      }
-                      return null;
-                    },
-                  ),
-                  TextFormField(
-                    obscureText: obsecureText,
-                    controller: passwordTextEditingController,
-                    decoration: const InputDecoration(
-                      labelText: "Password",
-                    ),
-                    validator: (String? value) {
-                      if (value == null || value.isEmpty) {
-                        return "password is required";
-                      }
-                      if (value.length < 6) {
-                        return "password must be at least 6 characters";
-                      }
-
-                      return null;
-                    },
-                  ),
-                  TextFormField(
-                    obscureText: obsecureText,
-                    controller: confirmPasswordTextEditingController,
-                    decoration: const InputDecoration(
-                      labelText: "Password Confirm",
-                    ),
-                    validator: (String? value) {
-                      if (value == null || value.isEmpty) {
-                        return "password confirm is required";
-                      }
-
-                      if (value != passwordTextEditingController.text) {
-                        return "password confirm must be equal to password";
-                      }
-
-                      return null;
-                    },
-                  ),
-                  MaterialButton(
-                    color: Colors.brown,
-                    onPressed: registerSubmit,
-                    child: const Text(
-                      "Sign Up",
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    height: 7,
-                  ),
-                  GestureDetector(
-                    onTap: () {},
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Text(
-                          "Already have an Account?",
-                          style: TextStyle(),
-                        ),
-                        Text(
-                          "Login",
-                          style: TextStyle(
-                            color: Colors.blue,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      Navigator.of(context).pushNamed(RouteGenerator.otpPage);
-                    },
-                    child: const Text(
-                      "OTP",
-                      style: TextStyle(
-                        color: Colors.blue,
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            )
-          ],
         ),
       ),
     );
+
+    // SafeArea(
+    //   child: Scaffold(
+    //     appBar: AppBar(
+    //       leading: IconButton(
+    //         onPressed: () {
+    //           Navigator.of(context).popAndPushNamed(RouteGenerator.welcomePage);
+    //         },
+    //         icon: const Icon(Icons.arrow_back),
+    //       ),
+    //       title: const Text(
+    //         "Sign up",
+    //         style: TextStyle(
+    //           fontWeight: FontWeight.bold,
+    //           fontSize: 30,
+    //         ),
+    //       ),
+    //     ),
+    //     body: Column(
+    //       mainAxisAlignment: MainAxisAlignment.center,
+    //       children: [
+    //         Form(
+    //           key: signupFormKey,
+    //           child: Column(
+    //             children: [
+    //               TextFormField(
+    //                 controller: emailTextEditingController,
+    //                 decoration: const InputDecoration(
+    //                   labelText: "Email",
+    //                 ),
+    //                 validator: (String? value) {
+    //                   if (value == null || value.isEmpty) {
+    //                     return "email address is required";
+    //                   }
+    //                   return null;
+    //                 },
+    //               ),
+    //               TextFormField(
+    //                 controller: phoneNumberTextEditingController,
+    //                 decoration: const InputDecoration(
+    //                   labelText: "Phone number",
+    //                 ),
+    //                 validator: (String? value) {
+    //                   if (value == null || value.isEmpty) {
+    //                     return "phone number is required";
+    //                   }
+    //                   return null;
+    //                 },
+    //               ),
+    //               TextFormField(
+    //                 controller: fullnameTextEditingController,
+    //                 decoration: const InputDecoration(
+    //                   labelText: "Full name",
+    //                 ),
+    //                 validator: (String? value) {
+    //                   if (value == null || value.isEmpty) {
+    //                     return "full name is required";
+    //                   }
+    //                   return null;
+    //                 },
+    //               ),
+    //               TextFormField(
+    //                 obscureText: obsecureText,
+    //                 controller: passwordTextEditingController,
+    //                 decoration: const InputDecoration(
+    //                   labelText: "Password",
+    //                 ),
+    //                 validator: (String? value) {
+    //                   if (value == null || value.isEmpty) {
+    //                     return "password is required";
+    //                   }
+    //                   if (value.length < 6) {
+    //                     return "password must be at least 6 characters";
+    //                   }
+
+    //                   return null;
+    //                 },
+    //               ),
+    //               TextFormField(
+    //                 obscureText: obsecureText,
+    //                 controller: confirmPasswordTextEditingController,
+    //                 decoration: const InputDecoration(
+    //                   labelText: "Password Confirm",
+    //                 ),
+    //                 validator: (String? value) {
+    //                   if (value == null || value.isEmpty) {
+    //                     return "password confirm is required";
+    //                   }
+
+    //                   if (value != passwordTextEditingController.text) {
+    //                     return "password confirm must be equal to password";
+    //                   }
+
+    //                   return null;
+    //                 },
+    //               ),
+    //               MaterialButton(
+    //                 color: Colors.brown,
+    //                 onPressed: registerSubmit,
+    //                 child: const Text(
+    //                   "Sign Up",
+    //                   style: TextStyle(
+    //                     color: Colors.white,
+    //                   ),
+    //                 ),
+    //               ),
+    //               SizedBox(
+    //                 width: MediaQuery.of(context).size.width,
+    //                 height: 7,
+    //               ),
+    //               GestureDetector(
+    //                 onTap: () {},
+    //                 child: Row(
+    //                   mainAxisAlignment: MainAxisAlignment.center,
+    //                   children: const [
+    //                     Text(
+    //                       "Already have an Account?",
+    //                       style: TextStyle(),
+    //                     ),
+    //                     Text(
+    //                       "Login",
+    //                       style: TextStyle(
+    //                         color: Colors.blue,
+    //                       ),
+    //                     )
+    //                   ],
+    //                 ),
+    //               ),
+    //               InkWell(
+    //                 onTap: () {
+    //                   Navigator.of(context).pushNamed(RouteGenerator.otpPage);
+    //                 },
+    //                 child: const Text(
+    //                   "OTP",
+    //                   style: TextStyle(
+    //                     color: Colors.blue,
+    //                   ),
+    //                 ),
+    //               )
+    //             ],
+    //           ),
+    //         )
+    //       ],
+    //     ),
+    //   ),
+    // );
   }
 }

@@ -17,25 +17,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 class AuthService extends ChangeNotifier {
-  //check internet connectivity
-  // bool? _isConnected = true;
-  // bool? get isConnected => _isConnected;
-
-  // checkInternet() async {
-  //   return InternetConnectionChecker().onStatusChange.listen((status) {
-  //     switch (status) {
-  //       case InternetConnectionStatus.connected:
-  //         _isConnected = true;
-  //         notifyListeners();
-  //         break;
-  //       case InternetConnectionStatus.disconnected:
-  //         _isConnected = false;
-  //         notifyListeners();
-  //         break;
-  //     }
-  //   });
-  // }
-
   Login get loginDetails => db.loginAllDetailsBox!.getAt(0)!;
   TokenCheck get otpCheckDetails => db.otpDetailsBox!.getAt(0)!;
 
@@ -160,6 +141,8 @@ class AuthService extends ChangeNotifier {
     });
   }
 
+  bool _loadingSignup = false;
+  bool get loadingSignup => _loadingSignup;
   void signUpToast() {
     Fluttertoast.showToast(
       msg: "OTP sent to your phone",
@@ -191,6 +174,7 @@ class AuthService extends ChangeNotifier {
     String password,
     String password_confirmation,
   ) async {
+    _loadingSignup = true;
     return await Api.register(
       phone,
       email,
@@ -200,9 +184,8 @@ class AuthService extends ChangeNotifier {
     ).then((response) async {
       if (response.statusCode == 201) {
         var payload = json.decode(response.body);
-
-        print("Register*******************$payload");
         SignUp signupDetails = SignUp.fromJson(payload);
+
         Login allDetails = Login(
           access: signupDetails.token,
           refresh: signupDetails.refresh,
@@ -218,15 +201,18 @@ class AuthService extends ChangeNotifier {
 
         notifyListeners();
         signUpToast();
+        _loadingSignup = false;
         return payload;
       } else {
         var payload = json.decode(response.body);
         print(payload);
         signUpErrorToast(payload);
+        _loadingSignup = false;
       }
     }).catchError((error) {
       signUpErrorToast("Account sign up failed!");
       print("error occured during user signup $error");
+      _loadingSignup = false;
     });
   }
 
