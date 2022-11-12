@@ -117,26 +117,47 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     // create category map
     var infor = [
-      {"name": "Home", "icon": Icons.home, "color": Colors.blue, "id": 1},
-      {"name": "Work", "icon": Icons.work, "color": Colors.red, "id": 2},
-      {"name": "School", "icon": Icons.school, "color": Colors.green, "id": 3},
+      {
+        "name": "Home",
+        "icon": Icons.home,
+        "color": Colors.blue,
+        "id": 1,
+        "date": "2021-09-01 00:00:00"
+      },
+      {
+        "name": "Work",
+        "icon": Icons.work,
+        "color": Colors.red,
+        "id": 2,
+        "date": "2021-09-01 00:00:00"
+      },
+      {
+        "name": "School",
+        "icon": Icons.school,
+        "color": Colors.green,
+        "id": 3,
+        "date": "2021-09-01 00:00:00"
+      },
       {
         "name": "Shopping",
         "icon": Icons.shopping_cart,
         "color": Colors.purple,
-        "id": 4
+        "id": 4,
+        "date": "2021-09-01 00:00:00"
       },
       {
-        "name": "Others",
-        "icon": Icons.more_horiz,
-        "color": Colors.grey,
-        "id": 5
+        "name": "Personal",
+        "icon": Icons.person,
+        "color": Colors.orange,
+        "id": 5,
+        "date": "2021-09-01 00:00:00"
       },
       {
-        "name": "Others",
+        "name": "Other",
         "icon": Icons.more_horiz,
         "color": Colors.grey,
-        "id": 5
+        "id": 6,
+        "date": "2021-09-01 00:00:00"
       },
     ];
     return SafeArea(
@@ -153,19 +174,6 @@ class _HomeScreenState extends State<HomeScreen> {
             fontSize: 28,
           ),
         ),
-        // actions: [
-        //   Padding(
-        //     padding: const EdgeInsets.only(
-        //       right: 20,
-        //     ),
-        //     child: IconButton(
-        //       onPressed: () {
-        //         showSearch(context: context, delegate: DataSearch());
-        //       },
-        //       icon: const Icon(Icons.search),
-        //     ),
-        //   )
-        // ],
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(28),
           child: Container(
@@ -201,6 +209,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           SizedBox(
             width: MediaQuery.of(context).size.width,
@@ -345,255 +354,114 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
           ),
-          SizedBox(
-            height: 10,
+          const SizedBox(
+            height: 5,
           ),
-          // category to be in a List builder with a row of 2 containers
-          Expanded(
-            child: ListView.builder(
-              // split the list into 2
-              itemCount: (infor.length / 2).ceil(),
-              itemBuilder: (context, index) {
-                int firstIndex = index * 2;
-                int secondIndex = firstIndex + 1;
-                return Container(
-                  height: 180,
-                  margin: const EdgeInsets.only(left: 7, right: 7),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.only(
-                            top: 18,
-                            left: 15,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Column(
-                            children: [
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    infor[firstIndex]["name"].toString(),
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 5,
-                                  ),
-                                  const Text(
-                                    "Tasks",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 3,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Flexible(
-                                    child: Text(
-                                      infor[firstIndex + 1]["id"].toString(),
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 14,
-                                        // 24,
-                                      ),
-                                      softWrap: false,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 8,
-                      ),
-                      Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.only(
-                            top: 18,
-                            left: 15,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.pink,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Column(
-                            children: [
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    infor[secondIndex]["name"].toString(),
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 14,
-                                      // 45,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 5,
-                                  ),
-                                  const Text(
-                                    "Tasks",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 3,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Flexible(
-                                    child: Text(
-                                      infor[secondIndex + 1]["id"].toString(),
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 24,
-                                      ),
-                                      softWrap: false,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
+
+          const Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: EdgeInsets.only(
+                left: 10,
+              ),
+              child: Text(
+                "Categories",
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 24,
+                ),
+              ),
             ),
-          )
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+
+          // category to be in grid view
+
+          Expanded(
+            child: Container(
+              margin: const EdgeInsets.only(left: 7, right: 7),
+              child: GridView.builder(
+                itemCount: infor.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: 1.5,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                ),
+                itemBuilder: (context, index) {
+                  return InkWell(
+                    onTap: () {},
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: infor[index]["color"] as Color,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      padding: const EdgeInsets.only(
+                        top: 1,
+                        left: 5,
+                        right: 5,
+                      ),
+                      child: Column(
+                        children: [
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              //row of name of task and the date created at the end of the row
+                              Text(
+                                infor[index]["name"] as String,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const Spacer(),
+                              //date to be in a white container in the format of 20th then Oct
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  color: Colors.white,
+                                ),
+                                padding: EdgeInsets.all(5),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "20",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Text(
+                                      "Oct",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    )
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        focusColor: Colors.amber,
+        onPressed: () {},
+        child: Icon(Icons.add),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     ));
-
-    // Scaffold(
-    //   appBar: AppBar(
-    //     title: Text("Taskido"),
-    //     actions: [
-    //       Padding(
-    //         padding: const EdgeInsets.only(
-    //           right: 10,
-    //         ),
-    //         child: IconButton(
-    //           iconSize: 30,
-    //           onPressed: _logoutFnc,
-    //           icon: const Icon(
-    //             Icons.logout,
-    //             // size: 10,
-    //           ),
-    //         ),
-    //       )
-    //     ],
-    //   ),
-    //   //implement categories with pagination
-    //   body: RefreshIndicator(
-    //     onRefresh: _refresh,
-    //     child: Consumer<TaskService>(
-    //       builder: (context, value, child) {
-    //         if (value.categoryLoading == true) {
-    //           return const Center(
-    //             child: Padding(
-    //               padding: EdgeInsets.all(8),
-    //               child: CircularProgressIndicator(),
-    //             ),
-    //           );
-    //         } else {
-    //           return ListView.builder(
-    //             controller: value.scrollController,
-    //             itemCount: value.categories.length,
-    //             itemBuilder: (context, index) {
-    //               return ListTile(
-    //                 onTap: () {},
-    //                 title: Text(
-    //                   value.categories[index].category.toString(),
-    //                   style: const TextStyle(
-    //                     fontWeight: FontWeight.bold,
-    //                     fontSize: 60,
-    //                   ),
-    //                 ),
-    //                 trailing: IconButton(
-    //                   onPressed: () {},
-    //                   icon: const Icon(
-    //                     Icons.delete,
-    //                     color: Colors.red,
-    //                   ),
-    //                 ),
-    //               );
-    //             },
-    //           );
-    //         }
-    //       },
-    //     ),
-    //   ),
-    //   // body: RefreshIndicator(
-    //   //   onRefresh: _refresh,
-    //   //   child: Consumer<TaskService>(
-    //   //     builder: (BuildContext context, value, child) {
-    //   //       return ListView.builder(
-    //   //         itemCount: value.categories.length,
-    //   //         itemBuilder: ((context, index) {
-    //   //           return GestureDetector(
-    //   //             onTap: () {
-    //   //               // Navigator.of(context)
-    //   //               //     .push(MaterialPageRoute(builder: (context) {
-    //   //               //   return TasksScreen(category: value.categories[index]);
-    //   //               // }));
-    //   //             },
-    //   //             child: const Text(
-    //   //               "Category",
-    //   //               // "${value.categories[index].category}",
-    //   //               style: TextStyle(
-    //   //                 fontWeight: FontWeight.bold,
-    //   //                 fontSize: 24,
-    //   //               ),
-    //   //             ),
-    //   //           );
-    //   //         }),
-    //   //       );
-    //   //     },
-    //   //   ),
-    //   // ),
-    //   floatingActionButton: FloatingActionButton(
-    //     onPressed: () {},
-    //     //  _addCategoryDialog,
-    //     child: const Icon(Icons.add),
-    //   ),
-    // );
   }
 }
