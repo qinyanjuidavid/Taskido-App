@@ -424,120 +424,126 @@ class _HomeScreenState extends State<HomeScreen> {
           Expanded(
             child: Container(
               margin: const EdgeInsets.only(left: 7, right: 7, top: 5),
-              child: GridView.builder(
-                itemCount: infor.length,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 1.1,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 12,
-                ),
-                itemBuilder: (context, index) {
-                  return InkWell(
-                    onTap: () {},
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: infor[index]["color"] as Color,
-                        borderRadius: BorderRadius.circular(8),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 1,
-                            blurRadius: 5,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      padding: const EdgeInsets.only(
-                        top: 10,
-                        left: 10,
-                        right: 20,
-                        bottom: 12,
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  infor[index]["name"] as String,
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 26,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  maxLines: 3,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
+              child: Consumer<TaskService>(
+                builder: (context, value, child) {
+                  return GridView.builder(
+                    itemCount: value.categories.length,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 1.1,
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 12,
+                    ),
+                    itemBuilder: (context, index) {
+                      return InkWell(
+                        onTap: () {},
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: infor[index]["color"] as Color,
+                            borderRadius: BorderRadius.circular(8),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 1,
+                                blurRadius: 5,
+                                offset: const Offset(0, 3),
                               ),
                             ],
                           ),
-                          const Align(
-                            alignment: Alignment.topLeft,
-                            child: Text(
-                              "2 weeks ago",
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.white,
-                              ),
-                            ),
+                          padding: const EdgeInsets.only(
+                            top: 10,
+                            left: 10,
+                            right: 20,
+                            bottom: 12,
                           ),
-                          // at the bottom of the container
-                          Expanded(
-                            child: Align(
-                              alignment: Alignment.bottomLeft,
-                              child: Row(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  //number of tasks completed of all eg 2 of 5
-                                  Row(
-                                    children: const [
-                                      Text(
-                                        "3",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                  Expanded(
+                                    child: Text(
+                                      infor[index]["name"] as String,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 26,
+                                        fontWeight: FontWeight.bold,
                                       ),
-                                      Text(
-                                        " of ",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      Text(
-                                        "4",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  // at the end of the row
-                                  const Spacer(),
-                                  // normal circular progress indicator
-                                  const CircularProgressIndicator(
-                                    value: 0.45,
-                                    backgroundColor: Colors.white70,
-                                    strokeWidth: 5,
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                      Colors.white,
+                                      maxLines: 3,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
                                 ],
                               ),
-                            ),
+                              const Align(
+                                alignment: Alignment.topLeft,
+                                child: Text(
+                                  "2 weeks ago",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                              // at the bottom of the container
+                              Expanded(
+                                child: Align(
+                                  alignment: Alignment.bottomLeft,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      //number of tasks completed of all eg 2 of 5
+                                      Row(
+                                        children: const [
+                                          Text(
+                                            "3",
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          Text(
+                                            " of ",
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          Text(
+                                            "4",
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      // at the end of the row
+                                      const Spacer(),
+                                      // normal circular progress indicator
+                                      const CircularProgressIndicator(
+                                        value: 0.45,
+                                        backgroundColor: Colors.white70,
+                                        strokeWidth: 5,
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
+                                          Colors.white,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    ),
+                        ),
+                      );
+                    },
                   );
                 },
               ),
@@ -547,115 +553,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color.fromARGB(255, 60, 55, 255),
-        onPressed: () {
-          //show Bottomsheet
-          showModalBottomSheet(
-            context: context,
-            builder: (context) {
-              return Container(
-                height: 300,
-                child: Column(
-                  children: [
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    const Text(
-                      "Add a new category",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    const Divider(
-                      thickness: 2,
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.only(left: 10, right: 10),
-                      child: TextField(
-                        decoration: InputDecoration(
-                          hintText: "Category name",
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(10),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    // BlockcolorPicker
-                    const Padding(
-                      padding: EdgeInsets.only(left: 10, right: 10),
-                      child: TextField(
-                        decoration: InputDecoration(
-                          hintText: "Category color",
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(10),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.only(left: 10, right: 10),
-                      child: TextField(
-                        decoration: InputDecoration(
-                          hintText: "Category icon",
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(10),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    const Divider(
-                      thickness: 2,
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        ElevatedButton(
-                          onPressed: () {},
-                          child: const Text("Cancel"),
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.grey,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                        ),
-                        ElevatedButton(
-                          onPressed: () {},
-                          child: const Text("Add"),
-                          style: ElevatedButton.styleFrom(
-                            primary: const Color.fromARGB(255, 60, 55, 255),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-        },
+        onPressed: () {},
         child: Icon(Icons.add),
       ),
       // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

@@ -37,6 +37,7 @@ class Result {
   Result({
     this.id,
     this.category,
+    this.color,
     this.owner,
     this.completed,
     this.createdAt,
@@ -45,6 +46,7 @@ class Result {
 
   int? id;
   String? category;
+  String? color;
   CategoryOwner? owner;
   bool? completed;
   String? createdAt;
@@ -53,6 +55,7 @@ class Result {
   factory Result.fromJson(Map<String, dynamic> json) => Result(
         id: json["id"],
         category: json["category"],
+        color: json["color"],
         owner: CategoryOwner.fromJson(json["owner"]),
         completed: json["completed"],
         createdAt: json["created_at"],
@@ -62,6 +65,7 @@ class Result {
   Map<String, dynamic> toJson() => {
         "id": id,
         "category": category,
+        "color": color,
         "owner": owner!.toJson(),
         "completed": completed,
         "created_at": createdAt,
