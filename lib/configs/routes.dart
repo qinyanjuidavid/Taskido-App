@@ -11,9 +11,9 @@ import 'package:taskido/views/welcome_screen.dart';
 import '../views/auth/login.dart';
 
 class RouteGenerator {
-  static const String splashScreen = "/h";
+  static const String splashScreen = "/";
   static const String welcomePage = "/welcome";
-  static const String homePage = "/";
+  static const String homePage = "/home";
   static const String loginPage = "/login";
   static const String signUpPage = "/signup";
   static const String otpPage = "/otp";

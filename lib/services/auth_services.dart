@@ -56,7 +56,7 @@ class AuthService extends ChangeNotifier {
         Login loginDetails = Login.fromJson(payload);
         await db.loginAllDetailsBox!.clear();
         await db.loginAllDetailsBox!.add(loginDetails);
-        // print("Login Details++++++: ${loginDetails.access}");
+        print("Login Details++++++: ${loginDetails.access}");
 
         notifyListeners();
         loginToast();

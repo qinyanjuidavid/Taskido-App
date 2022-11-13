@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:http/http.dart';
 import 'package:taskido/api/api.dart';
 import 'package:taskido/data/models/category_models.dart';
 import 'package:taskido/data/models/task_model.dart';
@@ -14,7 +15,7 @@ class TaskService extends ChangeNotifier {
   String? _previous;
   bool? _categoryLoading = false;
   bool? _categoryOnError = false;
-  //ScrollController
+
   ScrollController? _scrollController;
   List<Result> _categories = [];
 
@@ -30,6 +31,7 @@ class TaskService extends ChangeNotifier {
   // setting listener to scrollController
   Future<void> setScrollController() async {
     _scrollController = ScrollController();
+    print("Changes............");
 
     _scrollController!.addListener(() {
       int page = 1;
@@ -39,55 +41,36 @@ class TaskService extends ChangeNotifier {
         print("Next: $_next");
         page++;
         fetchCategories(page: page); //printing nothing
-        // if (_next != null) {
-        //   fetchCategories(page);
-        // }
       }
     });
     notifyListeners();
   }
 
+  //fetching categories
   Future fetchCategories({int? page}) async {
     _categoryLoading = true;
-    if (_previous == null) {
-      _categories = [];
-    }
-
     String? refreshToken = authService.loginDetails.refresh;
-
     var response = await Api.getCategories(page).then((response) async {
-      print("Response on Service ${response.statusCode}");
       if (response.statusCode == 200) {
-        var payload = json.decode(response.body);
-        // Before pagination and after pagination
-//===============================================================
-        Category categoryDetails = Category.fromJson(payload);
-
-        _count = categoryDetails.count;
-        _next = categoryDetails.next;
-        _previous = categoryDetails.previous;
-        if (_previous == null) {
-          _categories = categoryDetails.results!;
-        }
-        _count = categoryDetails.count;
-        _next = categoryDetails.next;
-        _previous = categoryDetails.previous;
-        //if _next iS NOT NULL and _categories.length is less than _count
-        // if (_next != null && _categories.length < _count!) {
-        //append the new data to the list
-        // _categories.addAll(categoryDetails.results!);
-        // }
-        //==========================================================
+        var payload = jsonDecode(response.body);
+        Category category = Category.fromJson(payload);
+        _count = category.count;
+        _next = category.next;
+        _previous = category.previous;
+        _categories = category.results!;
         notifyListeners();
         _categoryLoading = false;
       } else if (response.statusCode == 401) {
         await authService.refreshToken(refreshToken);
         fetchCategories();
+      } else {
+        _categoryLoading = false;
+        var payload = jsonDecode(response.body);
+        print(payload);
       }
     }).catchError((error) {
-      print(error.toString());
       _categoryLoading = false;
-      _categoryOnError = true;
+      print("error occured while fetching categories $error");
     });
   }
 
