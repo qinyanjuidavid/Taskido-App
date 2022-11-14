@@ -156,24 +156,17 @@ class Api {
     return response;
   }
 
-  static Future<http.Response> getCategories(int? page) async {
+  static Future<http.Response> getCategories() async {
     // get token from db
     String? token = authService.loginDetails.access;
-    print("..... Page ...... $page");
-    page ??= 1;
-    print("Page ...... $page");
-    print("Page000000000000 $page");
+
     var response = await client2.get(
-      Uri.parse("${baseUrl}category/?page=$page"),
+      Uri.parse("${baseUrl}category/"),
       headers: {
         HttpHeaders.contentTypeHeader: 'application/json',
         HttpHeaders.authorizationHeader: 'Bearer $token',
       },
     );
-    print(response.body);
-    var l = json.decode(response.body);
-    Category c = Category.fromJson(l);
-    print("Response.........))))${c.results!.length}");
     return response;
   }
 

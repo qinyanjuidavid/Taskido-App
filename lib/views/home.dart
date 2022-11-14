@@ -148,331 +148,215 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: 10,
-            ),
-            Container(
-              margin: const EdgeInsets.only(left: 7, right: 7),
-              height: 150,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: InkWell(
-                      onTap: () {},
-                      child: Container(
-                        padding: const EdgeInsets.only(
-                          top: 18,
-                          left: 15,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.indigo,
-                          borderRadius: BorderRadius.circular(10),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 5,
-                              blurRadius: 7,
-                              offset: const Offset(0, 3),
-                            ),
-                          ],
-                        ),
-                        child: Column(
-                          children: [
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: const [
-                                Text(
-                                  "27",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 45,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 5,
-                                ),
-                                Text(
-                                  "Tasks",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 3,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: const [
-                                Flexible(
-                                  child: Text(
-                                    "Completed",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 26,
-                                    ),
-                                    softWrap: false,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  //space the containers
-                  const SizedBox(
-                    width: 8,
-                  ),
+            // SizedBox(
+            //   width: MediaQuery.of(context).size.width,
+            //   height: 10,
+            // ),
 
-                  Expanded(
-                    child: InkWell(
-                      onTap: () {},
-                      child: Container(
-                        padding: const EdgeInsets.only(
-                          top: 18,
-                          left: 15,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.teal,
-                          borderRadius: BorderRadius.circular(10),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 5,
-                              blurRadius: 7,
-                              offset: const Offset(0, 3),
-                            ),
-                          ],
-                        ),
-                        child: Column(
-                          children: [
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: const [
-                                Text(
-                                  "17",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 45,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 5,
-                                ),
-                                Text(
-                                  "Tasks",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 3,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: const [
-                                Flexible(
-                                  child: Text(
-                                    "To complete",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 26,
-                                    ),
-                                    softWrap: false,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 7,
-            ),
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: Padding(
-                padding: EdgeInsets.only(
-                  left: 10,
-                ),
-                child: Text(
-                  "Categories",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 24,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 2,
-            ),
+            // Container(
+            //   margin: const EdgeInsets.only(left: 7, right: 7),
+            //   height: 150,
+            //   child: Row(
+            //     children: [
+            //       Expanded(
+            //         child: InkWell(
+            //           onTap: () {},
+            //           child: Container(
+            //             padding: const EdgeInsets.only(
+            //               top: 18,
+            //               left: 15,
+            //             ),
+            //             decoration: BoxDecoration(
+            //               color: Colors.indigo,
+            //               borderRadius: BorderRadius.circular(10),
+            //               boxShadow: [
+            //                 BoxShadow(
+            //                   color: Colors.grey.withOpacity(0.5),
+            //                   spreadRadius: 5,
+            //                   blurRadius: 7,
+            //                   offset: const Offset(0, 3),
+            //                 ),
+            //               ],
+            //             ),
+            //             child: Column(
+            //               children: [
+            //                 const SizedBox(
+            //                   height: 10,
+            //                 ),
+            //                 Row(
+            //                   mainAxisAlignment: MainAxisAlignment.start,
+            //                   children: const [
+            //                     Text(
+            //                       "27",
+            //                       style: TextStyle(
+            //                         color: Colors.white,
+            //                         fontSize: 45,
+            //                         fontWeight: FontWeight.bold,
+            //                       ),
+            //                     ),
+            //                     SizedBox(
+            //                       width: 5,
+            //                     ),
+            //                     Text(
+            //                       "Tasks",
+            //                       style: TextStyle(
+            //                         color: Colors.white,
+            //                         fontSize: 20,
+            //                       ),
+            //                     ),
+            //                   ],
+            //                 ),
+            //                 const SizedBox(
+            //                   height: 3,
+            //                 ),
+            //                 Row(
+            //                   mainAxisAlignment: MainAxisAlignment.start,
+            //                   children: const [
+            //                     Flexible(
+            //                       child: Text(
+            //                         "Completed",
+            //                         style: TextStyle(
+            //                           color: Colors.white,
+            //                           fontWeight: FontWeight.bold,
+            //                           fontSize: 26,
+            //                         ),
+            //                         softWrap: false,
+            //                         maxLines: 1,
+            //                         overflow: TextOverflow.ellipsis,
+            //                       ),
+            //                     ),
+            //                   ],
+            //                 ),
+            //               ],
+            //             ),
+            //           ),
+            //         ),
+            //       ),
+            //       //space the containers
+            //       const SizedBox(
+            //         width: 8,
+            //       ),
+
+            //       Expanded(
+            //         child: InkWell(
+            //           onTap: () {},
+            //           child: Container(
+            //             padding: const EdgeInsets.only(
+            //               top: 18,
+            //               left: 15,
+            //             ),
+            //             decoration: BoxDecoration(
+            //               color: Colors.teal,
+            //               borderRadius: BorderRadius.circular(10),
+            //               boxShadow: [
+            //                 BoxShadow(
+            //                   color: Colors.grey.withOpacity(0.5),
+            //                   spreadRadius: 5,
+            //                   blurRadius: 7,
+            //                   offset: const Offset(0, 3),
+            //                 ),
+            //               ],
+            //             ),
+            //             child: Column(
+            //               children: [
+            //                 const SizedBox(
+            //                   height: 10,
+            //                 ),
+            //                 Row(
+            //                   mainAxisAlignment: MainAxisAlignment.start,
+            //                   children: const [
+            //                     Text(
+            //                       "17",
+            //                       style: TextStyle(
+            //                         color: Colors.white,
+            //                         fontSize: 45,
+            //                         fontWeight: FontWeight.bold,
+            //                       ),
+            //                     ),
+            //                     SizedBox(
+            //                       width: 5,
+            //                     ),
+            //                     Text(
+            //                       "Tasks",
+            //                       style: TextStyle(
+            //                         color: Colors.white,
+            //                         fontSize: 20,
+            //                       ),
+            //                     ),
+            //                   ],
+            //                 ),
+            //                 const SizedBox(
+            //                   height: 3,
+            //                 ),
+            //                 Row(
+            //                   mainAxisAlignment: MainAxisAlignment.start,
+            //                   children: const [
+            //                     Flexible(
+            //                       child: Text(
+            //                         "To complete",
+            //                         style: TextStyle(
+            //                           color: Colors.white,
+            //                           fontWeight: FontWeight.bold,
+            //                           fontSize: 26,
+            //                         ),
+            //                         softWrap: false,
+            //                         maxLines: 1,
+            //                         overflow: TextOverflow.ellipsis,
+            //                       ),
+            //                     ),
+            //                   ],
+            //                 ),
+            //               ],
+            //             ),
+            //           ),
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
+            // const SizedBox(
+            //   height: 7,
+            // ),
+            // const Align(
+            //   alignment: Alignment.centerLeft,
+            //   child: Padding(
+            //     padding: EdgeInsets.only(
+            //       left: 10,
+            //     ),
+            //     child: Text(
+            //       "Categories",
+            //       style: TextStyle(
+            //         fontWeight: FontWeight.w600,
+            //         fontSize: 24,
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            // const SizedBox(
+            //   height: 2,
+            // ),
             Expanded(
-              child: Container(
-                margin: const EdgeInsets.only(left: 7, right: 7, top: 5),
-                child: Consumer<TaskService>(
-                  builder: (context, value, child) {
-                    if (value.categoryLoading == true) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                    return GridView.builder(
-                      controller: value.scrollController,
-                      itemCount: value.categories.length,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        childAspectRatio: 1.1,
-                        crossAxisSpacing: 10,
-                        mainAxisSpacing: 12,
-                      ),
-                      itemBuilder: (context, index) {
-                        var clr = value.categories[index].color.toString();
-                        var categoryColor = Color(
-                            int.parse(clr.substring(1, 7), radix: 16) +
-                                0xFF000000);
-
-                        return InkWell(
-                          onTap: () {},
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: categoryColor,
-                              borderRadius: BorderRadius.circular(8),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.5),
-                                  spreadRadius: 1,
-                                  blurRadius: 5,
-                                  offset: const Offset(0, 3),
-                                ),
-                              ],
-                            ),
-                            padding: const EdgeInsets.only(
-                              top: 10,
-                              left: 10,
-                              right: 20,
-                              bottom: 12,
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        value.categories[index].category
-                                            .toString(),
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 26,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                        maxLines: 3,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const Align(
-                                  alignment: Alignment.topLeft,
-                                  child: Text(
-                                    "2 weeks ago",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                                // at the bottom of the container
-                                Expanded(
-                                  child: Align(
-                                    alignment: Alignment.bottomLeft,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        //number of tasks completed of all eg 2 of 5
-                                        Row(
-                                          children: const [
-                                            Text(
-                                              "3",
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                            Text(
-                                              " of ",
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                            Text(
-                                              "4",
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        // at the end of the row
-                                        const Spacer(),
-                                        // normal circular progress indicator
-                                        const CircularProgressIndicator(
-                                          value: 0.45,
-                                          backgroundColor: Colors.white70,
-                                          strokeWidth: 5,
-                                          valueColor:
-                                              AlwaysStoppedAnimation<Color>(
-                                            Colors.white,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
+              child: Consumer<TaskService>(
+                builder: (context, value, child) {
+                  if (value.categoryLoading == true) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
                     );
-                  },
-                ),
+                  }
+
+                  return ListView.builder(
+                    controller: value.scrollController,
+                    itemCount: value.categories.length,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 120,
+                        child: Text(
+                            "${value.categories[index].id} - ${value.categories[index].category}"),
+                      );
+                    },
+                  );
+                },
               ),
             ),
           ],

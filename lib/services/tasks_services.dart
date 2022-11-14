@@ -1,20 +1,33 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
+import 'package:http_interceptor/http/intercepted_client.dart';
 import 'package:taskido/api/api.dart';
+import 'package:taskido/api/interceptors/authorization_interceptor.dart';
 import 'package:taskido/data/models/category_models.dart';
 import 'package:taskido/data/models/task_model.dart';
 import 'package:taskido/services/auth_services.dart';
+import 'package:http/http.dart' as http;
 
 class TaskService extends ChangeNotifier {
-  //fetchCategories with pagination
-  //pagination variables
+  static var client = http.Client();
+  //interceptor client
+  static final client2 = InterceptedClient.build(
+    interceptors: [
+      AuthorizationInterceptor(),
+    ],
+    requestTimeout: Duration(seconds: 5),
+  );
+
   int? _count;
   String? _next;
   String? _previous;
   bool? _categoryLoading = false;
   bool? _categoryOnError = false;
+  bool? _moreDataLoading = false;
+  bool? get moreDataLoading => _moreDataLoading;
 
   ScrollController? _scrollController;
   List<Result> _categories = [];
@@ -28,29 +41,55 @@ class TaskService extends ChangeNotifier {
 
   List<Result> get categories => _categories;
 
-  // setting listener to scrollController
   Future<void> setScrollController() async {
     _scrollController = ScrollController();
-    print("Changes............");
+    print("Scroll Controller............");
 
-    _scrollController!.addListener(() {
-      int page = 1;
+    _scrollController!.addListener(() async {
+      String? token = authService.loginDetails.access;
+      String? refreshToken = authService.loginDetails.refresh;
       if (_scrollController!.position.pixels ==
-          _scrollController!.position.maxScrollExtent - 5) {
-        print("Fetching more data");
-        print("Next: $_next");
-        page++;
-        fetchCategories(page: page); //printing nothing
+          _scrollController!.position.maxScrollExtent) {
+        _moreDataLoading = true;
+        print("Next $_next");
+        print("Categoriesssssss ${_categories.length}");
+        if (_next != null && _count != _categories.length) {
+          return await client.get(
+            Uri.parse("$_next"),
+            headers: {
+              HttpHeaders.contentTypeHeader: 'application/json',
+              HttpHeaders.authorizationHeader: 'Bearer $token',
+            },
+          ).then((response) async {
+            if (response.statusCode == 200) {
+              var payload = jsonDecode(response.body);
+              Category category = Category.fromJson(payload);
+              _categories.addAll(category.results!.toList());
+              _next = category.next;
+              _count = category.count;
+              notifyListeners();
+            } else if (response.statusCode == 401) {
+              await authService.refreshToken(refreshToken);
+              fetchCategories();
+            } else {
+              var payload = jsonDecode(response.body);
+              print(payload);
+            }
+          }).catchError((error) {
+            print("Error occured while fetching data $error");
+          });
+        }
+        _moreDataLoading = false;
       }
     });
     notifyListeners();
   }
 
   //fetching categories
-  Future fetchCategories({int? page}) async {
+  Future fetchCategories() async {
     _categoryLoading = true;
     String? refreshToken = authService.loginDetails.refresh;
-    var response = await Api.getCategories(page).then((response) async {
+    var response = await Api.getCategories().then((response) async {
       if (response.statusCode == 200) {
         var payload = jsonDecode(response.body);
         Category category = Category.fromJson(payload);
