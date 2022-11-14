@@ -50,10 +50,10 @@ class TaskService extends ChangeNotifier {
       String? refreshToken = authService.loginDetails.refresh;
       if (_scrollController!.position.pixels ==
           _scrollController!.position.maxScrollExtent) {
-        _moreDataLoading = true;
-        print("Next $_next");
-        print("Categoriesssssss ${_categories.length}");
+        print("Next Page:: $_next");
+        print("Categoris Lengt::${_categories.length}");
         if (_next != null && _count != _categories.length) {
+          _moreDataLoading = true;
           return await client.get(
             Uri.parse("$_next"),
             headers: {
@@ -68,6 +68,7 @@ class TaskService extends ChangeNotifier {
               _next = category.next;
               _count = category.count;
               notifyListeners();
+              _moreDataLoading = false;
             } else if (response.statusCode == 401) {
               await authService.refreshToken(refreshToken);
               fetchCategories();
@@ -85,7 +86,6 @@ class TaskService extends ChangeNotifier {
     notifyListeners();
   }
 
-  //fetching categories
   Future fetchCategories() async {
     _categoryLoading = true;
     String? refreshToken = authService.loginDetails.refresh;
