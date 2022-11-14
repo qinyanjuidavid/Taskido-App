@@ -3,6 +3,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:taskido/configs/routes.dart';
 import 'package:taskido/services/auth_services.dart';
+import 'package:taskido/widgets/buttons/auth_button.dart';
+import 'package:taskido/widgets/inputs/text_field_with_label.dart';
 
 class LoginScreen extends StatefulWidget {
   LoginScreen({Key? key}) : super(key: key);
@@ -114,17 +116,14 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       const SizedBox(height: 15),
-                      const Text(
-                        "Phone",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            color: Color.fromARGB(255, 106, 106, 106),
-                            fontSize: 15),
-                      ),
-                      const SizedBox(height: 8),
-                      TextFormField(
-                        autofocus: false,
+                      TextFieldWithLabel(
+                        title: "Phone",
                         controller: phoneNumberTextEditingController,
+                        hintText: "Your phone number",
+                        prefix: const Icon(
+                          Icons.phone,
+                          color: Colors.grey,
+                        ),
                         keyboardType: TextInputType.emailAddress,
                         validator: (String? value) {
                           if (value == null || value.isEmpty) {
@@ -132,74 +131,30 @@ class _LoginScreenState extends State<LoginScreen> {
                           }
                           return null;
                         },
-                        textInputAction: TextInputAction.next,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          fillColor: const Color.fromARGB(255, 245, 170, 51),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                                color: Color.fromARGB(255, 20, 106, 218),
-                                width: 2.0),
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          hintText: "Your phone number",
-                          prefixIcon: const Icon(
-                            Icons.phone,
-                            // color: Color.fromARGB(255, 20, 106, 218),
-                          ),
-                        ),
                       ),
                       const SizedBox(
                         height: 20,
                       ),
-                      const Text(
-                        "Password",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            color: Color.fromARGB(255, 106, 106, 106),
-                            fontSize: 15),
-                      ),
-                      const SizedBox(height: 8),
-                      TextFormField(
-                        autofocus: false,
+                      TextFieldWithLabel(
+                        title: "Password",
                         controller: passwordTextEditingController,
-                        obscureText: _obsecure,
+                        obsecure: _obsecure,
+                        onVisibilityChange: () {
+                          setState(() {
+                            _obsecure = !_obsecure;
+                          });
+                        },
+                        prefix: const Icon(
+                          Icons.lock,
+                          color: Colors.grey,
+                        ),
+                        hintText: "Your password",
                         validator: (String? value) {
                           if (value == null || value.isEmpty) {
                             return "password is required";
                           }
                           return null;
                         },
-                        textInputAction: TextInputAction.done,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          fillColor: const Color.fromARGB(255, 245, 170, 51),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                                color: Color.fromARGB(255, 20, 106, 218),
-                                width: 2.0),
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          suffixIcon: IconButton(
-                            onPressed: () {
-                              setState(() {
-                                _obsecure = !_obsecure;
-                              });
-                            },
-                            icon: Icon(_obsecure
-                                ? Icons.visibility
-                                : Icons.visibility_off),
-                          ),
-                          prefixIcon: const Icon(
-                            Icons.lock,
-                            // color: Color.fromARGB(255, 20, 106, 218),
-                          ),
-                          hintText: "Your password",
-                        ),
                       ),
                       const SizedBox(
                         height: 16,
@@ -221,43 +176,31 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(
                         height: 20,
                       ),
-                      SizedBox(
-                        width: double.infinity,
-                        child: RawMaterialButton(
-                          onPressed: loginSubmit,
-                          // const Color.fromARGB(255, 60, 55, 255),
-                          fillColor: const Color.fromARGB(255, 60, 55, 255),
-                          //  const Color.fromARGB(255, 20, 106, 218),
-                          elevation: 5,
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 13,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Consumer<AuthService>(
-                            builder: ((context, value, child) {
-                              if (value.loadingLogin == true) {
-                                return const Center(
-                                  child: Padding(
-                                    padding: EdgeInsets.all(0),
-                                    child: CircularProgressIndicator(
-                                      color: Colors.orange,
-                                    ),
+                      AuthButton(
+                        onPressed: loginSubmit,
+                        title: "Sign In",
+                        child: Consumer<AuthService>(
+                          builder: ((context, value, child) {
+                            if (value.loadingLogin == true) {
+                              return const Center(
+                                child: Padding(
+                                  padding: EdgeInsets.all(0),
+                                  child: CircularProgressIndicator(
+                                    color: Colors.orange,
                                   ),
-                                );
-                              }
-
-                              return const Text(
-                                "Sign In",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w400,
                                 ),
                               );
-                            }),
-                          ),
+                            }
+
+                            return const Text(
+                              "Sign In",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 22,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            );
+                          }),
                         ),
                       ),
                       const SizedBox(height: 24),
@@ -351,114 +294,5 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
-
-    // SafeArea(
-    //   child: Scaffold(
-    //     appBar: AppBar(
-    //       leading: IconButton(
-    //         icon: const Icon(Icons.arrow_back),
-    //         onPressed: () {
-    //           Navigator.of(context).popAndPushNamed(RouteGenerator.welcomePage);
-    //         },
-    //       ),
-    //       title: const Text(
-    //         "Login",
-    //         style: TextStyle(
-    //           fontWeight: FontWeight.bold,
-    //           fontSize: 30,
-    //         ),
-    //       ),
-    //     ),
-    //     body: Center(
-    //       child: Form(
-    //         key: loginFormKey,
-    //         child: Column(
-    //           mainAxisAlignment: MainAxisAlignment.center,
-    //           children: [
-    //             TextFormField(
-    //               controller: phoneNumberTextEditingController,
-    //               decoration: const InputDecoration(
-    //                 labelText: "Phone number",
-    //               ),
-    //               validator: (String? value) {
-    //                 if (value == null || value.isEmpty) {
-    //                   return "phone is required";
-    //                 }
-    //                 return null;
-    //               },
-    //             ),
-    //             TextFormField(
-    //               obscureText: obsecureText,
-    //               controller: passwordTextEditingController,
-    //               decoration: const InputDecoration(
-    //                 labelText: "Password",
-    //               ),
-    //               validator: (String? value) {
-    //                 if (value == null || value.isEmpty) {
-    //                   return "password is required";
-    //                 }
-    //                 return null;
-    //               },
-    //             ),
-    //             MaterialButton(
-    //               color: Colors.brown,
-    //               onPressed: loginSubmit,
-    //               child: const Text(
-    //                 "Login",
-    //                 style: TextStyle(
-    //                   fontWeight: FontWeight.bold,
-    //                 ),
-    //               ),
-    //             ),
-    //             SizedBox(
-    //               width: MediaQuery.of(context).size.width,
-    //               height: 7,
-    //             ),
-    //             Center(
-    //               child: GestureDetector(
-    //                 onTap: () {
-    //                   Navigator.of(context)
-    //                       .pushNamed(RouteGenerator.signUpPage);
-    //                 },
-    //                 child: Row(
-    //                   mainAxisAlignment: MainAxisAlignment.center,
-    //                   children: const [
-    //                     Text(
-    //                       "Don't have an account?",
-    //                     ),
-    //                     Text(
-    //                       "Register",
-    //                       style: TextStyle(
-    //                         color: Colors.blue,
-    //                       ),
-    //                     ),
-    //                   ],
-    //                 ),
-    //               ),
-    //             ),
-    //             SizedBox(
-    //               width: MediaQuery.of(context).size.width,
-    //               height: 7,
-    //             ),
-    //             InkWell(
-    //               onTap: () {
-    //                 Navigator.of(context).pushNamed(
-    //                   RouteGenerator.forgotPasswordPage,
-    //                 );
-    //               },
-    //               child: const Text(
-    //                 "Forgot Password?",
-    //                 style: TextStyle(
-    //                   fontWeight: FontWeight.bold,
-    //                   color: Colors.blue,
-    //                 ),
-    //               ),
-    //             )
-    //           ],
-    //         ),
-    //       ),
-    //     ),
-    //   ),
-    // );
   }
 }
