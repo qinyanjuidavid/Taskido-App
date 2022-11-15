@@ -95,8 +95,14 @@ class _OtpScreenState extends State<OtpScreen> {
                   height: 68,
                   width: 64,
                   child: TextField(
-                    // style: Theme.of(context).textTheme.headLine6,
+                    onChanged: (value) {
+                      if (value.length == 1) {
+                        FocusScope.of(context).nextFocus();
+                      }
+                    },
+                    style: Theme.of(context).textTheme.headline6,
                     keyboardType: TextInputType.number,
+                    textAlign: TextAlign.center,
                     inputFormatters: [
                       LengthLimitingTextInputFormatter(1),
                       FilteringTextInputFormatter.digitsOnly,
