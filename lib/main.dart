@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:taskido/configs/routes.dart';
 import 'package:taskido/services/auth_services.dart';
 import 'package:taskido/services/tasks_services.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+    [
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ],
+  );
   runApp(MyApp());
 }
 
@@ -35,6 +43,7 @@ class _MyAppState extends State<MyApp> {
           brightness: Brightness.light,
           focusColor: Colors.black,
           primaryColor: Colors.amber,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         initialRoute: "/",
         onGenerateRoute: RouteGenerator.generateRoute,

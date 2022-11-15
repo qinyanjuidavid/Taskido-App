@@ -179,47 +179,51 @@ class _LoginScreenState extends State<LoginScreen> {
             SizedBox(
               width: double.infinity,
               child: RawMaterialButton(
-                  onPressed: () {},
-                  fillColor: Color.fromARGB(255, 239, 239, 239),
-                  focusColor: Color.fromARGB(255, 20, 106, 218),
-                  elevation: 0,
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 13,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        height: 18,
-                        width: 18,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                              image: AssetImage(
-                                "assets/images/google_signin.png",
-                              ),
-                              fit: BoxFit.cover),
-                        ),
+                onPressed: () {},
+                fillColor: Color.fromARGB(255, 239, 239, 239),
+                focusColor: Color.fromARGB(255, 20, 106, 218),
+                elevation: 0,
+                padding: const EdgeInsets.symmetric(
+                  vertical: 13,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      height: 18,
+                      width: 18,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                            image: AssetImage(
+                              "assets/images/google_signin.png",
+                            ),
+                            fit: BoxFit.cover),
                       ),
-                      const SizedBox(
-                        width: 8,
+                    ),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    const Text(
+                      "Sign in with Google",
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 72, 72, 72),
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
                       ),
-                      const Text(
-                        "Sign in with Google",
-                        style: TextStyle(
-                          color: Color.fromARGB(255, 72, 72, 72),
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                    ],
-                  )),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 30,
             ),
           ],
         ),

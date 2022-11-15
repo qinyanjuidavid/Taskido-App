@@ -22,6 +22,7 @@ class Api {
   );
 
   static Future<http.Response> login(String phone, String password) async {
+    print("Phone:: $phone Password:: $password ");
     var response = await client.post(
       Uri.parse('${baseUrl}login/'),
       headers: {
@@ -32,6 +33,7 @@ class Api {
         'password': password,
       }),
     );
+    print("Response.... $response");
     return response;
   }
 
