@@ -178,7 +178,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       AuthButton(
                         onPressed: loginSubmit,
-                        title: "Sign In",
                         child: Consumer<AuthService>(
                           builder: ((context, value, child) {
                             if (value.loadingLogin == true) {

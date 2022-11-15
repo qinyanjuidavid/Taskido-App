@@ -6,7 +6,6 @@ import 'package:taskido/data/data_search.dart';
 import 'package:taskido/data/models/category_models.dart';
 import 'package:taskido/services/auth_services.dart';
 import 'package:taskido/services/tasks_services.dart';
-import 'package:taskido/views/auth/tasks_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key? key}) : super(key: key);

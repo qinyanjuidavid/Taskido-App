@@ -7,7 +7,8 @@ class TextFieldWithLabel extends StatelessWidget {
   final Widget? prefix;
   final String? hintText;
   final Function? onVisibilityChange;
-  final Function? validator;
+  // final Function? validator;
+  final String? Function(String?)? validator;
   final Color? color;
   final TextEditingController controller;
   final Function? onChange;
@@ -48,7 +49,7 @@ class TextFieldWithLabel extends StatelessWidget {
             controller: controller,
             obscureText: obsecure,
             keyboardType: TextInputType.emailAddress,
-            // validator: validatorFunc ,
+            validator: validator,
             textInputAction: TextInputAction.next,
             decoration: InputDecoration(
               border: OutlineInputBorder(

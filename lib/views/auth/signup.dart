@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:taskido/configs/routes.dart';
 import 'package:taskido/services/auth_services.dart';
+import 'package:taskido/widgets/buttons/auth_button.dart';
 
 class SignUpScreen extends StatefulWidget {
   SignUpScreen({Key? key}) : super(key: key);
@@ -406,40 +407,29 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       const SizedBox(
                         height: 20,
                       ),
-                      SizedBox(
-                        width: double.infinity,
-                        child: RawMaterialButton(
-                          onPressed: registerSubmit,
-                          fillColor: const Color.fromARGB(255, 60, 55, 255),
-                          elevation: 5,
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 13,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Consumer<AuthService>(
-                            builder: (context, value, child) {
-                              if (value.loadingSignup == true) {
-                                return const Center(
-                                    child: Padding(
-                                  padding: EdgeInsets.all(0),
-                                  child: CircularProgressIndicator(
-                                    color: Colors.orange,
-                                  ),
-                                ));
-                              }
-
-                              return const Text(
-                                "Sign Up",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w400,
+                      AuthButton(
+                        onPressed: registerSubmit,
+                        child: Consumer<AuthService>(
+                          builder: (context, value, child) {
+                            if (value.loadingSignup == true) {
+                              return const Center(
+                                  child: Padding(
+                                padding: EdgeInsets.all(0),
+                                child: CircularProgressIndicator(
+                                  color: Colors.orange,
                                 ),
-                              );
-                            },
-                          ),
+                              ));
+                            }
+
+                            return const Text(
+                              "Sign Up",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 22,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            );
+                          },
                         ),
                       ),
                       const SizedBox(height: 24),

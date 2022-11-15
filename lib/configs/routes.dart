@@ -5,8 +5,8 @@ import 'package:taskido/views/auth/otp_page.dart';
 import 'package:taskido/views/auth/password_reset_screen.dart';
 import 'package:taskido/views/home.dart';
 import 'package:taskido/views/auth/signup.dart';
-import 'package:taskido/views/splash_screen.dart';
-import 'package:taskido/views/welcome_screen.dart';
+import 'package:taskido/views/welcome/splash_screen.dart';
+import 'package:taskido/views/welcome/welcome_screen.dart';
 
 import '../views/auth/login.dart';
 

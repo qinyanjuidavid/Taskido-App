@@ -105,7 +105,6 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
                 ),
                 AuthButton(
                   onPressed: _passwordResetFnc,
-                  title: "Reset Password",
                   child: Consumer<AuthService>(
                     builder: ((context, value, child) {
                       if (value.passwordResetLoading == true) {
@@ -118,6 +117,13 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
                           ),
                         );
                       }
+                      return const Text(
+                        "Reset Password",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
+                      );
                     }),
                   ),
                 ),
