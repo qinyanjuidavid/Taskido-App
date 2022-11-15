@@ -58,7 +58,7 @@ class _OtpScreenState extends State<OtpScreen> {
     return AuthBase(
       title: "Enter OTP",
       subtitle: "Enter the OTP sent to your phone",
-      image: "assets/images/forgot_password.svg",
+      image: "assets/images/otp.svg",
       body: Form(
         key: otpFormKey,
         child: Column(

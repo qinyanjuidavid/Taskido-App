@@ -125,7 +125,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           Icons.phone,
                           color: Colors.grey,
                         ),
-                        keyboardType: TextInputType.emailAddress,
+                        keyboardType: TextInputType.text,
                         // FormValidator for phone number
                         validator: (value) =>
                             FormValidators().phoneNumberValidator(

@@ -296,7 +296,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       GestureDetector(
                         onTap: () {
                           Navigator.of(context)
-                              .pushNamed(RouteGenerator.otpPage);
+                              .pushNamed(RouteGenerator.loginPage);
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,

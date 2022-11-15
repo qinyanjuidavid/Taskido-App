@@ -267,7 +267,11 @@ class AuthService extends ChangeNotifier {
     });
   }
 
+  bool _isSendOtpLoading = false;
+  bool get isSendOtpLoading => _isSendOtpLoading;
+
   Future passwordResetPhoneNumber(String? phoneNumber) async {
+    _isSendOtpLoading = true;
     return await Api.passwordResetPhoneNumber(phoneNumber)
         .then((response) async {
       if (response.statusCode == 200) {
@@ -293,13 +297,16 @@ class AuthService extends ChangeNotifier {
         print("Phone number from db ${loginDetails.user!.phone}");
         print("OTP 2 Phone number from db ${otpCheckDetails.otpData!.phone}");
         notifyListeners();
+        _isSendOtpLoading = false;
         return payload;
       } else {
         var payload = json.decode(response.body);
         print("Password Reset Phone $payload");
+        _isSendOtpLoading = false;
       }
     }).catchError((error) {
       print("error occured while requesting for an otp $error");
+      _isSendOtpLoading = false;
     });
   }
 
