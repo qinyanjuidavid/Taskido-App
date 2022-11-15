@@ -301,17 +301,24 @@ class AuthService extends ChangeNotifier {
     });
   }
 
+  bool _passwordResetLoading = false;
+  bool get passwordResetLoading => _passwordResetLoading;
+
   Future passwordReset(String? password, String? password_confirm) async {
+    _passwordResetLoading = true;
     return await Api.passwordReset(password, password_confirm).then((response) {
       if (response.statusCode == 200) {
         var payload = json.decode(response.body);
         notifyListeners();
+        _passwordResetLoading = false;
         return payload;
       } else {
         var payload = json.decode(response.body);
+        _passwordResetLoading = false;
         print("Password Reset Payload");
       }
     }).catchError((error) {
+      _passwordResetLoading = false;
       print("error occured during password reset $error");
     });
   }

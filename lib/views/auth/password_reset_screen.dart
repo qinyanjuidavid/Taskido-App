@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:taskido/configs/routes.dart';
 import 'package:taskido/services/auth_services.dart';
+import 'package:taskido/widgets/buttons/auth_button.dart';
+import 'package:taskido/widgets/inputs/text_field_with_label.dart';
 
 class PasswordResetScreen extends StatefulWidget {
   PasswordResetScreen({Key? key}) : super(key: key);
@@ -15,7 +18,8 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
 
   TextEditingController confirmPasswordTextEditingController =
       TextEditingController();
-  bool obsecureText = true;
+  bool _obsecure = true;
+  bool _obsecureConfirm = true;
   void _passwordResetFnc() async {
     if (passwordResetFormKey.currentState!.validate()) {
       await authService
@@ -50,11 +54,18 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                TextFormField(
-                  obscureText: obsecureText,
+                TextFieldWithLabel(
+                  title: "Password",
                   controller: passwordTextEditingController,
-                  decoration: const InputDecoration(
-                    labelText: "Password",
+                  obsecure: _obsecure,
+                  onVisibilityChange: () {
+                    setState(() {
+                      _obsecure = !_obsecure;
+                    });
+                  },
+                  prefix: const Icon(
+                    Icons.lock,
+                    color: Colors.grey,
                   ),
                   validator: (String? value) {
                     if (value == null || value.isEmpty) {
@@ -67,12 +78,19 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
                     return null;
                   },
                 ),
-                TextFormField(
-                  obscureText: obsecureText,
+                TextFieldWithLabel(
+                  title: "Password confirm",
                   controller: confirmPasswordTextEditingController,
-                  decoration: const InputDecoration(
-                    labelText: "Password Confirm",
+                  obsecure: _obsecureConfirm,
+                  prefix: const Icon(
+                    Icons.lock,
+                    color: Colors.grey,
                   ),
+                  onVisibilityChange: () {
+                    setState(() {
+                      _obsecureConfirm = !_obsecureConfirm;
+                    });
+                  },
                   validator: (String? value) {
                     if (value == null || value.isEmpty) {
                       return "password confirm is required";
@@ -85,14 +103,22 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
                     return null;
                   },
                 ),
-                MaterialButton(
-                  color: Colors.brown,
+                AuthButton(
                   onPressed: _passwordResetFnc,
-                  child: const Text(
-                    "Sign Up",
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
+                  title: "Reset Password",
+                  child: Consumer<AuthService>(
+                    builder: ((context, value, child) {
+                      if (value.passwordResetLoading == true) {
+                        return const Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(0),
+                            child: CircularProgressIndicator(
+                              color: Colors.orange,
+                            ),
+                          ),
+                        );
+                      }
+                    }),
                   ),
                 ),
               ],
