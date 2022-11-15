@@ -29,6 +29,7 @@ class _PasswordResetPhoneScreenState extends State<PasswordResetPhoneScreen> {
           Navigator.of(context).pushNamed(
             RouteGenerator.forgotPasswordOtpPage,
           );
+          phoneNumberTextEditingController.text = "";
         }
       });
     }

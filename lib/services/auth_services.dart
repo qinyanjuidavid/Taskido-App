@@ -310,7 +310,11 @@ class AuthService extends ChangeNotifier {
     });
   }
 
+  bool _isPasswordOTPLoading = false;
+  bool get isPasswordOTPLoading => _isPasswordOTPLoading;
+
   Future passwordResetTokenCheck(String? token) async {
+    _isPasswordOTPLoading = true;
     return await Api.passwordResetTokenCheck(token).then((response) async {
       if (response.statusCode == 200) {
         var payload = json.decode(response.body);
@@ -333,13 +337,16 @@ class AuthService extends ChangeNotifier {
         );
         print("Password Check ##### Payload $payload");
         notifyListeners();
+        _passwordResetLoading = false;
         return payload;
       } else {
         var payload = json.decode(response.body);
-        print("Password Token Check $payload");
+        print(payload);
+        _passwordResetLoading = false;
       }
     }).catchError((error) {
       print("error occurred during otp check $error");
+      _passwordResetLoading = false;
     });
   }
 

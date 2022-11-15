@@ -18,31 +18,36 @@ class OtpScreen extends StatefulWidget {
 
 class _OtpScreenState extends State<OtpScreen> {
   final GlobalKey<FormState> otpFormKey = GlobalKey<FormState>();
-  TextEditingController pin1TextEditingController = TextEditingController();
-  TextEditingController pin2TextEditingController = TextEditingController();
-  TextEditingController pin3TextEditingController = TextEditingController();
-  TextEditingController pin4TextEditingController = TextEditingController();
-  TextEditingController pin5TextEditingController = TextEditingController();
-  TextEditingController pin6TextEditingController = TextEditingController();
+  TextEditingController _pin1TextEditingController = TextEditingController();
+  TextEditingController _pin2TextEditingController = TextEditingController();
+  TextEditingController _pin3TextEditingController = TextEditingController();
+  TextEditingController _pin4TextEditingController = TextEditingController();
+  TextEditingController _pin5TextEditingController = TextEditingController();
+  TextEditingController _pin6TextEditingController = TextEditingController();
 
   void otpSubmit() async {
     if (otpFormKey.currentState!.validate()) {
-      var otp = pin1TextEditingController.text +
-          pin2TextEditingController.text +
-          pin3TextEditingController.text +
-          pin4TextEditingController.text +
-          pin5TextEditingController.text +
-          pin6TextEditingController.text;
+      var otp = _pin1TextEditingController.text +
+          _pin2TextEditingController.text +
+          _pin3TextEditingController.text +
+          _pin4TextEditingController.text +
+          _pin5TextEditingController.text +
+          _pin6TextEditingController.text;
 
       if (otp.length == 6) {
         await authService.otp(otp).then((value) {
           if (value != null) {
             print(value);
             Navigator.of(context).pushNamed(RouteGenerator.loginPage);
+            _pin1TextEditingController.text = "";
+            _pin2TextEditingController.text = "";
+            _pin3TextEditingController.text = "";
+            _pin4TextEditingController.text = "";
+            _pin5TextEditingController.text = "";
+            _pin6TextEditingController.text = "";
           }
         });
       } else {
-        //display snackbar
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text("Invalid OTP"),
@@ -69,7 +74,7 @@ class _OtpScreenState extends State<OtpScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 OtpInputBox(
-                  controller: pin1TextEditingController,
+                  controller: _pin1TextEditingController,
                   onChanged: (value) {
                     if (value!.length == 1) {
                       FocusScope.of(context).nextFocus();
@@ -78,7 +83,7 @@ class _OtpScreenState extends State<OtpScreen> {
                 ),
                 const SizedBox(width: 2),
                 OtpInputBox(
-                  controller: pin2TextEditingController,
+                  controller: _pin2TextEditingController,
                   onChanged: (value) {
                     if (value!.length == 1) {
                       FocusScope.of(context).nextFocus();
@@ -87,7 +92,7 @@ class _OtpScreenState extends State<OtpScreen> {
                 ),
                 const SizedBox(width: 2),
                 OtpInputBox(
-                  controller: pin3TextEditingController,
+                  controller: _pin3TextEditingController,
                   onChanged: (value) {
                     if (value!.length == 1) {
                       FocusScope.of(context).nextFocus();
@@ -96,7 +101,7 @@ class _OtpScreenState extends State<OtpScreen> {
                 ),
                 const SizedBox(width: 2),
                 OtpInputBox(
-                  controller: pin4TextEditingController,
+                  controller: _pin4TextEditingController,
                   onChanged: (value) {
                     if (value!.length == 1) {
                       FocusScope.of(context).nextFocus();
@@ -105,7 +110,7 @@ class _OtpScreenState extends State<OtpScreen> {
                 ),
                 const SizedBox(width: 2),
                 OtpInputBox(
-                  controller: pin5TextEditingController,
+                  controller: _pin5TextEditingController,
                   onChanged: (value) {
                     if (value!.length == 1) {
                       FocusScope.of(context).nextFocus();
@@ -114,7 +119,7 @@ class _OtpScreenState extends State<OtpScreen> {
                 ),
                 const SizedBox(width: 2),
                 OtpInputBox(
-                  controller: pin6TextEditingController,
+                  controller: _pin6TextEditingController,
                   onChanged: (value) {
                     if (value!.length == 1) {
                       FocusScope.of(context).unfocus();
