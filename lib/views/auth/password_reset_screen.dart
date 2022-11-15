@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taskido/configs/routes.dart';
 import 'package:taskido/services/auth_services.dart';
+import 'package:taskido/services/validators.dart';
+import 'package:taskido/views/auth/auth_base.dart';
 import 'package:taskido/widgets/buttons/auth_button.dart';
 import 'package:taskido/widgets/inputs/text_field_with_label.dart';
 
@@ -37,99 +39,75 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            "Password Reset",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 28,
+    return AuthBase(
+      title: "Password Reset",
+      subtitle: "Reset your password",
+      image: "assets/images/forgot_password.svg",
+      body: Form(
+        key: passwordResetFormKey,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextFieldWithLabel(
+              title: "Password",
+              hintText: "Enter Password",
+              obsecure: _obsecure,
+              controller: passwordTextEditingController,
+              validator: (value) => FormValidators().passwordValidator(value!),
+              keyboardType: TextInputType.text,
+              onVisibilityChange: () {
+                setState(() {
+                  _obsecure = !_obsecure;
+                });
+              },
+              prefix: const Icon(
+                Icons.lock,
+                color: Colors.grey,
+              ),
             ),
-          ),
-        ),
-        body: Container(
-          child: Form(
-            key: passwordResetFormKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TextFieldWithLabel(
-                  title: "Password",
-                  controller: passwordTextEditingController,
-                  obsecure: _obsecure,
-                  onVisibilityChange: () {
-                    setState(() {
-                      _obsecure = !_obsecure;
-                    });
-                  },
-                  prefix: const Icon(
-                    Icons.lock,
-                    color: Colors.grey,
-                  ),
-                  validator: (String? value) {
-                    if (value == null || value.isEmpty) {
-                      return "password is required";
-                    }
-                    if (value.length < 6) {
-                      return "password must be at least 6 characters";
-                    }
-
-                    return null;
-                  },
-                ),
-                TextFieldWithLabel(
-                  title: "Password confirm",
-                  controller: confirmPasswordTextEditingController,
-                  obsecure: _obsecureConfirm,
-                  prefix: const Icon(
-                    Icons.lock,
-                    color: Colors.grey,
-                  ),
-                  onVisibilityChange: () {
-                    setState(() {
-                      _obsecureConfirm = !_obsecureConfirm;
-                    });
-                  },
-                  validator: (String? value) {
-                    if (value == null || value.isEmpty) {
-                      return "password confirm is required";
-                    }
-
-                    if (value != passwordTextEditingController.text) {
-                      return "password confirm must be equal to password";
-                    }
-
-                    return null;
-                  },
-                ),
-                AuthButton(
-                  onPressed: _passwordResetFnc,
-                  child: Consumer<AuthService>(
-                    builder: ((context, value, child) {
-                      if (value.passwordResetLoading == true) {
-                        return const Center(
-                          child: Padding(
-                            padding: EdgeInsets.all(0),
-                            child: CircularProgressIndicator(
-                              color: Colors.orange,
-                            ),
+            const SizedBox(
+              height: 20,
+            ),
+            TextFieldWithLabel(
+              title: "Password Confirm",
+              hintText: "Enter Password Confirmation",
+              obsecure: _obsecureConfirm,
+              controller: confirmPasswordTextEditingController,
+              validator: (value) => FormValidators().passwordConfirmValidator(
+                  value!, passwordTextEditingController.text),
+              keyboardType: TextInputType.text,
+              onVisibilityChange: () {
+                setState(() {
+                  _obsecureConfirm = !_obsecureConfirm;
+                });
+              },
+              prefix: const Icon(
+                Icons.lock,
+                color: Colors.grey,
+              ),
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            AuthButton(
+              onPressed: _passwordResetFnc,
+              child: Consumer<AuthService>(
+                builder: (context, value, child) {
+                  return authService.passwordResetLoading
+                      ? const CircularProgressIndicator()
+                      : const Text(
+                          "Change Password",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 22,
+                            fontWeight: FontWeight.w400,
                           ),
                         );
-                      }
-                      return const Text(
-                        "Reset Password",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                      );
-                    }),
-                  ),
-                ),
-              ],
-            ),
-          ),
+                },
+              ),
+            )
+          ],
         ),
       ),
     );
