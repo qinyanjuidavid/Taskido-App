@@ -3,7 +3,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:taskido/configs/routes.dart';
 import 'package:taskido/services/auth_services.dart';
+import 'package:taskido/services/validators.dart';
 import 'package:taskido/widgets/buttons/auth_button.dart';
+import 'package:taskido/widgets/inputs/text_field_with_label.dart';
 
 class SignUpScreen extends StatefulWidget {
   SignUpScreen({Key? key}) : super(key: key);
@@ -119,231 +121,89 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                       ),
                       const SizedBox(height: 10),
-                      const Text(
-                        "Email",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            color: Color.fromARGB(255, 106, 106, 106),
-                            fontSize: 15),
-                      ),
-                      const SizedBox(height: 8),
-                      TextFormField(
-                        autofocus: false,
+                      TextFieldWithLabel(
+                        title: "Email",
                         controller: emailTextEditingController,
-                        keyboardType: TextInputType.emailAddress,
-                        validator: (String? value) {
-                          if (value == null || value.isEmpty) {
-                            return "email address is required";
-                          }
-                          return null;
-                        },
-                        textInputAction: TextInputAction.next,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          fillColor: const Color.fromARGB(255, 245, 170, 51),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                                color: Color.fromARGB(255, 20, 106, 218),
-                                width: 2.0),
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          hintText: "Your email",
-                          prefixIcon: const Icon(
-                            Icons.mail,
-                            // color: Color.fromARGB(255, 20, 106, 218),
-                          ),
+                        hintText: "Enter your email",
+                        prefix: const Icon(
+                          Icons.email,
+                          color: Colors.grey,
+                        ),
+                        validator: (value) => FormValidators().emailValidator(
+                          value!,
                         ),
                       ),
                       const SizedBox(
                         height: 15,
                       ),
-                      const Text(
-                        "Phone",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            color: Color.fromARGB(255, 106, 106, 106),
-                            fontSize: 15),
-                      ),
-                      const SizedBox(height: 8),
-                      TextFormField(
-                        autofocus: false,
+                      TextFieldWithLabel(
+                        title: "Phone",
                         controller: phoneNumberTextEditingController,
-                        keyboardType: TextInputType.text,
-                        validator: (String? value) {
-                          if (value == null || value.isEmpty) {
-                            return "phone number is required";
-                          }
-                          return null;
-                        },
-                        textInputAction: TextInputAction.next,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          fillColor: const Color.fromARGB(255, 245, 170, 51),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                                color: Color.fromARGB(255, 20, 106, 218),
-                                width: 2.0),
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          hintText: "Your phone number",
-                          prefixIcon: const Icon(
-                            Icons.phone,
-                            // color: Color.fromARGB(255, 20, 106, 218),
-                          ),
+                        hintText: "Enter your phone number",
+                        prefix: const Icon(Icons.phone, color: Colors.grey),
+                        validator: (value) =>
+                            FormValidators().phoneNumberValidator(
+                          value!,
                         ),
                       ),
                       const SizedBox(
                         height: 15,
                       ),
-                      const Text(
-                        "Full Name",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            color: Color.fromARGB(255, 106, 106, 106),
-                            fontSize: 15),
-                      ),
-                      const SizedBox(height: 8),
-                      TextFormField(
-                        autofocus: false,
+                      TextFieldWithLabel(
+                        title: "Full Name",
                         controller: fullnameTextEditingController,
-                        keyboardType: TextInputType.text,
-                        validator: (String? value) {
-                          if (value == null || value.isEmpty) {
-                            return "full name is required";
-                          }
-                          return null;
-                        },
-                        textInputAction: TextInputAction.next,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          fillColor: const Color.fromARGB(255, 245, 170, 51),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                                color: Color.fromARGB(255, 20, 106, 218),
-                                width: 2.0),
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          hintText: "Your full name",
-                          prefixIcon: const Icon(
-                            Icons.person,
-                            // color: Color.fromARGB(255, 20, 106, 218),
-                          ),
+                        hintText: "Enter your full name",
+                        prefix: const Icon(
+                          Icons.person,
+                          color: Colors.grey,
+                        ),
+                        validator: (value) =>
+                            FormValidators().fullNameValidator(
+                          value!,
                         ),
                       ),
                       const SizedBox(
                         height: 15,
                       ),
-                      const Text(
-                        "Password",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            color: Color.fromARGB(255, 106, 106, 106),
-                            fontSize: 15),
-                      ),
-                      const SizedBox(height: 8),
-                      TextFormField(
-                        autofocus: false,
+                      TextFieldWithLabel(
+                        title: "Password",
+                        obsecure: _obsecure,
                         controller: passwordTextEditingController,
-                        obscureText: _obsecure,
-                        validator: (String? value) {
-                          if (value == null || value.isEmpty) {
-                            return "password is required";
-                          }
-                          if (value.length < 6) {
-                            return "password must be at least 6 characters";
-                          }
-
-                          return null;
+                        hintText: "Enter your password",
+                        prefix: const Icon(
+                          Icons.lock,
+                          color: Colors.grey,
+                        ),
+                        onVisibilityChange: () {
+                          setState(() {
+                            _obsecure = !_obsecure;
+                          });
                         },
-                        textInputAction: TextInputAction.done,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          fillColor: const Color.fromARGB(255, 245, 170, 51),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                                color: Color.fromARGB(255, 20, 106, 218),
-                                width: 2.0),
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          suffixIcon: IconButton(
-                            onPressed: () {
-                              setState(() {
-                                _obsecure = !_obsecure;
-                              });
-                            },
-                            icon: Icon(_obsecure
-                                ? Icons.visibility
-                                : Icons.visibility_off),
-                          ),
-                          prefixIcon: const Icon(
-                            Icons.lock,
-                            // color: Color.fromARGB(255, 20, 106, 218),
-                          ),
-                          hintText: "Your password",
+                        validator: (value) =>
+                            FormValidators().passwordValidator(
+                          value!,
                         ),
                       ),
                       const SizedBox(
                         height: 15,
                       ),
-                      const Text(
-                        "Password Confirmation",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            color: Color.fromARGB(255, 106, 106, 106),
-                            fontSize: 15),
-                      ),
-                      const SizedBox(height: 8),
-                      TextFormField(
-                        autofocus: false,
+                      TextFieldWithLabel(
+                        title: "Password Confirm",
                         controller: confirmPasswordTextEditingController,
-                        obscureText: _obsecureConfirm,
-                        validator: (String? value) {
-                          if (value == null || value.isEmpty) {
-                            return "password confirmation is required";
-                          }
-
-                          if (value != passwordTextEditingController.text) {
-                            return "password confirm must be equal to password";
-                          }
-
-                          return null;
-                        },
-                        textInputAction: TextInputAction.done,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          fillColor: const Color.fromARGB(255, 245, 170, 51),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                                color: Color.fromARGB(255, 20, 106, 218),
-                                width: 2.0),
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          suffixIcon: IconButton(
-                            onPressed: () {
-                              setState(() {
-                                _obsecureConfirm = !_obsecureConfirm;
-                              });
-                            },
-                            icon: Icon(_obsecureConfirm
-                                ? Icons.visibility
-                                : Icons.visibility_off),
-                          ),
-                          prefixIcon: const Icon(
-                            Icons.lock,
-                            // color: Color.fromARGB(255, 20, 106, 218),
-                          ),
-                          hintText: "Your password Confirmation",
+                        obsecure: _obsecureConfirm,
+                        hintText: "Enter your password confirmation",
+                        prefix: const Icon(
+                          Icons.lock,
+                          color: Colors.grey,
                         ),
+                        onVisibilityChange: () {
+                          setState(() {
+                            _obsecureConfirm = !_obsecureConfirm;
+                          });
+                        },
+                        validator: (value) => FormValidators()
+                            .passwordConfirmValidator(
+                                value!, passwordTextEditingController.text),
                       ),
                       const SizedBox(
                         height: 16,
@@ -436,7 +296,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       GestureDetector(
                         onTap: () {
                           Navigator.of(context)
-                              .pushNamed(RouteGenerator.loginPage);
+                              .pushNamed(RouteGenerator.otpPage);
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,

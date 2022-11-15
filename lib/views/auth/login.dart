@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:taskido/configs/routes.dart';
 import 'package:taskido/services/auth_services.dart';
+import 'package:taskido/services/validators.dart';
 import 'package:taskido/widgets/buttons/auth_button.dart';
 import 'package:taskido/widgets/inputs/text_field_with_label.dart';
 
@@ -119,18 +120,17 @@ class _LoginScreenState extends State<LoginScreen> {
                       TextFieldWithLabel(
                         title: "Phone",
                         controller: phoneNumberTextEditingController,
-                        hintText: "Your phone number",
+                        hintText: "Enter your phone number",
                         prefix: const Icon(
                           Icons.phone,
                           color: Colors.grey,
                         ),
                         keyboardType: TextInputType.emailAddress,
-                        validator: (String? value) {
-                          if (value == null || value.isEmpty) {
-                            return "phone is required";
-                          }
-                          return null;
-                        },
+                        // FormValidator for phone number
+                        validator: (value) =>
+                            FormValidators().phoneNumberValidator(
+                          value!,
+                        ),
                       ),
                       const SizedBox(
                         height: 20,
@@ -148,13 +148,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           Icons.lock,
                           color: Colors.grey,
                         ),
-                        hintText: "Your password",
-                        validator: (String? value) {
-                          if (value == null || value.isEmpty) {
-                            return "password is required";
-                          }
-                          return null;
-                        },
+                        hintText: "Enter your password",
+                        validator: (value) =>
+                            FormValidators().passwordValidator(
+                          value!,
+                        ),
                       ),
                       const SizedBox(
                         height: 16,
