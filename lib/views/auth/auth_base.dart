@@ -51,7 +51,7 @@ class AuthBase extends StatelessWidget {
                 ],
               ),
               const SizedBox(
-                height: 8,
+                height: 10,
               ),
               SizedBox(
                 height: 200,
@@ -60,6 +60,9 @@ class AuthBase extends StatelessWidget {
                   image!,
                   fit: BoxFit.contain,
                 ),
+              ),
+              const SizedBox(
+                height: 10,
               ),
               Text(
                 title!,
@@ -74,8 +77,9 @@ class AuthBase extends StatelessWidget {
               Text(
                 subtitle!,
                 style: const TextStyle(
-                  fontWeight: FontWeight.w400,
+                  fontWeight: FontWeight.w700,
                   fontSize: 15,
+                  color: Color.fromARGB(255, 154, 154, 154),
                 ),
               ),
               const SizedBox(

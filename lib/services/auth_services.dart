@@ -216,19 +216,54 @@ class AuthService extends ChangeNotifier {
     });
   }
 
+  void otpSuccessToast() {
+    Fluttertoast.showToast(
+      msg: "OTP verified",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 4,
+      backgroundColor: Colors.green,
+      textColor: Colors.white,
+      fontSize: 18.0,
+    );
+  }
+
+  void otpErrorToast(msg) {
+    Fluttertoast.showToast(
+      msg: msg,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 4,
+      backgroundColor: Colors.red,
+      textColor: Colors.white,
+      fontSize: 18.0,
+    );
+  }
+
+  bool _isOtpLoading = false;
+  bool get isOtpLoading => _isOtpLoading;
+
   Future otp(String? token) async {
+    _isOtpLoading = true;
+    print("OTP is---->$token");
     return await Api.Otp(token).then((response) {
+      print("Response :::: ${response.body}");
       if (response.statusCode == 200) {
         var payload = json.decode(response.body);
 
         notifyListeners();
+        otpSuccessToast();
+        _isOtpLoading = false;
         return payload;
       } else {
         var payload = json.decode(response.body);
-        print("exception $payload");
+        otpErrorToast(payload);
+        _isOtpLoading = false;
       }
     }).catchError((error) {
-      print("error occured during user login $error");
+      print("error occured during user account verification $error");
+      otpErrorToast("Account verification failed!");
+      _isOtpLoading = false;
     });
   }
 
