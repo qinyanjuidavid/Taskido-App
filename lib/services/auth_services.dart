@@ -267,6 +267,30 @@ class AuthService extends ChangeNotifier {
     });
   }
 
+  void passwordResetRequestPhoneNumberSuccessToast() {
+    Fluttertoast.showToast(
+      msg: "",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 4,
+      backgroundColor: Colors.green,
+      textColor: Colors.white,
+      fontSize: 18.0,
+    );
+  }
+
+  void passwordResetRequestPhoneNumberErrorToast(msg) {
+    Fluttertoast.showToast(
+      msg: msg,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 4,
+      backgroundColor: Colors.red,
+      textColor: Colors.white,
+      fontSize: 18.0,
+    );
+  }
+
   bool _isSendOtpLoading = false;
   bool get isSendOtpLoading => _isSendOtpLoading;
 
@@ -310,6 +334,30 @@ class AuthService extends ChangeNotifier {
     });
   }
 
+  void passwordResetTokenCheckSuccessToast() {
+    Fluttertoast.showToast(
+      msg: "",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 4,
+      backgroundColor: Colors.green,
+      textColor: Colors.white,
+      fontSize: 18.0,
+    );
+  }
+
+  void passwordResetTokenCheckErrorToast(msg) {
+    Fluttertoast.showToast(
+      msg: msg,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 4,
+      backgroundColor: Colors.red,
+      textColor: Colors.white,
+      fontSize: 18.0,
+    );
+  }
+
   bool _isPasswordOTPLoading = false;
   bool get isPasswordOTPLoading => _isPasswordOTPLoading;
 
@@ -348,6 +396,30 @@ class AuthService extends ChangeNotifier {
       print("error occurred during otp check $error");
       _passwordResetLoading = false;
     });
+  }
+
+  void passwordResetSuccessToast() {
+    Fluttertoast.showToast(
+      msg: "",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 4,
+      backgroundColor: Colors.green,
+      textColor: Colors.white,
+      fontSize: 18.0,
+    );
+  }
+
+  void passwordResetErrorToast(msg) {
+    Fluttertoast.showToast(
+      msg: msg,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 4,
+      backgroundColor: Colors.red,
+      textColor: Colors.white,
+      fontSize: 18.0,
+    );
   }
 
   bool _passwordResetLoading = false;
