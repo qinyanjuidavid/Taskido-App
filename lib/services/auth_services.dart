@@ -10,6 +10,8 @@ import 'package:taskido/data/models/otp_check_model.dart';
 import 'package:taskido/data/models/password_reset_phone_number.dart';
 import 'package:taskido/data/models/refresh_token_model.dart';
 import 'package:taskido/data/models/sign_up_model.dart';
+import 'package:taskido/services/navigation_service.dart';
+import 'package:taskido/views/auth/login.dart';
 
 import '../api/api.dart';
 import '../data/models/login_models.dart';
@@ -104,6 +106,10 @@ class AuthService extends ChangeNotifier {
   Future logout() async {
     return await Api.logout().then((response) async {
       await db.loginAllDetailsBox!.clear();
+      await db.loginUserDetailsBox!.clear();
+      await db.otpDataDetailsBox!.clear();
+      await db.otpDetailsBox!.clear();
+      await db.signUpDetailsBox!.clear();
       logoutToast();
       print("************************Logged Out*******************");
     }).catchError((error) {

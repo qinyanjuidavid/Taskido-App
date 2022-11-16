@@ -7,6 +7,7 @@ import 'package:taskido/data/models/category_models.dart';
 import 'package:taskido/services/auth_services.dart';
 import 'package:taskido/services/extensions.dart';
 import 'package:taskido/services/tasks_services.dart';
+import 'package:taskido/widgets/app_drawer.dart';
 import 'package:taskido/widgets/buttons/auth_button.dart';
 import 'package:taskido/widgets/category/category_add_bottomsheet.dart';
 import 'package:taskido/widgets/category/category_container.dart';
@@ -46,6 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
       )
           .then(
         (value) {
+          print("Value:::::: $value");
           if (value != null) {
             Navigator.pop(context);
             _refresh();
@@ -56,17 +58,11 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  void _logoutFnc() async {
-    await authService.logout().then((value) {
-      Navigator.of(context).pop(RouteGenerator.loginPage);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        drawer: const Drawer(),
+        drawer: AppDrawer(),
         appBar: AppBar(
           backgroundColor: Colors.black87,
           // .deepOrangeAccent,
@@ -330,13 +326,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
 
                         BlockPicker(
-                          pickerColor: Colors.blue,
+                          pickerColor: Colors.red,
                           onColorChanged: (Color color) {
                             // String hexCode =
                             //     '#${color.value.toRadixString(16).padLeft(8, '0')}';
                             setState() {
                               pickedColor = color;
                             }
+
                             pickedColor = color;
                           },
                         ),

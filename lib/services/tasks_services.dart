@@ -213,6 +213,8 @@ class TaskService extends ChangeNotifier {
       } else if (response.statusCode == 401) {
         await authService.refreshToken(refreshToken);
         addCategory(category, color);
+        //navigate to login page
+
       } else {
         var payload = json.decode(response.body);
         addCategoryErrorToast(payload);

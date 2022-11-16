@@ -5,6 +5,8 @@ import 'package:taskido/views/auth/otp_page.dart';
 import 'package:taskido/views/auth/password_reset_screen.dart';
 import 'package:taskido/views/home.dart';
 import 'package:taskido/views/auth/signup.dart';
+import 'package:taskido/views/tasks/completed_tasks_screen.dart';
+import 'package:taskido/views/tasks/uncomplete_tasks_screen.dart';
 import 'package:taskido/views/welcome/splash_screen.dart';
 import 'package:taskido/views/welcome/welcome_screen.dart';
 
@@ -20,6 +22,8 @@ class RouteGenerator {
   static const String forgotPasswordPage = "/forgotPassword";
   static const String forgotPasswordOtpPage = "/forgotPasswordOtp";
   static const String passwordResetPage = "/passwordReset";
+  static const String completeTasksPage = "/completeTasks";
+  static const String unCompleteTasksPage = "/uncompleteTasks";
 
   RouteGenerator._() {}
 
@@ -61,8 +65,16 @@ class RouteGenerator {
         return MaterialPageRoute(
           builder: (_) => PasswordResetScreen(),
         );
+      case completeTasksPage:
+        return MaterialPageRoute(
+          builder: (_) => CompletedTasks(),
+        );
+      case unCompleteTasksPage:
+        return MaterialPageRoute(
+          builder: (_) => UncompleteTasksScreen(),
+        );
       default:
-        throw FormatException("Route not found");
+        throw const FormatException("Route not found");
     }
   }
 }
