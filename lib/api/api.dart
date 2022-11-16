@@ -37,6 +37,46 @@ class Api {
     return response;
   }
 
+  static Future<http.Response> profile() async {
+    String? token = authService.loginDetails.access;
+
+    var response = await client2.get(
+      Uri.parse("${baseUrl}own/profile/"),
+      headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+        HttpHeaders.authorizationHeader: 'Bearer $token',
+      },
+    );
+
+    return response;
+  }
+
+  static Future<http.Response> updateProfile(
+    String? phone,
+    String? email,
+    String? fullName,
+    String? bio,
+    int? userID,
+  ) async {
+    String? token = authService.loginDetails.access;
+
+    var response = await client2.put(
+      Uri.parse("${baseUrl}owner/Profile/$userID/"),
+      headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+        HttpHeaders.authorizationHeader: 'Bearer $token',
+      },
+      body: jsonEncode({
+        "phone": phone,
+        "email": email,
+        "full_name": fullName,
+        "bio": bio,
+      }),
+    );
+
+    return response;
+  }
+
   static Future<http.Response> logout() async {
     String? token = authService.loginDetails.access;
     String? refresh = authService.loginDetails.refresh;
