@@ -10,8 +10,8 @@ import 'package:taskido/services/auth_services.dart';
 import 'package:taskido/services/tasks_services.dart';
 
 class Api {
-  static String baseUrl = baseUrl = 'http://127.0.0.1:8000/api/v1/';
-
+  // static String baseUrl = baseUrl = 'http://127.0.0.1:8000/api/v1/';
+  static String baseUrl = baseUrl = 'http://10.0.2.2:8000/api/v1/';
   static var client = http.Client();
   //interceptor client
   static final client2 = InterceptedClient.build(

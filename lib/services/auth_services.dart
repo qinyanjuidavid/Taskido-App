@@ -56,7 +56,7 @@ class AuthService extends ChangeNotifier {
         Login loginDetails = Login.fromJson(payload);
         await db.loginAllDetailsBox!.clear();
         await db.loginAllDetailsBox!.add(loginDetails);
-        print("Login Details++++++: ${loginDetails.access}");
+        print("Login Details+++++++++: ${loginDetails.access}");
 
         notifyListeners();
         loginToast();
@@ -69,7 +69,6 @@ class AuthService extends ChangeNotifier {
           "Incorrect phone or password",
         );
         _loadingLogin = false;
-        print(payload);
       }
     }).catchError((error) {
       loginToastError("Login Failed!");
@@ -129,12 +128,10 @@ class AuthService extends ChangeNotifier {
         db.loginAllDetailsBox!.putAt(0, loginDetails);
         print("New Access Token ${refreshTokenDetails.access}");
         print("New refresh token ${refreshTokenDetails.refresh}");
-        // update the access token and refresh token
 
         notifyListeners();
       } else {
         var payload = json.decode(response.body);
-        print(payload);
       }
     }).catchError((error) {
       print("error occured during token refresh auth $error");
@@ -145,7 +142,8 @@ class AuthService extends ChangeNotifier {
   bool get loadingSignup => _loadingSignup;
   void signUpToast() {
     Fluttertoast.showToast(
-      msg: "OTP sent to your phone",
+      msg:
+          "Account Created Successfully, please enter the OTP sent to your phone",
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
       timeInSecForIosWeb: 4,
@@ -205,7 +203,6 @@ class AuthService extends ChangeNotifier {
         return payload;
       } else {
         var payload = json.decode(response.body);
-        print(payload);
         signUpErrorToast(payload);
         _loadingSignup = false;
       }
@@ -218,7 +215,7 @@ class AuthService extends ChangeNotifier {
 
   void otpSuccessToast() {
     Fluttertoast.showToast(
-      msg: "OTP verified",
+      msg: "OTP successfully verified",
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
       timeInSecForIosWeb: 4,
@@ -245,9 +242,7 @@ class AuthService extends ChangeNotifier {
 
   Future otp(String? token) async {
     _isOtpLoading = true;
-    print("OTP is---->$token");
     return await Api.Otp(token).then((response) {
-      print("Response :::: ${response.body}");
       if (response.statusCode == 200) {
         var payload = json.decode(response.body);
 
@@ -269,7 +264,7 @@ class AuthService extends ChangeNotifier {
 
   void passwordResetRequestPhoneNumberSuccessToast() {
     Fluttertoast.showToast(
-      msg: "",
+      msg: "OTP sent to your phone",
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
       timeInSecForIosWeb: 4,
@@ -317,26 +312,28 @@ class AuthService extends ChangeNotifier {
         await db.otpDetailsBox!.clear();
         await db.otpDetailsBox!.add(passwordOtpDetails);
 
-        //print phone number from db
         print("Phone number from db ${loginDetails.user!.phone}");
         print("OTP 2 Phone number from db ${otpCheckDetails.otpData!.phone}");
         notifyListeners();
+        passwordResetRequestPhoneNumberSuccessToast();
         _isSendOtpLoading = false;
         return payload;
       } else {
         var payload = json.decode(response.body);
         print("Password Reset Phone $payload");
+        passwordResetRequestPhoneNumberErrorToast(payload);
         _isSendOtpLoading = false;
       }
     }).catchError((error) {
-      print("error occured while requesting for an otp $error");
+      passwordResetRequestPhoneNumberErrorToast(
+          "Error occured while requesting for an otp");
       _isSendOtpLoading = false;
     });
   }
 
   void passwordResetTokenCheckSuccessToast() {
     Fluttertoast.showToast(
-      msg: "",
+      msg: "OTP successfully verified",
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
       timeInSecForIosWeb: 4,
@@ -377,30 +374,29 @@ class AuthService extends ChangeNotifier {
         // add token to the otp db
         await db.otpDetailsBox!.clear();
         await db.otpDetailsBox!.add(passwordOtpDetails);
-        // print the token from db
         print("Token from db ${otpCheckDetails.otpData!.token}");
-        // print phone number from db
         print(
           "OTP Check 2 Phone number from db ${otpCheckDetails.otpData!.phone}",
         );
-        print("Password Check ##### Payload $payload");
         notifyListeners();
+        passwordResetTokenCheckSuccessToast();
         _passwordResetLoading = false;
         return payload;
       } else {
         var payload = json.decode(response.body);
-        print(payload);
+        passwordResetTokenCheckErrorToast(payload);
         _passwordResetLoading = false;
       }
     }).catchError((error) {
       print("error occurred during otp check $error");
+      passwordResetTokenCheckErrorToast("OTP verification failed!");
       _passwordResetLoading = false;
     });
   }
 
   void passwordResetSuccessToast() {
     Fluttertoast.showToast(
-      msg: "",
+      msg: "Password successfully reset",
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
       timeInSecForIosWeb: 4,
@@ -431,14 +427,16 @@ class AuthService extends ChangeNotifier {
       if (response.statusCode == 200) {
         var payload = json.decode(response.body);
         notifyListeners();
+        passwordResetSuccessToast();
         _passwordResetLoading = false;
         return payload;
       } else {
         var payload = json.decode(response.body);
+        passwordResetErrorToast(payload);
         _passwordResetLoading = false;
-        print("Password Reset Payload");
       }
     }).catchError((error) {
+      passwordResetErrorToast("Password reset failed!");
       _passwordResetLoading = false;
       print("error occured during password reset $error");
     });
