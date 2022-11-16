@@ -25,7 +25,7 @@ class AuthService extends ChangeNotifier {
 
   void loginToast() {
     Fluttertoast.showToast(
-      msg: "Login Successly",
+      msg: "Login Success",
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
       timeInSecForIosWeb: 3,

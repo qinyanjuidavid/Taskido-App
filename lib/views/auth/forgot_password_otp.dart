@@ -57,8 +57,9 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
   @override
   Widget build(BuildContext context) {
     return AuthBase(
-      title: "Enter OTP",
-      subtitle: "Enter the OTP sent to your phone",
+      title: "Enter your verification code",
+      subtitle:
+          "We have sent you a 6 digit code to your phone. You can check your inbox.",
       image: "assets/images/forgot_password.svg",
       body: Form(
         key: otpFormKey,

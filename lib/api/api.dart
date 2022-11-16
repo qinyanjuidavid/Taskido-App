@@ -184,7 +184,8 @@ class Api {
     return response;
   }
 
-  static Future<http.Response> addCategory(String? category) async {
+  static Future<http.Response> addCategory(
+      String? category, String? color) async {
     String? token = authService.loginDetails.access;
     var response = await client2.post(
       Uri.parse("${baseUrl}category/"),
@@ -194,6 +195,7 @@ class Api {
       },
       body: jsonEncode({
         "category": category,
+        "color": color,
       }),
     );
     return response;

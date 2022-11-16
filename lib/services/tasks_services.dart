@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart';
 import 'package:http_interceptor/http/intercepted_client.dart';
 import 'package:taskido/api/api.dart';
@@ -172,26 +174,54 @@ class TaskService extends ChangeNotifier {
     });
   }
 
-  Future addCategory(String? category) async {
+  void addCategorySuccessToast() {
+    Fluttertoast.showToast(
+        msg: "Category Added Successfully",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 16.0);
+  }
+
+  void addCategoryErrorToast(msg) {
+    Fluttertoast.showToast(
+        msg: msg,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0);
+  }
+
+  bool _addCategoryLoading = false;
+  bool get addCategoryLoading => _addCategoryLoading;
+
+  Future addCategory(String? category, String? color) async {
     String? refreshToken = authService.loginDetails.refresh;
 
-    return await Api.addCategory(category).then((response) async {
+    _addCategoryLoading = true;
+    return await Api.addCategory(category, color).then((response) async {
       if (response.statusCode == 201) {
         var payload = json.decode(response.body);
-        Category categoryDetails = Category.fromJson(payload);
-
-        print("Category Added############ $categoryDetails");
         notifyListeners();
-        return categoryDetails;
+        addCategorySuccessToast();
+        _addCategoryLoading = false;
+        return payload;
       } else if (response.statusCode == 401) {
         await authService.refreshToken(refreshToken);
-        addCategory(category);
+        addCategory(category, color);
       } else {
         var payload = json.decode(response.body);
-        print("payload----> $payload");
+        addCategoryErrorToast(payload);
+        _addCategoryLoading = false;
       }
     }).catchError((error) {
       print("error occured while adding category $error");
+      addCategoryErrorToast("Category not added");
+      _addCategoryLoading = false;
     });
   }
 
