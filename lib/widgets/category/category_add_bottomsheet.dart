@@ -23,7 +23,7 @@ class CategoryBottomSheet extends StatelessWidget {
 
     return _makeDismissible(
       child: DraggableScrollableSheet(
-        initialChildSize: 0.7,
+        initialChildSize: 0.8,
         minChildSize: 0.5,
         maxChildSize: 0.9,
         builder: (context, scrollController) {

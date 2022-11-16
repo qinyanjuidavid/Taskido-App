@@ -5,6 +5,7 @@ import 'package:taskido/configs/routes.dart';
 import 'package:taskido/data/data_search.dart';
 import 'package:taskido/data/models/category_models.dart';
 import 'package:taskido/services/auth_services.dart';
+import 'package:taskido/services/extensions.dart';
 import 'package:taskido/services/tasks_services.dart';
 import 'package:taskido/widgets/buttons/auth_button.dart';
 import 'package:taskido/widgets/category/category_add_bottomsheet.dart';
@@ -21,6 +22,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<FormState> categoryAddFormKey = GlobalKey<FormState>();
   TextEditingController categoryTextEditingController = TextEditingController();
+  Color pickedColor = Colors.red;
 
   @override
   void initState() {
@@ -28,82 +30,22 @@ class _HomeScreenState extends State<HomeScreen> {
     _refresh();
   }
 
-// refresh
   Future<void> _refresh() async {
     await Provider.of<TaskService>(context, listen: false).fetchCategories();
     await Provider.of<TaskService>(context, listen: false)
         .setScrollController();
   }
 
-  // void _addCategoryDialog() async {
-  //   await showDialog(
-  //       context: context,
-  //       builder: (BuildContext context) {
-  //         return SimpleDialog(
-  //           shape: RoundedRectangleBorder(
-  //             borderRadius: BorderRadius.circular(10),
-  //           ),
-  //           title: const Text(
-  //             "Add Category",
-  //             style: TextStyle(
-  //               color: Colors.black,
-  //               fontWeight: FontWeight.w600,
-  //               fontSize: 20,
-  //             ),
-  //           ),
-  //           children: [
-  //             Container(
-  //               padding: const EdgeInsets.only(
-  //                 left: 20,
-  //                 right: 20,
-  //               ),
-  //               child: Column(
-  //                 children: [
-  //                   Form(
-  //                     key: categoryAddFormKey,
-  //                     child: TextFormField(
-  //                       controller: categoryTextEditingController,
-  //                       decoration: const InputDecoration(
-  //                         labelText: "Category",
-  //                       ),
-  //                     ),
-  //                   ),
-  //                   SizedBox(
-  //                     width: MediaQuery.of(context).size.width,
-  //                     height: 15,
-  //                   ),
-  //                   MaterialButton(
-  //                     color: Colors.brown,
-  //                     onPressed: () {},
-  //                     // _categorySubmit,
-  //                     child: const Text(
-  //                       "Add Category",
-  //                       style: TextStyle(
-  //                         fontWeight: FontWeight.bold,
-  //                         color: Colors.white,
-  //                       ),
-  //                     ),
-  //                   )
-  //                 ],
-  //               ),
-  //             )
-  //           ],
-  //         );
-  //       });
-  // }
-
-  void _categorySubmit() async {
-    print("Valide:::: ${categoryAddFormKey.currentState!.validate()}");
-
+  void _categorySubmit(categoryColor) async {
+    var color = '#${categoryColor.value.toRadixString(16).padLeft(8, '0')}';
     if (categoryAddFormKey.currentState!.validate()) {
       await taskService
           .addCategory(
         categoryTextEditingController.text,
-        "#2312FF",
+        color,
       )
           .then(
         (value) {
-          print("Value:::: $value");
           if (value != null) {
             Navigator.pop(context);
             _refresh();
@@ -222,16 +164,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           mainAxisSpacing: 12,
                         ),
                         itemBuilder: (context, index) {
-                          var clr = value.categories[index].color.toString();
-                          var categoryColor = Color(
-                              int.parse(clr.substring(1, 7), radix: 16) +
-                                  0xFF000000);
+                          var catColor =
+                              value.categories[index].color.toString();
 
                           return InkWell(
                             onTap: () {},
                             child: Container(
                               decoration: BoxDecoration(
-                                color: categoryColor,
+                                color: catColor.toColor(),
                                 borderRadius: BorderRadius.circular(8),
                                 boxShadow: [
                                   BoxShadow(
@@ -373,8 +313,41 @@ class _HomeScreenState extends State<HomeScreen> {
                         const SizedBox(
                           height: 10,
                         ),
+                        //blockpicker
+                        const Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding: EdgeInsets.only(left: 10),
+                            child: Text(
+                              "Pick a color!",
+                              style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                color: Color.fromARGB(255, 106, 106, 106),
+                                fontSize: 15,
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        BlockPicker(
+                          pickerColor: Colors.blue,
+                          onColorChanged: (Color color) {
+                            // String hexCode =
+                            //     '#${color.value.toRadixString(16).padLeft(8, '0')}';
+                            setState() {
+                              pickedColor = color;
+                            }
+                            pickedColor = color;
+                          },
+                        ),
+                        const SizedBox(
+                          height: 25,
+                        ),
+
                         AuthButton(
-                          onPressed: _categorySubmit,
+                          onPressed: () {
+                            _categorySubmit(pickedColor);
+                          },
                           child: Consumer<TaskService>(
                             builder: (context, value, child) {
                               return value.addCategoryLoading == true
@@ -402,7 +375,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               },
             );
-            // ////////
           },
           child: Icon(Icons.add),
         ),
