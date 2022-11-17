@@ -41,7 +41,7 @@ class Api {
     String? token = authService.loginDetails.access;
 
     var response = await client2.get(
-      Uri.parse("${baseUrl}own/profile/"),
+      Uri.parse("${baseUrl}owner/profile/"),
       headers: {
         HttpHeaders.contentTypeHeader: 'application/json',
         HttpHeaders.authorizationHeader: 'Bearer $token',

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:taskido/configs/routes.dart';
 import 'package:taskido/services/auth_services.dart';
+import 'package:taskido/services/profile_service.dart';
 import 'package:taskido/services/tasks_services.dart';
 
 void main() {
@@ -33,6 +34,7 @@ class _MyAppState extends State<MyApp> {
         //   create: (context) => TaskService(),
         // ),
         ChangeNotifierProvider.value(value: taskService),
+        ChangeNotifierProvider.value(value: profileService),
       ],
       child: MaterialApp(
         title: "Taskido",

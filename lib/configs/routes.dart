@@ -3,6 +3,7 @@ import 'package:taskido/views/auth/forgot_password_otp.dart';
 import 'package:taskido/views/auth/forgot_password_screen.dart';
 import 'package:taskido/views/auth/otp_page.dart';
 import 'package:taskido/views/auth/password_reset_screen.dart';
+import 'package:taskido/views/auth/profile_screen.dart';
 import 'package:taskido/views/home.dart';
 import 'package:taskido/views/auth/signup.dart';
 import 'package:taskido/views/tasks/completed_tasks_screen.dart';
@@ -24,6 +25,7 @@ class RouteGenerator {
   static const String passwordResetPage = "/passwordReset";
   static const String completeTasksPage = "/completeTasks";
   static const String unCompleteTasksPage = "/uncompleteTasks";
+  static const String profilePage = "/profilePage";
 
   RouteGenerator._() {}
 
@@ -64,6 +66,10 @@ class RouteGenerator {
       case passwordResetPage:
         return MaterialPageRoute(
           builder: (_) => PasswordResetScreen(),
+        );
+      case profilePage:
+        return MaterialPageRoute(
+          builder: (_) => ProfileScreen(),
         );
       case completeTasksPage:
         return MaterialPageRoute(

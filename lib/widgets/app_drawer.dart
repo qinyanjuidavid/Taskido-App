@@ -27,7 +27,10 @@ class AppDrawer extends StatelessWidget {
                   ),
                   ListTile(
                     title: Text("Profile"),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context)
+                          .pushNamed(RouteGenerator.profilePage);
+                    },
                   ),
                   ListTile(
                     title: Text("Logout"),

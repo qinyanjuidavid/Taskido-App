@@ -24,14 +24,14 @@ class ProfileService extends ChangeNotifier {
     return await Api.profile().then((response) async {
       if (response.statusCode == 200) {
         var payload = jsonDecode(response.body);
-        Profile profile = Profile.fromJson(payload);
-        _profileDetails = profile;
 
-        await db.userProfileDetailsBox!.clear();
-        await db.userProfileDetailsBox!.add(profile);
+        Profile profile = Profile.fromJson(payload[0]);
+        _profileDetails = profile;
 
         _profileLoading = false;
         notifyListeners();
+        await db.userProfileDetailsBox!.clear();
+        await db.userProfileDetailsBox!.add(profile);
       } else if (response.statusCode == 401) {
         await authService.refreshToken(refreshToken);
         getProfile();
@@ -122,3 +122,5 @@ class ProfileService extends ChangeNotifier {
     });
   }
 }
+
+ProfileService profileService = ProfileService();
