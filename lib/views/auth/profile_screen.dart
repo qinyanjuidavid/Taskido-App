@@ -1,15 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taskido/configs/routes.dart';
+import 'package:taskido/services/auth_services.dart';
 import 'package:taskido/services/profile_service.dart';
 import 'package:taskido/widgets/buttons/auth_button.dart';
 import 'package:taskido/widgets/inputs/text_field_with_label.dart';
+import 'package:taskido/widgets/spinners/spinner.dart';
 
 class ProfileScreen extends StatefulWidget {
   ProfileScreen({Key? key}) : super(key: key);
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+Future logoutFunc(BuildContext context) async {
+  await authService.logout().then((value) {
+    Navigator.of(context).pushNamed(RouteGenerator.loginPage);
+  });
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
@@ -86,7 +94,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Container(
               margin: const EdgeInsets.only(right: 10),
               child: IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  logoutFunc(context);
+                },
+                // _logoutFnc,
                 icon: const Icon(
                   Icons.logout,
                 ),
@@ -96,16 +107,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         body: RefreshIndicator(
           onRefresh: _refresh,
-          child: profileService.profileUpdateLoading == true
-              ? const Center(
-                  child: SizedBox(
-                    height: 20.0, width: 20.0, child: Text("Hello....."),
-                    // CircularProgressIndicator(
-                    //   strokeWidth: 4.0,
-                    // ),
-                  ),
-                )
-              : Container(
+          child: Consumer<ProfileService>(
+            builder: (context, value, child) {
+              print(profileService.profileDetails.profilePicture);
+              return MaterialSpinner(
+                loading: value.profileUpdateLoading,
+                child: Container(
                   padding: const EdgeInsets.only(
                     top: 10,
                     left: 14,
@@ -125,13 +132,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 radius: 70,
                                 backgroundColor:
                                     const Color.fromARGB(255, 60, 55, 255),
-                                child: CircleAvatar(
-                                  radius: 65,
-                                  backgroundImage: NetworkImage(
-                                    profileService.profileDetails.profilePicture
-                                        .toString(),
-                                  ),
-                                ),
+                                child: profileService
+                                            .profileDetails.profilePicture ==
+                                        null
+                                    ? const CircleAvatar(
+                                        radius: 65,
+                                        backgroundImage: AssetImage(
+                                            "assets/images/default.png"))
+                                    : CircleAvatar(
+                                        radius: 65,
+                                        backgroundImage: NetworkImage(
+                                          profileService
+                                              .profileDetails.profilePicture
+                                              .toString(),
+                                        ),
+                                      ),
                               ),
                               //camera icon
                               Positioned(
@@ -265,6 +280,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ],
                   ),
                 ),
+              );
+            },
+          ),
         ),
       ),
     );

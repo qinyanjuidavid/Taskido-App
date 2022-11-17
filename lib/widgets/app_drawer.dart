@@ -1,18 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:taskido/configs/routes.dart';
 import 'package:taskido/services/auth_services.dart';
+import 'package:taskido/views/auth/profile_screen.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    void _logoutFnc() async {
-      await authService.logout().then((value) {
-        Navigator.of(context).pop(RouteGenerator.loginPage);
-      });
-    }
-
     return Drawer(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -35,7 +30,7 @@ class AppDrawer extends StatelessWidget {
                   ListTile(
                     title: Text("Logout"),
                     onTap: () {
-                      _logoutFnc();
+                      logoutFunc(context);
                       Navigator.of(context).pop(RouteGenerator.loginPage);
                     },
                   ),
