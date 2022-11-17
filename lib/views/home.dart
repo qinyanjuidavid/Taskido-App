@@ -64,7 +64,8 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Scaffold(
         drawer: AppDrawer(),
         appBar: AppBar(
-          backgroundColor: Color.fromARGB(255, 10, 95, 89),
+          backgroundColor: Colors.black87,
+          //  Color.fromARGB(255, 10, 95, 89),
           // Colors.black87,
           // .deepOrangeAccent,
           elevation: 20,

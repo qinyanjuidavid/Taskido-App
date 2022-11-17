@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:taskido/configs/routes.dart';
 import 'package:taskido/services/profile_service.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -25,8 +26,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Color.fromARGB(255, 10, 95, 89),
-          //  Colors.black87,
+          backgroundColor: Colors.black87,
+
           // .deepOrangeAccent,
           elevation: 20,
           titleSpacing: 20,
@@ -50,7 +51,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Container(
               margin: const EdgeInsets.only(right: 10),
               child: IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context)
+                      .pushNamed(RouteGenerator.updateProfilePage);
+                },
                 icon: const Icon(
                   Icons.edit,
                 ),
@@ -134,30 +138,48 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ),
                       const SizedBox(
-                        height: 20,
+                        height: 10,
                       ),
-                      const Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "Email",
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Color.fromARGB(255, 154, 154, 154),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            "Email",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
-                        ),
+                          Text(
+                            value.profileDetails.user!.email.toString(),
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
                       ),
                       const SizedBox(
-                        height: 5,
+                        height: 20,
                       ),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          value.profileDetails.user!.email.toString(),
-                          style: const TextStyle(
-                            fontSize: 16,
-                            color: Color.fromARGB(255, 154, 154, 154),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            "Phone number",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
-                        ),
+                          Text(
+                            value.profileDetails.user!.phone.toString(),
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   );
