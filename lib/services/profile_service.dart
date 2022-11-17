@@ -76,6 +76,11 @@ class ProfileService extends ChangeNotifier {
   Profile _updatedProfileDetails = Profile();
   Profile get updatedProfileDetails => _updatedProfileDetails;
 
+  set profileUpdateLoading(bool val) {
+    _profileUpdateLoading = val;
+    notifyListeners();
+  }
+
   Future updateProfile({
     String? phone,
     String? email,
@@ -95,8 +100,11 @@ class ProfileService extends ChangeNotifier {
 
         await db.userProfileDetailsBox!.clear();
         await db.userProfileDetailsBox!.add(_updatedProfileDetails);
-
+        // await Future.delayed(
+        //   const Duration(seconds: 20),
+        // );
         _profileUpdateSuccessToast();
+
         _profileUpdateLoading = false;
         notifyListeners();
 

@@ -40,7 +40,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           .then((value) {
         if (value != null) {
           _refresh();
-          print("Success.....");
         }
       });
     }
@@ -97,165 +96,175 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         body: RefreshIndicator(
           onRefresh: _refresh,
-          child: Container(
-            padding: const EdgeInsets.only(
-              top: 10,
-              left: 14,
-              right: 14,
-            ),
-            height: double.infinity,
-            width: MediaQuery.of(context).size.width,
-            child: ListView(
-              children: [
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: Container(
-                    child: Stack(
-                      children: [
-                        //circle avatar
-                        CircleAvatar(
-                          radius: 70,
-                          backgroundColor:
-                              const Color.fromARGB(255, 60, 55, 255),
-                          child: CircleAvatar(
-                            radius: 65,
-                            backgroundImage: NetworkImage(
-                              profileService.profileDetails.profilePicture
-                                  .toString(),
-                            ),
+          child: profileService.profileUpdateLoading == true
+              ? const Center(
+                  child: SizedBox(
+                    height: 20.0, width: 20.0, child: Text("Hello....."),
+                    // CircularProgressIndicator(
+                    //   strokeWidth: 4.0,
+                    // ),
+                  ),
+                )
+              : Container(
+                  padding: const EdgeInsets.only(
+                    top: 10,
+                    left: 14,
+                    right: 14,
+                  ),
+                  height: double.infinity,
+                  width: MediaQuery.of(context).size.width,
+                  child: ListView(
+                    children: [
+                      Align(
+                        alignment: Alignment.topCenter,
+                        child: Container(
+                          child: Stack(
+                            children: [
+                              //circle avatar
+                              CircleAvatar(
+                                radius: 70,
+                                backgroundColor:
+                                    const Color.fromARGB(255, 60, 55, 255),
+                                child: CircleAvatar(
+                                  radius: 65,
+                                  backgroundImage: NetworkImage(
+                                    profileService.profileDetails.profilePicture
+                                        .toString(),
+                                  ),
+                                ),
+                              ),
+                              //camera icon
+                              Positioned(
+                                bottom: 0,
+                                right: 0,
+                                child: Container(
+                                  height: 40,
+                                  width: 40,
+                                  decoration: BoxDecoration(
+                                    color: Colors.orangeAccent,
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                  child: IconButton(
+                                    onPressed: () {},
+                                    icon: const Icon(
+                                      Icons.camera_alt,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        //camera icon
-                        Positioned(
-                          bottom: 0,
-                          right: 0,
-                          child: Container(
-                            height: 40,
-                            width: 40,
-                            decoration: BoxDecoration(
-                              color: Colors.orangeAccent,
-                              borderRadius: BorderRadius.circular(50),
-                            ),
-                            child: IconButton(
-                              onPressed: () {},
-                              icon: const Icon(
-                                Icons.camera_alt,
-                                color: Colors.white,
+                      ),
+                      Form(
+                        key: profileUpdateKey,
+                        child: Column(
+                          children: [
+                            TextFieldWithLabel(
+                              controller: _emailTextEditingController,
+                              title: "Email",
+                              prefix: const Icon(
+                                Icons.email,
+                                color: Colors.grey,
                               ),
                             ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Form(
-                  key: profileUpdateKey,
-                  child: Column(
-                    children: [
-                      TextFieldWithLabel(
-                        controller: _emailTextEditingController,
-                        title: "Email",
-                        prefix: const Icon(
-                          Icons.email,
-                          color: Colors.grey,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      TextFieldWithLabel(
-                        controller: _phoneNumberTextEditingController,
-                        title: "Phone number",
-                        prefix: const Icon(
-                          Icons.phone,
-                          color: Colors.grey,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      TextFieldWithLabel(
-                        title: "Full name",
-                        controller: _fullNameTextEditingController,
-                        prefix: const Icon(
-                          Icons.person,
-                          color: Colors.grey,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      const Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "About",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            color: Color.fromARGB(255, 106, 106, 106),
-                            fontSize: 15,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      TextFormField(
-                        autofocus: false,
-                        controller: _bioTextEditingController,
-                        keyboardType: TextInputType.text,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          fillColor: const Color.fromARGB(255, 245, 170, 51),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                                color: Color.fromARGB(255, 20, 106, 218),
-                                width: 2.0),
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          hintText: "About yourself",
-                          prefixIcon: const Icon(
-                            Icons.info,
-                            color: Colors.grey,
-                          ),
-                        ),
-                        style: const TextStyle(
-                          fontSize: 16,
-                          color: Color.fromARGB(255, 106, 106, 106),
-                        ),
-                        maxLines: 5,
-                        minLines: 5,
-                      ),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      AuthButton(
-                        onPressed: _profileUpdateFnc,
-                        child: Consumer<ProfileService>(
-                            builder: (context, value, child) {
-                          if (value.profileUpdateLoading == true) {
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          }
-                          return const Text(
-                            "Update",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
+                            const SizedBox(
+                              height: 20,
                             ),
-                          );
-                        }),
-                      ),
-                      const SizedBox(
-                        height: 30,
+                            TextFieldWithLabel(
+                              controller: _phoneNumberTextEditingController,
+                              title: "Phone number",
+                              prefix: const Icon(
+                                Icons.phone,
+                                color: Colors.grey,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            TextFieldWithLabel(
+                              title: "Full name",
+                              controller: _fullNameTextEditingController,
+                              prefix: const Icon(
+                                Icons.person,
+                                color: Colors.grey,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            const Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "About",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  color: Color.fromARGB(255, 106, 106, 106),
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            TextFormField(
+                              autofocus: false,
+                              controller: _bioTextEditingController,
+                              keyboardType: TextInputType.text,
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                fillColor:
+                                    const Color.fromARGB(255, 245, 170, 51),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      color: Color.fromARGB(255, 20, 106, 218),
+                                      width: 2.0),
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                hintText: "About yourself",
+                                prefixIcon: const Icon(
+                                  Icons.info,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              style: const TextStyle(
+                                fontSize: 16,
+                                color: Color.fromARGB(255, 106, 106, 106),
+                              ),
+                              maxLines: 5,
+                              minLines: 5,
+                            ),
+                            const SizedBox(
+                              height: 30,
+                            ),
+                            AuthButton(
+                              onPressed: _profileUpdateFnc,
+                              child: Consumer<ProfileService>(
+                                  builder: (context, value, child) {
+                                if (value.profileUpdateLoading == true) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+                                return const Text(
+                                  "Update",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                  ),
+                                );
+                              }),
+                            ),
+                            const SizedBox(
+                              height: 30,
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
                 ),
-              ],
-            ),
-          ),
         ),
       ),
     );
