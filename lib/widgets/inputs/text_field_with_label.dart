@@ -7,27 +7,26 @@ class TextFieldWithLabel extends StatelessWidget {
   final Widget? prefix;
   final String? hintText;
   final Function? onVisibilityChange;
-  // final Function? validator;
   final String? Function(String?)? validator;
   final Color? color;
   final TextEditingController controller;
   final Function? onChange;
   final keyboardType;
 
-  const TextFieldWithLabel(
-      {Key? key,
-      required this.title,
-      required this.controller,
-      this.obsecure = false,
-      this.suffix,
-      this.prefix,
-      this.hintText,
-      this.onVisibilityChange,
-      this.validator,
-      this.color,
-      this.onChange,
-      this.keyboardType})
-      : super(key: key);
+  const TextFieldWithLabel({
+    Key? key,
+    required this.title,
+    required this.controller,
+    this.obsecure = false,
+    this.suffix,
+    this.prefix,
+    this.hintText,
+    this.onVisibilityChange,
+    this.validator,
+    this.color,
+    this.onChange,
+    this.keyboardType,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +47,7 @@ class TextFieldWithLabel extends StatelessWidget {
             autofocus: false,
             controller: controller,
             obscureText: obsecure,
-            keyboardType: TextInputType.emailAddress,
+            keyboardType: keyboardType,
             validator: validator,
             textInputAction: TextInputAction.next,
             decoration: InputDecoration(
@@ -75,6 +74,10 @@ class TextFieldWithLabel extends StatelessWidget {
                           ),
                         )
                       : null),
+            ),
+            style: const TextStyle(
+              fontSize: 16,
+              color: Color.fromARGB(255, 106, 106, 106),
             ),
           ),
         ],

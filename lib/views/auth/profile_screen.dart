@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taskido/configs/routes.dart';
 import 'package:taskido/services/profile_service.dart';
+import 'package:taskido/widgets/buttons/auth_button.dart';
+import 'package:taskido/widgets/inputs/text_field_with_label.dart';
 
 class ProfileScreen extends StatefulWidget {
   ProfileScreen({Key? key}) : super(key: key);
@@ -11,10 +13,26 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  GlobalKey<FormState> profileUpdateKey = GlobalKey<FormState>();
+  TextEditingController _fullNameTextEditingController =
+      TextEditingController();
+  TextEditingController _emailTextEditingController = TextEditingController();
+  TextEditingController _phoneNumberTextEditingController =
+      TextEditingController();
+  TextEditingController _bioTextEditingController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
     _refresh();
+    _fullNameTextEditingController.text =
+        profileService.profileDetails.user!.fullName!.toString();
+    _emailTextEditingController.text =
+        profileService.profileDetails.user!.email!.toString();
+    _phoneNumberTextEditingController.text =
+        profileService.profileDetails.user!.phone!.toString();
+    _bioTextEditingController.text =
+        profileService.profileDetails.bio!.toString();
   }
 
   Future _refresh() async {
@@ -27,7 +45,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.black87,
-
           // .deepOrangeAccent,
           elevation: 20,
           titleSpacing: 20,
@@ -40,7 +57,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           title: const Center(
             child: Text(
-              "My profile",
+              "Profile",
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 24,
@@ -51,12 +68,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Container(
               margin: const EdgeInsets.only(right: 10),
               child: IconButton(
-                onPressed: () {
-                  Navigator.of(context)
-                      .pushNamed(RouteGenerator.updateProfilePage);
-                },
+                onPressed: () {},
                 icon: const Icon(
-                  Icons.edit,
+                  Icons.logout,
                 ),
               ),
             ),
@@ -74,116 +88,152 @@ class _ProfileScreenState extends State<ProfileScreen> {
             width: MediaQuery.of(context).size.width,
             child: ListView(
               children: [
-                Consumer<ProfileService>(builder: (context, value, child) {
-                  if (value.profileLoading) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                  return Column(
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Container(
+                    child: Stack(
+                      children: [
+                        //circle avatar
+                        CircleAvatar(
+                          radius: 70,
+                          backgroundColor:
+                              const Color.fromARGB(255, 60, 55, 255),
+                          child: CircleAvatar(
+                            radius: 65,
+                            backgroundImage: NetworkImage(
+                              profileService.profileDetails.profilePicture
+                                  .toString(),
+                            ),
+                          ),
+                        ),
+                        //camera icon
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: Container(
+                            height: 40,
+                            width: 40,
+                            decoration: BoxDecoration(
+                              color: Colors.orangeAccent,
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                            child: IconButton(
+                              onPressed: () {},
+                              icon: const Icon(
+                                Icons.camera_alt,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Form(
+                  key: profileUpdateKey,
+                  child: Column(
                     children: [
-                      CircleAvatar(
-                        radius: 70,
-                        backgroundImage: NetworkImage(
-                          value.profileDetails.profilePicture.toString(),
+                      TextFieldWithLabel(
+                        controller: _emailTextEditingController,
+                        title: "Email",
+                        prefix: const Icon(
+                          Icons.email,
+                          color: Colors.grey,
                         ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        value.profileDetails.user!.fullName.toString(),
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 8,
-                      ),
-                      Center(
-                        child: Text(
-                          value.profileDetails.bio.toString(),
-                          style: const TextStyle(
-                            fontSize: 16,
-                            color: Color.fromARGB(255, 154, 154, 154),
-                            fontWeight: FontWeight.w500,
-                          ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 25,
-                      ),
-                      Divider(
-                        height: 1,
-                        thickness: 3,
-                        indent: 0,
-                        endIndent: 0,
-                        color: Colors.grey[300],
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      const Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "Profile details",
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            "Email",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          Text(
-                            value.profileDetails.user!.email.toString(),
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
                       ),
                       const SizedBox(
                         height: 20,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            "Phone number",
+                      TextFieldWithLabel(
+                        controller: _phoneNumberTextEditingController,
+                        title: "Phone number",
+                        prefix: const Icon(
+                          Icons.phone,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      TextFieldWithLabel(
+                        title: "Full name",
+                        controller: _fullNameTextEditingController,
+                        prefix: const Icon(
+                          Icons.person,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      const Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "About",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            color: Color.fromARGB(255, 106, 106, 106),
+                            fontSize: 15,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      TextFormField(
+                        autofocus: false,
+                        controller: _bioTextEditingController,
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          fillColor: const Color.fromARGB(255, 245, 170, 51),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                color: Color.fromARGB(255, 20, 106, 218),
+                                width: 2.0),
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          hintText: "About yourself",
+                          prefixIcon: const Icon(
+                            Icons.info,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: Color.fromARGB(255, 106, 106, 106),
+                        ),
+                        maxLines: 5,
+                        minLines: 5,
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      AuthButton(
+                        onPressed: () {},
+                        child: Consumer<ProfileService>(
+                            builder: (context, value, child) {
+                          if (value.profileUpdateLoading == true) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                          return const Text(
+                            "Update",
                             style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
+                              color: Colors.white,
+                              fontSize: 18,
                             ),
-                          ),
-                          Text(
-                            value.profileDetails.user!.phone.toString(),
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
+                          );
+                        }),
+                      ),
+                      const SizedBox(
+                        height: 30,
                       ),
                     ],
-                  );
-                }),
+                  ),
+                ),
               ],
             ),
           ),

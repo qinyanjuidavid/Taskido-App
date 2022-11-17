@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:taskido/views/auth/edit_profile_screen.dart';
 import 'package:taskido/views/auth/forgot_password_otp.dart';
 import 'package:taskido/views/auth/forgot_password_screen.dart';
 import 'package:taskido/views/auth/otp_page.dart';
@@ -27,7 +26,6 @@ class RouteGenerator {
   static const String completeTasksPage = "/completeTasks";
   static const String unCompleteTasksPage = "/uncompleteTasks";
   static const String profilePage = "/profilePage";
-  static const String updateProfilePage = "/updateProfilePage";
 
   RouteGenerator._() {}
 
@@ -80,10 +78,6 @@ class RouteGenerator {
       case unCompleteTasksPage:
         return MaterialPageRoute(
           builder: (_) => UncompleteTasksScreen(),
-        );
-      case updateProfilePage:
-        return MaterialPageRoute(
-          builder: (_) => UpdateProfileScreen(),
         );
       default:
         throw const FormatException("Route not found");
