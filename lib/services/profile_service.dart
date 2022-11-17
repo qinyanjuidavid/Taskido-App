@@ -101,7 +101,7 @@ class ProfileService extends ChangeNotifier {
         notifyListeners();
 
         return payload;
-      } else if (response.statusCode == 400) {
+      } else if (response.statusCode == 401) {
         await authService.refreshToken(refreshToken);
         updateProfile(
           phone: phone,

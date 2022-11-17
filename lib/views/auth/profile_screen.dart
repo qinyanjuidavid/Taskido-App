@@ -25,6 +25,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void initState() {
     super.initState();
     _refresh();
+  }
+
+  void _profileUpdateFnc() async {
+    if (profileUpdateKey.currentState!.validate()) {
+      await profileService
+          .updateProfile(
+        bio: _bioTextEditingController.text,
+        email: _emailTextEditingController.text,
+        fullName: _fullNameTextEditingController.text,
+        phone: _phoneNumberTextEditingController.text,
+        userID: profileService.profileDetails.id,
+      )
+          .then((value) {
+        if (value != null) {
+          _refresh();
+          print("Success.....");
+        }
+      });
+    }
+  }
+
+  Future _refresh() async {
+    await Provider.of<ProfileService>(context, listen: false).getProfile();
     _fullNameTextEditingController.text =
         profileService.profileDetails.user!.fullName!.toString();
     _emailTextEditingController.text =
@@ -33,10 +56,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         profileService.profileDetails.user!.phone!.toString();
     _bioTextEditingController.text =
         profileService.profileDetails.bio!.toString();
-  }
-
-  Future _refresh() async {
-    await Provider.of<ProfileService>(context, listen: false).getProfile();
   }
 
   @override
@@ -211,7 +230,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         height: 30,
                       ),
                       AuthButton(
-                        onPressed: () {},
+                        onPressed: _profileUpdateFnc,
                         child: Consumer<ProfileService>(
                             builder: (context, value, child) {
                           if (value.profileUpdateLoading == true) {
