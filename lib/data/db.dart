@@ -1,6 +1,7 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hive/hive.dart';
 import 'package:taskido/data/models/otp_check_model.dart';
+import 'package:taskido/data/models/profile_model.dart';
 
 import 'models/login_models.dart';
 import 'models/sign_up_model.dart';
@@ -11,6 +12,8 @@ class DataBase {
   Box<SignUp>? signUpDetailsBox;
   Box<TokenCheck>? otpDetailsBox;
   Box<OtpData>? otpDataDetailsBox;
+  //profile
+  Box<Profile>? userProfileDetailsBox;
 
   _initBoxes() async {
     loginAllDetailsBox = await Hive.openBox('loginUserBox');
@@ -18,11 +21,17 @@ class DataBase {
     signUpDetailsBox = await Hive.openBox("signUpDetailsBox");
     otpDetailsBox = await Hive.openBox("passwordTokenDetailsBox");
     otpDataDetailsBox = await Hive.openBox("otpDataDetailsBox");
+    userProfileDetailsBox = await Hive.openBox("profileDetailsBox");
   }
 
   _loginAdapters() async {
     Hive.registerAdapter(LoginAdapter());
     Hive.registerAdapter(UserAdapter());
+  }
+
+  _userProfileAdapters() async {
+    Hive.registerAdapter(ProfileAdapter());
+    Hive.registerAdapter(UserProfileAdapter());
   }
 
   _signupAdapters() async {
@@ -36,6 +45,7 @@ class DataBase {
 
   init() async {
     await Hive.initFlutter();
+    await _userProfileAdapters();
     await _otpAdapters();
     await _signupAdapters();
     await _loginAdapters();
