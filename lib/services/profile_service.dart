@@ -29,8 +29,8 @@ class ProfileService extends ChangeNotifier {
         Profile profile = Profile.fromJson(payload[0]);
         _profileDetails = profile;
 
-        _profileLoading = false;
         notifyListeners();
+        _profileLoading = false;
         await db.userProfileDetailsBox!.clear();
         await db.userProfileDetailsBox!.add(profile);
       } else if (response.statusCode == 401) {
@@ -164,11 +164,12 @@ class ProfileService extends ChangeNotifier {
       if (response.statusCode == 200) {
         _profilePictureUpdateSuccessToast();
         notifyListeners();
+        _profileUpdateLoading = false;
       }
     }).catchError((error) {
       print("error occured while updating profile $error");
       _profilePictureUpdateErrorToast("Profile picture update failed!");
-      _profileLoading = false;
+      _profileUpdateLoading = false;
     });
   }
 }

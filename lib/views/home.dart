@@ -6,7 +6,9 @@ import 'package:taskido/data/data_search.dart';
 import 'package:taskido/data/models/category_models.dart';
 import 'package:taskido/services/auth_services.dart';
 import 'package:taskido/services/extensions.dart';
+import 'package:taskido/services/navigation_service.dart';
 import 'package:taskido/services/tasks_services.dart';
+import 'package:taskido/views/tasks/tasks_screen.dart';
 import 'package:taskido/widgets/app_drawer.dart';
 import 'package:taskido/widgets/buttons/auth_button.dart';
 import 'package:taskido/widgets/category/category_add_bottomsheet.dart';
@@ -60,6 +62,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    void _completedTaskFunc() {
+      Navigator.of(context).pushNamed(RouteGenerator.completeTasksPage);
+    }
+
     return SafeArea(
       child: Scaffold(
         drawer: AppDrawer(),
@@ -108,6 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       title: "Complete",
                       color: Colors.indigo,
                       numberOfTasks: "27",
+                      // onTap:  _completedTaskFunc;
                     ),
                     SizedBox(
                       width: 8,
@@ -166,7 +173,19 @@ class _HomeScreenState extends State<HomeScreen> {
                               value.categories[index].color.toString();
 
                           return InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => TasksScreen(
+                                    category: value.categories[index],
+                                  ),
+                                ),
+                              );
+                              // MaterialPageRoute(
+                              //     builder: (_) => TasksScreen(
+                              //           category: value.categories[index],
+                              //         ));
+                            },
                             child: Container(
                               decoration: BoxDecoration(
                                 color: catColor.toColor(),

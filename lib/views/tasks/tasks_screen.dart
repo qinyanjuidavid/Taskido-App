@@ -6,7 +6,7 @@ import 'package:taskido/data/models/category_models.dart';
 import 'package:taskido/services/tasks_services.dart';
 
 class TasksScreen extends StatefulWidget {
-  final Category category;
+  final Result category;
   TasksScreen({Key? key, required this.category}) : super(key: key);
 
   @override

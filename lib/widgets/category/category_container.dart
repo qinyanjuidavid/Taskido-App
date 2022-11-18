@@ -4,12 +4,14 @@ class CompleteAndUncompleteContainerWidget extends StatelessWidget {
   final String title;
   final String numberOfTasks;
   final Color color;
-  const CompleteAndUncompleteContainerWidget(
-      {Key? key,
-      required this.title,
-      required this.numberOfTasks,
-      required this.color})
-      : super(key: key);
+  // final Function onTap;
+  const CompleteAndUncompleteContainerWidget({
+    Key? key,
+    required this.title,
+    required this.numberOfTasks,
+    required this.color,
+    // required this.onTap
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
