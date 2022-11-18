@@ -104,10 +104,9 @@ class ProfileService extends ChangeNotifier {
         // await Future.delayed(
         //   const Duration(seconds: 20),
         // );
-
-        notifyListeners();
         _profileUpdateSuccessToast();
         _profileUpdateLoading = false;
+        notifyListeners();
 
         return payload;
       } else if (response.statusCode == 401) {

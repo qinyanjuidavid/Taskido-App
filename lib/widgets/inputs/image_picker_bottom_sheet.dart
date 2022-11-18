@@ -88,7 +88,22 @@ class ImagePickerBottomSheet extends StatelessWidget {
                     Column(
                       children: [
                         IconButton(
-                          onPressed: () {},
+                          onPressed: () async {
+                            final _capturedImage = await _imagePicker.pickImage(
+                              source: ImageSource.camera,
+                              imageQuality: 100,
+                            );
+                            if (_capturedImage != null) {
+                              File _cameraFile = File(_capturedImage.path);
+                              _uploadFnc(_capturedImage.path, _cameraFile);
+
+                              Navigator.of(context).pop();
+                              await Future.delayed(
+                                const Duration(seconds: 8),
+                              );
+                              profileService.getProfile();
+                            }
+                          },
                           icon: const Icon(
                             Icons.camera_alt,
                             size: 40,
