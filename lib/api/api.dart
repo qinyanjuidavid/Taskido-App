@@ -78,6 +78,39 @@ class Api {
     return response;
   }
 
+  static Future updateProfilePicture(
+    String? imagePath,
+    File? profileImage,
+    int? userID,
+  ) async {
+    String? token = authService.loginDetails.access;
+    print("Api Path ${imagePath} --->Type ${imagePath.runtimeType}");
+    print("Api Image ${profileImage} --->Type ${profileImage.runtimeType}");
+    final file = File(imagePath!);
+    final _url = Uri.parse("http://10.0.2.2:8000/media/profile_pictures/");
+    //upload profile picture to django rest framework api
+    var request = http.MultipartRequest(
+      'PUT',
+      // _url,
+      Uri.parse("${baseUrl}owner/profile/$userID/"),
+    );
+    request.headers.addAll({
+      HttpHeaders.contentTypeHeader: 'application/json',
+      HttpHeaders.authorizationHeader: "Bearer $token",
+    });
+    request.files.add(
+      http.MultipartFile.fromBytes(
+        "profile_picture",
+        file.readAsBytesSync(),
+        filename: imagePath.split('/').last,
+      ),
+    );
+    var response = await request.send();
+    print("Data ${response.stream.toBytes()}");
+    print("Response ${response.statusCode}");
+    return response;
+  }
+
   static Future<http.Response> logout() async {
     String? token = authService.loginDetails.access;
     String? refresh = authService.loginDetails.refresh;

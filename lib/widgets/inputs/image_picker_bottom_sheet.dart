@@ -1,10 +1,15 @@
+import 'dart:io';
+
 import "package:flutter/material.dart";
+import 'package:image_picker/image_picker.dart';
+import 'package:taskido/services/profile_service.dart';
 
 class ImagePickerBottomSheet extends StatelessWidget {
   const ImagePickerBottomSheet({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final ImagePicker _imagePicker = ImagePicker();
     Widget _makeDismissible({required Widget child}) {
       return GestureDetector(
         behavior: HitTestBehavior.opaque,
@@ -49,7 +54,6 @@ class ImagePickerBottomSheet extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    // Camera
                     Column(
                       children: [
                         IconButton(
@@ -71,7 +75,20 @@ class ImagePickerBottomSheet extends StatelessWidget {
                     Column(
                       children: [
                         IconButton(
-                          onPressed: () {},
+                          onPressed: () async {
+                            final _pickedImageFile =
+                                await _imagePicker.pickImage(
+                              source: ImageSource.gallery,
+                              imageQuality: 100,
+                            );
+
+                            if (_pickedImageFile != null) {
+                              File _imageFile = File(_pickedImageFile.path);
+                              print(
+                                  "Runt time type::: ${_pickedImageFile.path.runtimeType}");
+                              _uploadFnc(_pickedImageFile.path, _imageFile);
+                            }
+                          },
                           icon: const Icon(
                             Icons.photo,
                             size: 40,
@@ -93,5 +110,17 @@ class ImagePickerBottomSheet extends StatelessWidget {
         },
       ),
     );
+  }
+
+  void _uploadFnc(String? imagePath, File? profileImage) async {
+    await profileService
+        .profilePictureUpload(
+      imagePath,
+      profileImage,
+      profileService.profileDetails.id,
+    )
+        .then((value) {
+      print(value);
+    });
   }
 }

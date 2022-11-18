@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -123,6 +124,41 @@ class ProfileService extends ChangeNotifier {
         _profileUpdateLoading = false;
         notifyListeners();
       }
+    }).catchError((error) {
+      print("error occured while updating profile $error");
+      _profileUpdateErrorToast("Profile Update Failed!");
+      _profileLoading = false;
+    });
+  }
+
+  Future profilePictureUpload(
+      String? imagePath, File? profileImage, int? userID) async {
+    String? refreshToken = authService.loginDetails.refresh;
+    _profileUpdateLoading = true;
+
+    return await Api.updateProfilePicture(imagePath, profileImage, userID)
+        .then((response) async {
+      print(
+          "Service Image Path ${imagePath} --> Type ${imagePath.runtimeType}");
+      // var payload = jsonDecode(response);
+      if (response.statusCode == 200) {}
+
+      // if (response.statusCode == 200) {
+      //   _updatedProfileDetails = Profile.fromJson(payload);
+
+      //   notifyListeners();
+      //   _profileUpdateSuccessToast();
+      //   _profileUpdateLoading = false;
+
+      //   return payload;
+      // } else if (response.statusCode == 401) {
+      //   await authService.refreshToken(refreshToken);
+      //   profilePictureUpload(imagePath, profileImage, userID);
+      // } else {
+      //   _profileUpdateErrorToast(payload);
+      //   _profileUpdateLoading = false;
+      //   notifyListeners();
+      // }
     }).catchError((error) {
       print("error occured while updating profile $error");
       _profileUpdateErrorToast("Profile Update Failed!");
