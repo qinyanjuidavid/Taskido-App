@@ -4,6 +4,7 @@ import 'package:taskido/configs/routes.dart';
 import 'package:taskido/services/auth_services.dart';
 import 'package:taskido/services/profile_service.dart';
 import 'package:taskido/widgets/buttons/auth_button.dart';
+import 'package:taskido/widgets/inputs/image_picker_bottom_sheet.dart';
 import 'package:taskido/widgets/inputs/text_field_with_label.dart';
 import 'package:taskido/widgets/spinners/spinner.dart';
 
@@ -160,7 +161,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     borderRadius: BorderRadius.circular(50),
                                   ),
                                   child: IconButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      showModalBottomSheet(
+                                        isScrollControlled: true,
+                                        context: context,
+                                        backgroundColor: Colors.transparent,
+                                        builder: (context) {
+                                          return ImagePickerBottomSheet();
+                                        },
+                                      );
+                                    },
                                     icon: const Icon(
                                       Icons.camera_alt,
                                       color: Colors.white,

@@ -73,7 +73,7 @@ class RouteGenerator {
         );
       case completeTasksPage:
         return MaterialPageRoute(
-          builder: (_) => CompletedTasks(),
+          builder: (_) => CompletedTasksScreen(),
         );
       case unCompleteTasksPage:
         return MaterialPageRoute(

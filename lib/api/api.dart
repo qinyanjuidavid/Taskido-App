@@ -67,6 +67,7 @@ class Api {
         HttpHeaders.authorizationHeader: 'Bearer $token',
       },
       body: jsonEncode({
+        // "user": {"email": email, "phone": phone, "full_name": fullName},
         "phone": phone,
         "email": email,
         "full_name": fullName,

@@ -42,18 +42,6 @@ class CategoryBottomSheet extends StatelessWidget {
             child: ListView(
               children: [
                 const SizedBox(
-                  height: 10,
-                ),
-                const Center(
-                  child: Text(
-                    "Add Category",
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                const SizedBox(
                   height: 15,
                 ),
                 categoryAddForm,

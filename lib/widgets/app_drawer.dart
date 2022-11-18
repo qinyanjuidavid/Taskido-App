@@ -18,7 +18,9 @@ class AppDrawer extends StatelessWidget {
                 children: [
                   ListTile(
                     title: Text("Home"),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context).pushNamed(RouteGenerator.homePage);
+                    },
                   ),
                   ListTile(
                     title: Text("Profile"),
