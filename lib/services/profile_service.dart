@@ -131,6 +131,30 @@ class ProfileService extends ChangeNotifier {
     });
   }
 
+  void _profilePictureUpdateSuccessToast() {
+    Fluttertoast.showToast(
+      msg: "Profile picture was successfully updated",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 4,
+      backgroundColor: Colors.green,
+      textColor: Colors.white,
+      fontSize: 18.0,
+    );
+  }
+
+  void _profilePictureUpdateErrorToast(msg) {
+    Fluttertoast.showToast(
+      msg: msg,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 4,
+      backgroundColor: Colors.red,
+      textColor: Colors.white,
+      fontSize: 18.0,
+    );
+  }
+
   Future profilePictureUpload(
       String? imagePath, File? profileImage, int? userID) async {
     String? refreshToken = authService.loginDetails.refresh;
@@ -138,30 +162,13 @@ class ProfileService extends ChangeNotifier {
 
     return await Api.updateProfilePicture(imagePath, profileImage, userID)
         .then((response) async {
-      print(
-          "Service Image Path ${imagePath} --> Type ${imagePath.runtimeType}");
-      // var payload = jsonDecode(response);
-      if (response.statusCode == 200) {}
-
-      // if (response.statusCode == 200) {
-      //   _updatedProfileDetails = Profile.fromJson(payload);
-
-      //   notifyListeners();
-      //   _profileUpdateSuccessToast();
-      //   _profileUpdateLoading = false;
-
-      //   return payload;
-      // } else if (response.statusCode == 401) {
-      //   await authService.refreshToken(refreshToken);
-      //   profilePictureUpload(imagePath, profileImage, userID);
-      // } else {
-      //   _profileUpdateErrorToast(payload);
-      //   _profileUpdateLoading = false;
-      //   notifyListeners();
-      // }
+      if (response.statusCode == 200) {
+        _profilePictureUpdateSuccessToast();
+        notifyListeners();
+      }
     }).catchError((error) {
       print("error occured while updating profile $error");
-      _profileUpdateErrorToast("Profile Update Failed!");
+      _profilePictureUpdateErrorToast("Profile picture update failed!");
       _profileLoading = false;
     });
   }

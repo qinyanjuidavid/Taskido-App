@@ -2,6 +2,7 @@ import 'dart:io';
 
 import "package:flutter/material.dart";
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:taskido/services/profile_service.dart';
 
 class ImagePickerBottomSheet extends StatelessWidget {
@@ -57,24 +58,6 @@ class ImagePickerBottomSheet extends StatelessWidget {
                     Column(
                       children: [
                         IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.camera_alt,
-                            size: 40,
-                          ),
-                        ),
-                        const Text(
-                          "Camera",
-                          style: TextStyle(
-                            fontSize: 16,
-                          ),
-                        ),
-                      ],
-                    ),
-                    // Gallery
-                    Column(
-                      children: [
-                        IconButton(
                           onPressed: () async {
                             final _pickedImageFile =
                                 await _imagePicker.pickImage(
@@ -84,9 +67,9 @@ class ImagePickerBottomSheet extends StatelessWidget {
 
                             if (_pickedImageFile != null) {
                               File _imageFile = File(_pickedImageFile.path);
-                              print(
-                                  "Runt time type::: ${_pickedImageFile.path.runtimeType}");
                               _uploadFnc(_pickedImageFile.path, _imageFile);
+                              Navigator.of(context).pop();
+                              profileService.getProfile();
                             }
                           },
                           icon: const Icon(
@@ -96,6 +79,23 @@ class ImagePickerBottomSheet extends StatelessWidget {
                         ),
                         const Text(
                           "Gallery",
+                          style: TextStyle(
+                            fontSize: 16,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        IconButton(
+                          onPressed: () {},
+                          icon: const Icon(
+                            Icons.camera_alt,
+                            size: 40,
+                          ),
+                        ),
+                        const Text(
+                          "Camera",
                           style: TextStyle(
                             fontSize: 16,
                           ),
