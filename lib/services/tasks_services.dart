@@ -150,7 +150,7 @@ class TaskService extends ChangeNotifier {
   bool _taskLoading = false;
   bool get taskLoading => _taskLoading;
 
-  Future fetchTasks(int? categoryId) async {
+  Future fetchTasks({int? categoryId}) async {
     _tasks = [];
     _taskLoading = true;
     String? refreshToken = authService.loginDetails.refresh;
@@ -159,17 +159,27 @@ class TaskService extends ChangeNotifier {
     return await Api.getTasks().then((response) async {
       if (response.statusCode == 200) {
         var payload = json.decode(response.body);
-        // filter the tasks using category ID
-        for (var task in payload) {
-          if (task['category'] == categoryId) {
+        if (categoryId != null) {
+          for (var task in payload) {
+            if (task['category'] == categoryId) {
+              _tasks.add(Tasks.fromJson(task));
+            }
+          }
+        } else {
+          for (var task in payload) {
             _tasks.add(Tasks.fromJson(task));
           }
         }
+
         notifyListeners();
         _taskLoading = false;
       } else if (response.statusCode == 401) {
         await authService.refreshToken(refreshToken);
-        fetchTasks(categoryId);
+        if (categoryId != null) {
+          fetchTasks(categoryId: categoryId);
+        } else {
+          fetchTasks();
+        }
       } else {
         var payload = json.decode(response.body);
         print("Failed to load Tasks $payload");

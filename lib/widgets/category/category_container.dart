@@ -1,23 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:taskido/configs/routes.dart';
 
 class CompleteAndUncompleteContainerWidget extends StatelessWidget {
   final String title;
   final String numberOfTasks;
   final Color color;
-  // final Function onTap;
+  //pass navigation route
+  final String route;
+
   const CompleteAndUncompleteContainerWidget({
     Key? key,
     required this.title,
     required this.numberOfTasks,
     required this.color,
-    // required this.onTap
+    required this.route,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          Navigator.pushNamed(context, route);
+        },
         child: Container(
           padding: const EdgeInsets.only(
             top: 18,

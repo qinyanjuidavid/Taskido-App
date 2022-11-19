@@ -35,10 +35,13 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _refresh() async {
-    await Provider.of<TaskService>(context, listen: false).fetchCategories();
-    await Provider.of<TaskService>(context, listen: false)
-        .setScrollController();
-    await Provider.of<ProfileService>(context, listen: false).getProfile();
+    var profileService = Provider.of<ProfileService>(context, listen: false);
+    var taskService = Provider.of<TaskService>(context, listen: false);
+
+    await profileService.getProfile();
+    await taskService.fetchCategories();
+    await taskService.setScrollController();
+    await taskService.fetchTasks();
   }
 
   void _categorySubmit(categoryColor) async {
@@ -62,23 +65,8 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  // number of completed tasks
-  // int _completedTasks() {
-  //   int completedTasks = 0;
-  //   //filter all the completed tasks
-  //   for (var i = 0; i < taskService.tasks.length; i++) {
-  //     if (taskService.tasks[i]. == true) {
-  //       completedTasks++;
-  //     }
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
-    void _completedTaskFunc() {
-      Navigator.of(context).pushNamed(RouteGenerator.completeTasksPage);
-    }
-
     return SafeArea(
       child: Scaffold(
         drawer: const AppDrawer(),
@@ -136,20 +124,29 @@ class _HomeScreenState extends State<HomeScreen> {
                     margin: const EdgeInsets.only(left: 7, right: 7),
                     height: 150,
                     child: Row(
-                      children: const [
+                      children: [
                         CompleteAndUncompleteContainerWidget(
                           title: "Complete",
                           color: Colors.indigo,
-                          numberOfTasks: "27",
-                          // onTap:  _completedTaskFunc;
+                          numberOfTasks: taskService.tasks
+                              .where((element) => element.completed == true)
+                              .toList()
+                              .length
+                              .toString(),
+                          route: RouteGenerator.completeTasksPage,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 8,
                         ),
                         CompleteAndUncompleteContainerWidget(
                           title: "To complete",
                           color: Colors.teal,
-                          numberOfTasks: "13",
+                          numberOfTasks: taskService.tasks
+                              .where((element) => element.completed == false)
+                              .toList()
+                              .length
+                              .toString(),
+                          route: RouteGenerator.unCompleteTasksPage,
                         ),
                       ],
                     ),

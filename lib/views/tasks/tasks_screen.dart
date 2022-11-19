@@ -66,7 +66,7 @@ class _TasksScreenState extends State<TasksScreen> {
     await Provider.of<TaskService>(context, listen: false).fetchCategories();
     Future.delayed(
       Duration(milliseconds: 0),
-      (() => taskService.fetchTasks(widget.category.id)),
+      (() => taskService.fetchTasks(categoryId: widget.category.id)),
     );
   }
 
