@@ -15,28 +15,31 @@ class Tasks {
     this.note,
     this.dueDate,
     this.important,
+    this.completed,
     this.createdAt,
     this.updatedAt,
   });
 
   int? id;
   String? task;
-  Owner? owner;
+  TaskOwner? owner;
   int? category;
   String? note;
   String? dueDate;
   bool? important;
+  bool? completed;
   String? createdAt;
   String? updatedAt;
 
   factory Tasks.fromJson(Map<String, dynamic> json) => Tasks(
         id: json["id"],
         task: json["task"],
-        owner: Owner.fromJson(json["owner"]),
+        owner: TaskOwner.fromJson(json["owner"]),
         category: json["category"],
         note: json["note"],
         dueDate: json["due_date"],
         important: json["important"],
+        completed: json["completed"],
         createdAt: json["created_at"],
         updatedAt: json["updated_at"],
       );
@@ -49,13 +52,14 @@ class Tasks {
         "note": note,
         "due_date": dueDate,
         "important": important,
+        "completed": completed,
         "created_at": createdAt,
         "updated_at": updatedAt,
       };
 }
 
-class Owner {
-  Owner({
+class TaskOwner {
+  TaskOwner({
     this.id,
     this.user,
     this.bio,
@@ -63,13 +67,13 @@ class Owner {
   });
 
   int? id;
-  User? user;
+  TaskUser? user;
   String? bio;
   String? profilePicture;
 
-  factory Owner.fromJson(Map<String, dynamic> json) => Owner(
+  factory TaskOwner.fromJson(Map<String, dynamic> json) => TaskOwner(
         id: json["id"],
-        user: User.fromJson(json["user"]),
+        user: TaskUser.fromJson(json["user"]),
         bio: json["bio"],
         profilePicture: json["profile_picture"],
       );
@@ -82,8 +86,8 @@ class Owner {
       };
 }
 
-class User {
-  User({
+class TaskUser {
+  TaskUser({
     this.id,
     this.phone,
     this.email,
@@ -99,7 +103,7 @@ class User {
   String? role;
   String? timestamp;
 
-  factory User.fromJson(Map<String, dynamic> json) => User(
+  factory TaskUser.fromJson(Map<String, dynamic> json) => TaskUser(
         id: json["id"],
         phone: json["phone"],
         email: json["email"],

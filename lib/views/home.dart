@@ -62,6 +62,17 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  // number of completed tasks
+  // int _completedTasks() {
+  //   int completedTasks = 0;
+  //   //filter all the completed tasks
+  //   for (var i = 0; i < taskService.tasks.length; i++) {
+  //     if (taskService.tasks[i]. == true) {
+  //       completedTasks++;
+  //     }
+  //   }
+  // }
+
   @override
   Widget build(BuildContext context) {
     void _completedTaskFunc() {
