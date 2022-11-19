@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:taskido/configs/routes.dart';
 import 'package:taskido/services/auth_services.dart';
+import 'package:taskido/services/profile_service.dart';
 import 'package:taskido/views/auth/profile_screen.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -10,10 +11,9 @@ class AppDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       child: Container(
-        color: Color(0xFF1a2f45),
-        child: Column(
+        color: const Color(0xFF1a2f45),
+        child: ListView(
           children: [
-            //profile image
             Container(
               height: 200,
               width: double.infinity,
@@ -24,58 +24,129 @@ class AppDrawer extends StatelessWidget {
                   CircleAvatar(
                     radius: 50,
                     backgroundImage: NetworkImage(
-                        "https://images.unsplash.com/photo-1616166330073-8b8b2b2b2b1a?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"),
+                      profileService.profileDetails.profilePicture.toString(),
+                    ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Text(
-                    "John Doe",
-                    style: TextStyle(
+                    profileService.profileDetails.user!.fullName.toString(),
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 20,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ],
               ),
             ),
+            ListTile(
+              leading: const Icon(
+                Icons.home,
+                color: Colors.white,
+              ),
+              title: const Text(
+                "Home",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                ),
+              ),
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pushNamed(RouteGenerator.homePage);
+              },
+            ),
+            ListTile(
+              leading: const Icon(
+                Icons.person,
+                color: Colors.white,
+              ),
+              title: const Text("Profile",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                  )),
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pushNamed(RouteGenerator.profilePage);
+              },
+            ),
+            ListTile(
+              leading: const Icon(
+                Icons.check_circle,
+                color: Colors.white,
+              ),
+              title: const Text(
+                "Completed Tasks",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                ),
+              ),
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.of(context)
+                    .pushNamed(RouteGenerator.completeTasksPage);
+              },
+            ),
+            ListTile(
+              leading: const Icon(
+                Icons.cancel,
+                color: Colors.white,
+              ),
+              title: const Text(
+                "Uncompleted Tasks",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                ),
+              ),
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.of(context)
+                    .pushNamed(RouteGenerator.unCompleteTasksPage);
+              },
+            ),
+            ListTile(
+              leading: const Icon(
+                Icons.calendar_today,
+                color: Colors.white,
+              ),
+              title: const Text(
+                "Calendar",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                ),
+              ),
+              onTap: () {
+                Navigator.of(context).pop();
+                // Navigator.of(context)
+                //     .pushNamed(RouteGenerator.calendarPage);
+              },
+            ),
+            ListTile(
+              leading: const Icon(
+                Icons.logout,
+                color: Colors.white,
+              ),
+              title: const Text(
+                "Logout",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                ),
+              ),
+              onTap: () {
+                Navigator.of(context).pushNamed(RouteGenerator.loginPage);
+                authService.logout();
+              },
+            ),
           ],
         ),
       ),
     );
-
-    // child: Padding(
-    //   padding: const EdgeInsets.symmetric(horizontal: 20),
-    //   child: Column(
-    //     children: [
-    //       Expanded(
-    //         child: ListView(
-    //           children: [
-    //             ListTile(
-    //               title: Text("Home"),
-    //               onTap: () {
-    //                 Navigator.of(context).pushNamed(RouteGenerator.homePage);
-    //               },
-    //             ),
-    //             ListTile(
-    //               title: Text("Profile"),
-    //               onTap: () {
-    //                 Navigator.of(context)
-    //                     .pushNamed(RouteGenerator.profilePage);
-    //               },
-    //             ),
-    //             ListTile(
-    //               title: Text("Logout"),
-    //               onTap: () {
-    //                 logoutFunc(context);
-    //                 Navigator.of(context).pop(RouteGenerator.loginPage);
-    //               },
-    //             ),
-    //           ],
-    //         ),
-    //       ),
-    //     ],
-    //   ),
-    // ),
   }
 }

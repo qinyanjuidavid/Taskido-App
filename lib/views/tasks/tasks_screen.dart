@@ -306,7 +306,7 @@ class _TasksScreenState extends State<TasksScreen> {
               ),
             ),
           ),
-          backgroundColor: Colors.black87,
+          backgroundColor: Color(0xFF1a2f45),
           actions: [
             IconButton(
               icon: const Icon(Icons.search),

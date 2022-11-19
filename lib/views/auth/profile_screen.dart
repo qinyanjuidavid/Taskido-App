@@ -71,7 +71,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.black87,
+          backgroundColor: Color(0xFF1a2f45),
           // .deepOrangeAccent,
           elevation: 20,
           titleSpacing: 20,
