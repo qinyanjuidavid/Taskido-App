@@ -73,9 +73,13 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
                       left: 10,
                       right: 10,
                     ),
+                    padding: const EdgeInsets.only(
+                      top: 20,
+                      bottom: 20,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(5),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.grey.withOpacity(0.5),
@@ -88,7 +92,6 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
                     ),
                     child: Column(
                       children: [
-                        //badge for category at the topr
                         Row(
                           children: [
                             Checkbox(
@@ -103,37 +106,6 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                //badge for category at the top
-                                Align(
-                                  alignment: Alignment.topLeft,
-                                  child: Container(
-                                    margin: const EdgeInsets.only(
-                                      top: 10,
-                                      left: 10,
-                                    ),
-                                    padding: const EdgeInsets.only(
-                                      left: 5,
-                                      right: 5,
-                                      top: 3,
-                                      bottom: 3,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: Color.fromARGB(255, 253, 211, 176),
-                                      borderRadius: BorderRadius.circular(6),
-                                    ),
-                                    child: Text(
-                                      task.category.toString(),
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                // task title
                                 Container(
                                   margin: const EdgeInsets.only(
                                     left: 10,
@@ -154,25 +126,6 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
                                   margin: const EdgeInsets.only(
                                     left: 10,
                                   ),
-                                  child: Text(
-                                    task.note.toString(),
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 14,
-                                    ),
-                                    maxLines: 3,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                // task date due
-                                Container(
-                                  margin: const EdgeInsets.only(
-                                    left: 10,
-                                  ),
-                                  //calendar icon and date
                                   child: Row(
                                     children: [
                                       const Icon(
@@ -184,8 +137,6 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
                                         width: 5,
                                       ),
                                       Text(
-                                        //convert task time to datetime
-
                                         task.createdAt.toString(),
                                         style: const TextStyle(
                                           color: Colors.grey,
