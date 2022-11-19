@@ -287,6 +287,33 @@ class _TasksScreenState extends State<TasksScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.black87,
+          //  Color.fromARGB(255, 10, 95, 89),
+          // Colors.black87,
+          // .deepOrangeAccent,
+          elevation: 20,
+          titleSpacing: 20,
+          // automaticallyImplyLeading: false,
+          title: const Text(
+            "Taskido",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 28,
+            ),
+          ),
+          actions: [
+            Container(
+              margin: const EdgeInsets.only(right: 10),
+              child: IconButton(
+                onPressed: () {
+                  // showSearch(context: context, delegate: DataSearch());
+                },
+                icon: const Icon(Icons.search),
+              ),
+            ),
+          ],
+        ),
         body: Text("Tasks"),
       ),
     );
