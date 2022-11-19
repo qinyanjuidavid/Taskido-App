@@ -7,6 +7,7 @@ import 'package:taskido/data/models/category_models.dart';
 import 'package:taskido/services/auth_services.dart';
 import 'package:taskido/services/extensions.dart';
 import 'package:taskido/services/navigation_service.dart';
+import 'package:taskido/services/profile_service.dart';
 import 'package:taskido/services/tasks_services.dart';
 import 'package:taskido/views/tasks/tasks_screen.dart';
 import 'package:taskido/widgets/app_drawer.dart';
@@ -37,6 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
     await Provider.of<TaskService>(context, listen: false).fetchCategories();
     await Provider.of<TaskService>(context, listen: false)
         .setScrollController();
+    await Provider.of<ProfileService>(context, listen: false).getProfile();
   }
 
   void _categorySubmit(categoryColor) async {
@@ -68,7 +70,149 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return SafeArea(
       child: Scaffold(
-        drawer: AppDrawer(),
+        drawer: Drawer(
+          child: Container(
+            color: Color(0xFF1a2f45),
+            child: Column(
+              children: [
+                //profile image
+                Container(
+                  height: 200,
+                  width: double.infinity,
+                  color: Colors.blueGrey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircleAvatar(
+                        radius: 50,
+                        backgroundImage: NetworkImage(
+                          profileService.profileDetails.profilePicture
+                              .toString(),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        profileService.profileDetails.user!.fullName.toString(),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                //drawer home button
+                ListTile(
+                  leading: const Icon(
+                    Icons.home,
+                    color: Colors.white,
+                  ),
+                  title: const Text(
+                    "Home",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(
+                    Icons.person,
+                    color: Colors.white,
+                  ),
+                  title: const Text("Profile",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                      )),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pushNamed(RouteGenerator.profilePage);
+                  },
+                ),
+                //drawer completed tasks button
+                ListTile(
+                  leading: const Icon(
+                    Icons.check_circle,
+                    color: Colors.white,
+                  ),
+                  title: const Text(
+                    "Completed Tasks",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context)
+                        .pushNamed(RouteGenerator.completeTasksPage);
+                  },
+                ),
+                //drawer uncompleted tasks button
+                ListTile(
+                  leading: const Icon(
+                    Icons.cancel,
+                    color: Colors.white,
+                  ),
+                  title: const Text(
+                    "Uncompleted Tasks",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context)
+                        .pushNamed(RouteGenerator.unCompleteTasksPage);
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(
+                    Icons.calendar_today,
+                    color: Colors.white,
+                  ),
+                  title: const Text(
+                    "Calendar",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    // Navigator.of(context)
+                    //     .pushNamed(RouteGenerator.calendarPage);
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(
+                    Icons.logout,
+                    color: Colors.white,
+                  ),
+                  title: const Text(
+                    "Logout",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.of(context).pushNamed(RouteGenerator.loginPage);
+                    authService.logout();
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
         appBar: AppBar(
           backgroundColor: Colors.black87,
           //  Color.fromARGB(255, 10, 95, 89),
@@ -77,11 +221,13 @@ class _HomeScreenState extends State<HomeScreen> {
           elevation: 20,
           titleSpacing: 20,
           // automaticallyImplyLeading: false,
-          title: const Text(
-            "Taskido",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 28,
+          title: const Center(
+            child: Text(
+              "Home",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 24,
+              ),
             ),
           ),
           actions: [
@@ -98,67 +244,71 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         body: RefreshIndicator(
           onRefresh: _refresh,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: 10,
-              ),
-              Container(
-                margin: const EdgeInsets.only(left: 7, right: 7),
-                height: 150,
-                child: Row(
-                  children: const [
-                    CompleteAndUncompleteContainerWidget(
-                      title: "Complete",
-                      color: Colors.indigo,
-                      numberOfTasks: "27",
-                      // onTap:  _completedTaskFunc;
-                    ),
-                    SizedBox(
-                      width: 8,
-                    ),
-                    CompleteAndUncompleteContainerWidget(
-                      title: "To complete",
-                      color: Colors.teal,
-                      numberOfTasks: "13",
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 7,
-              ),
-              const Align(
-                alignment: Alignment.centerLeft,
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    left: 10,
+          child: Consumer<TaskService>(
+            builder: (context, value, child) {
+              if (value.categoryLoading == true) {
+                return const Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.blue,
+                    strokeWidth: 2,
+                    value: 0.5,
                   ),
-                  child: Text(
-                    "Categories",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 24,
+                );
+              }
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: 10,
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(left: 7, right: 7),
+                    height: 150,
+                    child: Row(
+                      children: const [
+                        CompleteAndUncompleteContainerWidget(
+                          title: "Complete",
+                          color: Colors.indigo,
+                          numberOfTasks: "27",
+                          // onTap:  _completedTaskFunc;
+                        ),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        CompleteAndUncompleteContainerWidget(
+                          title: "To complete",
+                          color: Colors.teal,
+                          numberOfTasks: "13",
+                        ),
+                      ],
                     ),
                   ),
-                ),
-              ),
-              const SizedBox(
-                height: 2,
-              ),
-              Expanded(
-                child: Container(
-                  margin: const EdgeInsets.only(left: 7, right: 7, top: 5),
-                  child: Consumer<TaskService>(
-                    builder: (context, value, child) {
-                      if (value.categoryLoading == true) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-                      return GridView.builder(
+                  const SizedBox(
+                    height: 7,
+                  ),
+                  const Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        left: 10,
+                      ),
+                      child: Text(
+                        "Categories",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 24,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 2,
+                  ),
+                  Expanded(
+                    child: Container(
+                      margin: const EdgeInsets.only(left: 7, right: 7, top: 5),
+                      child: GridView.builder(
                         controller: value.scrollController,
                         itemCount: value.categories.length,
                         gridDelegate:
@@ -181,10 +331,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 ),
                               );
-                              // MaterialPageRoute(
-                              //     builder: (_) => TasksScreen(
-                              //           category: value.categories[index],
-                              //         ));
                             },
                             child: Container(
                               decoration: BoxDecoration(
@@ -293,12 +439,12 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           );
                         },
-                      );
-                    },
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            ],
+                ],
+              );
+            },
           ),
         ),
 

@@ -69,6 +69,9 @@ class ImagePickerBottomSheet extends StatelessWidget {
                               File _imageFile = File(_pickedImageFile.path);
                               _uploadFnc(_pickedImageFile.path, _imageFile);
                               Navigator.of(context).pop();
+                              await Future.delayed(
+                                const Duration(seconds: 8),
+                              );
                               profileService.getProfile();
                             }
                           },

@@ -60,15 +60,15 @@ class _TasksScreenState extends State<TasksScreen> {
   //   }
   // }
 
-  // Future<void> _refresh() async {
-  //   await Provider.of<TaskService>(context, listen: false)
-  //       .fetchCategoryDetails(widget.category.id);
-  //   await Provider.of<TaskService>(context, listen: false).fetchCategories();
-  //   Future.delayed(
-  //     Duration(milliseconds: 0),
-  //     (() => taskService.fetchTasks(widget.category.id)),
-  //   );
-  // }
+  Future<void> _refresh() async {
+    await Provider.of<TaskService>(context, listen: false)
+        .fetchCategoryDetails(widget.category.id);
+    await Provider.of<TaskService>(context, listen: false).fetchCategories();
+    Future.delayed(
+      Duration(milliseconds: 0),
+      (() => taskService.fetchTasks(widget.category.id)),
+    );
+  }
 
   // void categoryUpdateFnc() async {
   //   if (categoryUpdateKey.currentState!.validate()) {
@@ -288,33 +288,66 @@ class _TasksScreenState extends State<TasksScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.black87,
-          //  Color.fromARGB(255, 10, 95, 89),
-          // Colors.black87,
-          // .deepOrangeAccent,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
           elevation: 20,
           titleSpacing: 20,
-          // automaticallyImplyLeading: false,
-          title: const Text(
-            "Taskido",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 28,
+          title: const Center(
+            child: Text(
+              "Category Details",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+                fontSize: 24,
+              ),
             ),
           ),
+          backgroundColor: Colors.black87,
           actions: [
-            Container(
-              margin: const EdgeInsets.only(right: 10),
-              child: IconButton(
-                onPressed: () {
-                  // showSearch(context: context, delegate: DataSearch());
-                },
-                icon: const Icon(Icons.search),
-              ),
+            IconButton(
+              icon: const Icon(Icons.search),
+              onPressed: () {},
+            ),
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(Icons.mode_edit),
             ),
           ],
         ),
-        body: Text("Tasks"),
+        body: RefreshIndicator(
+          onRefresh: _refresh,
+          child: Consumer<TaskService>(
+            builder: (context, value, child) {
+              //loading
+              if (value.taskLoading == true) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              return ListView.builder(
+                  itemCount: value.tasks.length,
+                  itemBuilder: (context, index) {
+                    return Card(
+                      elevation: 10,
+                      child: ListTile(
+                        title: Text(value.tasks[index].task.toString()),
+                        subtitle: Text(value.tasks[index].note.toString()),
+                        trailing: IconButton(
+                          icon: const Icon(Icons.delete),
+                          onPressed: () {
+                            // value.deleteTask(value.taskList[index].id);
+                          },
+                        ),
+                      ),
+                    );
+                  });
+            },
+          ),
+        ),
       ),
     );
     // return Scaffold(

@@ -48,6 +48,7 @@ class TaskService extends ChangeNotifier {
     print("Scroll Controller............");
 
     _scrollController!.addListener(() async {
+      print("Try this......");
       String? token = authService.loginDetails.access;
       String? refreshToken = authService.loginDetails.refresh;
       if (_scrollController!.position.pixels ==
@@ -146,8 +147,12 @@ class TaskService extends ChangeNotifier {
   List<Tasks> _tasks = [];
   List<Tasks> get tasks => _tasks;
 
+  bool _taskLoading = false;
+  bool get taskLoading => _taskLoading;
+
   Future fetchTasks(int? categoryId) async {
     _tasks = [];
+    _taskLoading = true;
     String? refreshToken = authService.loginDetails.refresh;
     print("fetching tasks for category $categoryId");
 
@@ -161,6 +166,7 @@ class TaskService extends ChangeNotifier {
           }
         }
         notifyListeners();
+        _taskLoading = false;
       } else if (response.statusCode == 401) {
         await authService.refreshToken(refreshToken);
         fetchTasks(categoryId);
@@ -168,8 +174,10 @@ class TaskService extends ChangeNotifier {
         var payload = json.decode(response.body);
         print("Failed to load Tasks $payload");
         notifyListeners();
+        _taskLoading = false;
       }
     }).catchError((error) {
+      _taskLoading = false;
       print("error occured while fetching tasks $error");
     });
   }
