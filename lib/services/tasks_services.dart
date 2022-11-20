@@ -230,7 +230,6 @@ class TaskService extends ChangeNotifier {
     _tasks = [];
     _taskLoading = true;
     String? refreshToken = authService.loginDetails.refresh;
-    print("fetching tasks for category $categoryId");
 
     return await Api.getTasks().then((response) async {
       if (response.statusCode == 200) {
@@ -304,6 +303,29 @@ class TaskService extends ChangeNotifier {
     });
   }
 
+  Tasks _taskDetails = Tasks();
+  Tasks get taskDetails => _taskDetails;
+
+  Future fetchTaskDetails(int? taskID) async {
+    String? refreshToken = authService.loginDetails.refresh;
+
+    return await Api.getTaskDetails(taskID).then((response) async {
+      var payload = json.decode(response.body);
+      if (response.statusCode == 200) {
+        _taskDetails = Tasks.fromJson(payload);
+        notifyListeners();
+        return payload;
+      } else if (response.statusCode == 401) {
+        await authService.refreshToken(refreshToken);
+        fetchTaskDetails(taskID);
+      } else {
+        print("Payload---> $payload");
+      }
+    }).catchError((error) {
+      print("error occured while fetching task $error");
+    });
+  }
+
   Future updateTask({
     String? task,
     int? category,
@@ -325,6 +347,7 @@ class TaskService extends ChangeNotifier {
     ).then((response) async {
       var payload = json.decode(response.body);
       if (response.statusCode == 200) {
+        return payload;
       } else if (response.statusCode == 401) {
         await authService.refreshToken(refreshToken);
         // updateTask(task, category, note, dueDate, important, completed, taskID);

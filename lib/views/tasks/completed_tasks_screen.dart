@@ -30,10 +30,11 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
     await taskService.fetchTasks();
   }
 
-  void _taskUpdateFnc() async {
+  void _taskUpdateFnc(int? taskID) async {
     if (taskUpdateKey.currentState!.validate()) {
       await taskService
           .updateTask(
+        taskID: taskID,
         task: taskUpdateTextEditingController.text,
         note: noteUpdateTextEditingController.text,
       )
@@ -93,10 +94,12 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
                   var task = taskService.tasks[index];
                   return InkWell(
                     onTap: () async {
-                      await taskService.fetchTasks(categoryId: index);
-                      // taskUpdateTextEditingController.text =
-                      //     taskService.tasks[index].task.toString();
-                      _taskUpdateBottomSheet();
+                      await taskService.fetchTaskDetails(task.id);
+                      taskUpdateTextEditingController.text =
+                          task.task.toString();
+                      noteUpdateTextEditingController.text =
+                          task.note.toString();
+                      _taskUpdateBottomSheet(task.id);
                     },
                     child: Container(
                       margin: const EdgeInsets.only(
@@ -194,7 +197,7 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
     );
   }
 
-  void _taskUpdateBottomSheet() {
+  void _taskUpdateBottomSheet(int? taskID) {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
@@ -280,7 +283,9 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
                   height: 30,
                 ),
                 AuthButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    _taskUpdateFnc(taskID);
+                  },
                   child: const Text(
                     "Update",
                     style: TextStyle(

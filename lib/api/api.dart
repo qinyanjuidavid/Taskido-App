@@ -315,7 +315,6 @@ class Api {
         "Authorization": "Bearer $token",
       },
     );
-    print(response.body);
     return response;
   }
 
@@ -354,7 +353,7 @@ class Api {
       bool? completed,
       int? taskID}) async {
     String? token = authService.loginDetails.access;
-    var response = await client2.post(
+    var response = await client2.put(
       Uri.parse("${baseUrl}tasks/$taskID/"),
       headers: {
         HttpHeaders.contentTypeHeader: 'application/json',
