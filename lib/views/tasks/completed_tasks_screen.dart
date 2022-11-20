@@ -13,7 +13,8 @@ class CompletedTasksScreen extends StatefulWidget {
 
 class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
   GlobalKey<FormState> taskUpdateForm = GlobalKey<FormState>();
-  TextEditingController taskTextEditingController = TextEditingController();
+  TextEditingController taskUpdateTextEditingController =
+      TextEditingController();
 
   @override
   void initState() {
@@ -181,7 +182,43 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
         return TaskBottomSheet(
           taskForm: Form(
             key: taskUpdateForm,
-            child: Column(),
+            child: Column(
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(top: 0),
+                  height: 5,
+                  width: 50,
+                  decoration: BoxDecoration(
+                    color: Colors.grey,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                const SizedBox(
+                  height: 3,
+                ),
+                const Center(
+                  child: Text(
+                    "Update task",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                TextFieldWithLabel(
+                  title: "Task",
+                  controller: taskUpdateTextEditingController,
+                  hintText: "Enter task",
+                  keyboardType: TextInputType.text,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return "Please enter task";
+                    }
+                    return null;
+                  },
+                ),
+              ],
+            ),
           ),
         );
       },

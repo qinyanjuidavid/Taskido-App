@@ -19,9 +19,9 @@ class TaskBottomSheet extends StatelessWidget {
 
     return _makeDismissible(
       child: DraggableScrollableSheet(
-        initialChildSize: 0.8,
-        minChildSize: 0.5,
-        maxChildSize: 0.9,
+        initialChildSize: 0.6,
+        minChildSize: 0.3,
+        maxChildSize: 0.7,
         builder: (context, scrollController) {
           return Container(
             padding: const EdgeInsets.only(

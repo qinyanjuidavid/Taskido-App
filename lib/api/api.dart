@@ -344,4 +344,31 @@ class Api {
     print(response.body);
     return response;
   }
+
+  static Future<http.Response> updateTask(
+      String? task,
+      int? category,
+      String? note,
+      String? dueDate,
+      bool? important,
+      bool? completed,
+      int? taskID) async {
+    String? token = authService.loginDetails.access;
+    var response = await client2.post(
+      Uri.parse("${baseUrl}tasks/$taskID/"),
+      headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+        "Authorization": "Bearer $token",
+      },
+      body: jsonEncode({
+        "task": task,
+        "category": category,
+        "note": note,
+        "due_date": dueDate,
+        "important": important,
+        "completed": completed,
+      }),
+    );
+    return response;
+  }
 }
