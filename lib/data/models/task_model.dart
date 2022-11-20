@@ -1,13 +1,40 @@
 import 'dart:convert';
 
-List<Tasks> tasksFromJson(String str) =>
-    List<Tasks>.from(json.decode(str).map((x) => Tasks.fromJson(x)));
+Tasks tasksFromJson(String str) => Tasks.fromJson(json.decode(str));
 
-String tasksToJson(List<Tasks> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String tasksToJson(Tasks data) => json.encode(data.toJson());
 
 class Tasks {
   Tasks({
+    this.count,
+    this.next,
+    this.previous,
+    this.taskResults,
+  });
+
+  int? count;
+  String? next;
+  String? previous;
+  List<TaskResult>? taskResults;
+
+  factory Tasks.fromJson(Map<String, dynamic> json) => Tasks(
+        count: json["count"],
+        next: json["next"],
+        previous: json["previous"],
+        taskResults: List<TaskResult>.from(
+            json["TaskResults"].map((x) => TaskResult.fromJson(x))),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "count": count,
+        "next": next,
+        "previous": previous,
+        "TaskResults": List<dynamic>.from(taskResults.map((x) => x.toJson())),
+      };
+}
+
+class TaskResult {
+  TaskResult({
     this.id,
     this.task,
     this.owner,
@@ -31,7 +58,7 @@ class Tasks {
   String? createdAt;
   String? updatedAt;
 
-  factory Tasks.fromJson(Map<String, dynamic> json) => Tasks(
+  factory TaskResult.fromJson(Map<String, dynamic> json) => TaskResult(
         id: json["id"],
         task: json["task"],
         owner: TaskOwner.fromJson(json["owner"]),

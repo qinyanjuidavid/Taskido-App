@@ -18,6 +18,10 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
       TextEditingController();
   TextEditingController noteUpdateTextEditingController =
       TextEditingController();
+  TextEditingController dueDateTextEditingController = TextEditingController();
+  TextEditingController categoryTextEditingController = TextEditingController();
+  TextEditingController importantTextEditingController =
+      TextEditingController();
 
   @override
   void initState() {
@@ -37,6 +41,12 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
         taskID: taskID,
         task: taskUpdateTextEditingController.text,
         note: noteUpdateTextEditingController.text,
+        dueDate: dueDateTextEditingController.text,
+        important: false,
+        completed: true,
+        category: int.tryParse(
+          categoryTextEditingController.text,
+        ),
       )
           .then((value) {
         if (value != null) {
@@ -99,6 +109,10 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
                           task.task.toString();
                       noteUpdateTextEditingController.text =
                           task.note.toString();
+                      categoryTextEditingController.text =
+                          task.category.toString();
+                      dueDateTextEditingController.text =
+                          task.dueDate.toString();
                       _taskUpdateBottomSheet(task.id);
                     },
                     child: Container(
@@ -285,6 +299,7 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
                 AuthButton(
                   onPressed: () {
                     _taskUpdateFnc(taskID);
+                    Navigator.of(context).pop();
                   },
                   child: const Text(
                     "Update",

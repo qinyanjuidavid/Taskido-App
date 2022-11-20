@@ -220,7 +220,7 @@ class TaskService extends ChangeNotifier {
     });
   }
 
-  List<Tasks> _tasks = [];
+  List<Results> _tasks = [];
   List<Tasks> get tasks => _tasks;
 
   bool _taskLoading = false;
@@ -234,6 +234,7 @@ class TaskService extends ChangeNotifier {
     return await Api.getTasks().then((response) async {
       if (response.statusCode == 200) {
         var payload = json.decode(response.body);
+
         if (categoryId != null) {
           for (var task in payload) {
             if (task['category'] == categoryId) {
@@ -241,9 +242,9 @@ class TaskService extends ChangeNotifier {
             }
           }
         } else {
-          for (var task in payload) {
-            _tasks.add(Tasks.fromJson(task));
-          }
+          // for (var task in payload) {
+          _tasks = Tasks.fromJson(payload);
+          // }
         }
 
         notifyListeners();
@@ -278,6 +279,7 @@ class TaskService extends ChangeNotifier {
 
     return await Api.addTask(task, category, note, dueDate, important)
         .then((response) async {
+      print("Response ${response.body}");
       if (response.statusCode == 201) {
         var payload = json.decode(response.body);
         Tasks taskDetails = Tasks.fromJson(payload);
@@ -299,7 +301,7 @@ class TaskService extends ChangeNotifier {
         print("payload---> $payload");
       }
     }).catchError((error) {
-      print("error occured while adding task $task");
+      print("error occured while adding task $error");
     });
   }
 
