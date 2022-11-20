@@ -98,10 +98,15 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
               var completedTasks = taskService.tasks
                   .where((element) => element.completed == true)
                   .toList();
+              if (taskService.taskLoading == true) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
               return ListView.builder(
                 itemCount: completedTasks.length,
                 itemBuilder: (context, index) {
-                  var task = taskService.tasks[index];
+                  var task = completedTasks[index];
                   return InkWell(
                     onTap: () async {
                       await taskService.fetchTaskDetails(task.id);
@@ -148,6 +153,18 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
                                   // taskService.updateTask(task.copyWith(
                                   //   completed: value,
                                   // ));
+                                  taskService.updateTask(
+                                    completed: value,
+                                    taskID: task.id,
+                                    task: taskUpdateTextEditingController.text,
+                                    note: noteUpdateTextEditingController.text,
+                                    dueDate: dueDateTextEditingController.text,
+                                    category: int.tryParse(
+                                      categoryTextEditingController.text,
+                                    ),
+                                    important: false,
+                                  );
+                                  _refresh();
                                 },
                               ),
                               Column(

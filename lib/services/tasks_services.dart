@@ -338,6 +338,8 @@ class TaskService extends ChangeNotifier {
     });
   }
 
+  bool _taskUpdateTaskLoading = false;
+  bool get taskUpdateTaskLoading => _taskUpdateTaskLoading;
   Future updateTask({
     String? task,
     int? category,
@@ -348,6 +350,7 @@ class TaskService extends ChangeNotifier {
     int? taskID,
   }) async {
     String? refreshToken = authService.loginDetails.refresh;
+    _taskUpdateTaskLoading = true;
     return await Api.updateTask(
       category: category,
       completed: completed,
@@ -359,14 +362,18 @@ class TaskService extends ChangeNotifier {
     ).then((response) async {
       var payload = json.decode(response.body);
       if (response.statusCode == 201) {
+        _taskUpdateTaskLoading = false;
         return payload;
       } else if (response.statusCode == 401) {
         await authService.refreshToken(refreshToken);
+        _taskUpdateTaskLoading = false;
         // updateTask(task, category, note, dueDate, important, completed, taskID);
       } else {
         print("payload----> $payload");
+        _taskUpdateTaskLoading = false;
       }
     }).catchError((error) {
+      _taskUpdateTaskLoading = false;
       print("error occured while updating task $error");
     });
   }
