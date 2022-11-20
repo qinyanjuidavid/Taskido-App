@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:taskido/services/tasks_services.dart';
 import 'package:provider/provider.dart';
+import 'package:taskido/widgets/buttons/auth_button.dart';
 import 'package:taskido/widgets/category/task_add_bottom_sheet.dart';
 import 'package:taskido/widgets/inputs/text_field_with_label.dart';
 
@@ -12,8 +13,10 @@ class CompletedTasksScreen extends StatefulWidget {
 }
 
 class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
-  GlobalKey<FormState> taskUpdateForm = GlobalKey<FormState>();
+  GlobalKey<FormState> taskUpdateKey = GlobalKey<FormState>();
   TextEditingController taskUpdateTextEditingController =
+      TextEditingController();
+  TextEditingController noteUpdateTextEditingController =
       TextEditingController();
 
   @override
@@ -25,6 +28,21 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
   Future<void> _refresh() async {
     var taskService = Provider.of<TaskService>(context, listen: false);
     await taskService.fetchTasks();
+  }
+
+  void _taskUpdateFnc() async {
+    if (taskUpdateKey.currentState!.validate()) {
+      await taskService
+          .updateTask(
+        task: taskUpdateTextEditingController.text,
+        note: noteUpdateTextEditingController.text,
+      )
+          .then((value) {
+        if (value != null) {
+          _refresh();
+        }
+      });
+    }
   }
 
   @override
@@ -74,7 +92,10 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
                 itemBuilder: (context, index) {
                   var task = taskService.tasks[index];
                   return InkWell(
-                    onTap: () {
+                    onTap: () async {
+                      await taskService.fetchTasks(categoryId: index);
+                      // taskUpdateTextEditingController.text =
+                      //     taskService.tasks[index].task.toString();
                       _taskUpdateBottomSheet();
                     },
                     child: Container(
@@ -181,7 +202,7 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
       builder: (context) {
         return TaskBottomSheet(
           taskForm: Form(
-            key: taskUpdateForm,
+            key: taskUpdateKey,
             child: Column(
               children: [
                 Container(
@@ -216,6 +237,60 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
                     }
                     return null;
                   },
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Note",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      color: Color.fromARGB(255, 106, 106, 106),
+                      fontSize: 15,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                TextFormField(
+                  autofocus: false,
+                  controller: noteUpdateTextEditingController,
+                  keyboardType: TextInputType.text,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    fillColor: const Color.fromARGB(255, 245, 170, 51),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                          color: Color.fromARGB(255, 20, 106, 218), width: 2.0),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    hintText: "Enter description",
+                  ),
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Color.fromARGB(255, 106, 106, 106),
+                  ),
+                  maxLines: 5,
+                  minLines: 5,
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                AuthButton(
+                  onPressed: () {},
+                  child: const Text(
+                    "Update",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 30,
                 ),
               ],
             ),

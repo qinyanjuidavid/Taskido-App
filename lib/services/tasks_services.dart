@@ -144,54 +144,6 @@ class TaskService extends ChangeNotifier {
     });
   }
 
-  List<Tasks> _tasks = [];
-  List<Tasks> get tasks => _tasks;
-
-  bool _taskLoading = false;
-  bool get taskLoading => _taskLoading;
-
-  Future fetchTasks({int? categoryId}) async {
-    _tasks = [];
-    _taskLoading = true;
-    String? refreshToken = authService.loginDetails.refresh;
-    print("fetching tasks for category $categoryId");
-
-    return await Api.getTasks().then((response) async {
-      if (response.statusCode == 200) {
-        var payload = json.decode(response.body);
-        if (categoryId != null) {
-          for (var task in payload) {
-            if (task['category'] == categoryId) {
-              _tasks.add(Tasks.fromJson(task));
-            }
-          }
-        } else {
-          for (var task in payload) {
-            _tasks.add(Tasks.fromJson(task));
-          }
-        }
-
-        notifyListeners();
-        _taskLoading = false;
-      } else if (response.statusCode == 401) {
-        await authService.refreshToken(refreshToken);
-        if (categoryId != null) {
-          fetchTasks(categoryId: categoryId);
-        } else {
-          fetchTasks();
-        }
-      } else {
-        var payload = json.decode(response.body);
-        print("Failed to load Tasks $payload");
-        notifyListeners();
-        _taskLoading = false;
-      }
-    }).catchError((error) {
-      _taskLoading = false;
-      print("error occured while fetching tasks $error");
-    });
-  }
-
   void addCategorySuccessToast() {
     Fluttertoast.showToast(
         msg: "Category Added Successfully",
@@ -268,6 +220,54 @@ class TaskService extends ChangeNotifier {
     });
   }
 
+  List<Tasks> _tasks = [];
+  List<Tasks> get tasks => _tasks;
+
+  bool _taskLoading = false;
+  bool get taskLoading => _taskLoading;
+
+  Future fetchTasks({int? categoryId}) async {
+    _tasks = [];
+    _taskLoading = true;
+    String? refreshToken = authService.loginDetails.refresh;
+    print("fetching tasks for category $categoryId");
+
+    return await Api.getTasks().then((response) async {
+      if (response.statusCode == 200) {
+        var payload = json.decode(response.body);
+        if (categoryId != null) {
+          for (var task in payload) {
+            if (task['category'] == categoryId) {
+              _tasks.add(Tasks.fromJson(task));
+            }
+          }
+        } else {
+          for (var task in payload) {
+            _tasks.add(Tasks.fromJson(task));
+          }
+        }
+
+        notifyListeners();
+        _taskLoading = false;
+      } else if (response.statusCode == 401) {
+        await authService.refreshToken(refreshToken);
+        if (categoryId != null) {
+          fetchTasks(categoryId: categoryId);
+        } else {
+          fetchTasks();
+        }
+      } else {
+        var payload = json.decode(response.body);
+        print("Failed to load Tasks $payload");
+        notifyListeners();
+        _taskLoading = false;
+      }
+    }).catchError((error) {
+      _taskLoading = false;
+      print("error occured while fetching tasks $error");
+    });
+  }
+
   Future addTask(
     String? task,
     int? category,
@@ -301,6 +301,38 @@ class TaskService extends ChangeNotifier {
       }
     }).catchError((error) {
       print("error occured while adding task $task");
+    });
+  }
+
+  Future updateTask({
+    String? task,
+    int? category,
+    String? note,
+    String? dueDate,
+    bool? important,
+    bool? completed,
+    int? taskID,
+  }) async {
+    String? refreshToken = authService.loginDetails.refresh;
+    return await Api.updateTask(
+      category: category,
+      completed: completed,
+      dueDate: dueDate,
+      important: important,
+      note: note,
+      task: task,
+      taskID: taskID,
+    ).then((response) async {
+      var payload = json.decode(response.body);
+      if (response.statusCode == 200) {
+      } else if (response.statusCode == 401) {
+        await authService.refreshToken(refreshToken);
+        // updateTask(task, category, note, dueDate, important, completed, taskID);
+      } else {
+        print("payload----> $payload");
+      }
+    }).catchError((error) {
+      print("error occured while updating task $error");
     });
   }
 }

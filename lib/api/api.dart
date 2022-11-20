@@ -346,13 +346,13 @@ class Api {
   }
 
   static Future<http.Response> updateTask(
-      String? task,
+      {String? task,
       int? category,
       String? note,
       String? dueDate,
       bool? important,
       bool? completed,
-      int? taskID) async {
+      int? taskID}) async {
     String? token = authService.loginDetails.access;
     var response = await client2.post(
       Uri.parse("${baseUrl}tasks/$taskID/"),
