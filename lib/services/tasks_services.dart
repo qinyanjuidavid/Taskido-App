@@ -234,10 +234,7 @@ class TaskService extends ChangeNotifier {
     return await Api.getTasks().then((response) async {
       if (response.statusCode == 200) {
         var payload = json.decode(response.body);
-
-        print("Loadddddddd:::::: ${response.body}");
         Tasks taskJson = Tasks.fromJson(payload);
-        print("Loading.....:::::::${taskJson.results}");
         if (categoryId != null) {
           for (var task in payload["results"]) {
             if (task["category"] == categoryId) {
@@ -361,7 +358,7 @@ class TaskService extends ChangeNotifier {
       taskID: taskID,
     ).then((response) async {
       var payload = json.decode(response.body);
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         return payload;
       } else if (response.statusCode == 401) {
         await authService.refreshToken(refreshToken);
