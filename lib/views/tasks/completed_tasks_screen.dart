@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:taskido/services/tasks_services.dart';
 import 'package:provider/provider.dart';
+import 'package:taskido/widgets/category/task_add_bottom_sheet.dart';
+import 'package:taskido/widgets/inputs/text_field_with_label.dart';
 
 class CompletedTasksScreen extends StatefulWidget {
   CompletedTasksScreen({Key? key}) : super(key: key);
@@ -10,6 +12,9 @@ class CompletedTasksScreen extends StatefulWidget {
 }
 
 class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
+  GlobalKey<FormState> taskUpdateForm = GlobalKey<FormState>();
+  TextEditingController taskTextEditingController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -67,90 +72,95 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
                 itemCount: completedTasks.length,
                 itemBuilder: (context, index) {
                   var task = taskService.tasks[index];
-                  return Container(
-                    margin: const EdgeInsets.only(
-                      top: 10,
-                      left: 10,
-                      right: 10,
-                    ),
-                    padding: const EdgeInsets.only(
-                      top: 20,
-                      bottom: 20,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(5),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 5,
-                          blurRadius: 7,
-                          offset:
-                              const Offset(0, 3), // changes position of shadow
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Checkbox(
-                              value: task.completed,
-                              onChanged: (value) {
-                                // taskService.updateTask(task.copyWith(
-                                //   completed: value,
-                                // ));
-                              },
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  margin: const EdgeInsets.only(
-                                    left: 10,
-                                  ),
-                                  child: Text(
-                                    task.task.toString(),
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
+                  return InkWell(
+                    onTap: () {
+                      _taskUpdateBottomSheet();
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.only(
+                        top: 10,
+                        left: 10,
+                        right: 10,
+                      ),
+                      padding: const EdgeInsets.only(
+                        top: 20,
+                        bottom: 20,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(5),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 5,
+                            blurRadius: 7,
+                            offset: const Offset(
+                                0, 3), // changes position of shadow
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Checkbox(
+                                value: task.completed,
+                                onChanged: (value) {
+                                  // taskService.updateTask(task.copyWith(
+                                  //   completed: value,
+                                  // ));
+                                },
+                              ),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    margin: const EdgeInsets.only(
+                                      left: 10,
+                                    ),
+                                    child: Text(
+                                      task.task.toString(),
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Container(
-                                  margin: const EdgeInsets.only(
-                                    left: 10,
+                                  const SizedBox(
+                                    height: 10,
                                   ),
-                                  child: Row(
-                                    children: [
-                                      const Icon(
-                                        Icons.calendar_today,
-                                        color: Colors.black,
-                                        size: 20,
-                                      ),
-                                      const SizedBox(
-                                        width: 5,
-                                      ),
-                                      Text(
-                                        task.createdAt.toString(),
-                                        style: const TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 14,
+                                  Container(
+                                    margin: const EdgeInsets.only(
+                                      left: 10,
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.calendar_today,
+                                          color: Colors.black,
+                                          size: 20,
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            )
-                          ],
-                        ),
-                      ],
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text(
+                                          task.createdAt.toString(),
+                                          style: const TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 },
@@ -159,6 +169,22 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  void _taskUpdateBottomSheet() {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return TaskBottomSheet(
+          taskForm: Form(
+            key: taskUpdateForm,
+            child: Column(),
+          ),
+        );
+      },
     );
   }
 }
