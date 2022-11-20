@@ -220,8 +220,8 @@ class TaskService extends ChangeNotifier {
     });
   }
 
-  List<Results> _tasks = [];
-  List<Tasks> get tasks => _tasks;
+  List<TaskResult> _tasks = [];
+  List<TaskResult> get tasks => _tasks;
 
   bool _taskLoading = false;
   bool get taskLoading => _taskLoading;
@@ -235,17 +235,30 @@ class TaskService extends ChangeNotifier {
       if (response.statusCode == 200) {
         var payload = json.decode(response.body);
 
+        print("Loadddddddd:::::: ${response.body}");
+        Tasks taskJson = Tasks.fromJson(payload);
+        print("Loading.....:::::::${taskJson.results}");
         if (categoryId != null) {
-          for (var task in payload) {
-            if (task['category'] == categoryId) {
-              _tasks.add(Tasks.fromJson(task));
+          for (var task in payload["results"]) {
+            if (task["category"] == categoryId) {
+              _tasks.add(TaskResult.fromJson(task));
             }
           }
         } else {
-          // for (var task in payload) {
-          _tasks = Tasks.fromJson(payload);
-          // }
+          _tasks = taskJson.results!;
         }
+
+        // if (categoryId != null) {
+        //   for (var task in payload) {
+        //     if (task['category'] == categoryId) {
+        //       _tasks.add(TaskResult.fromJson(task));
+        //     }
+        //   }
+        // } else {
+        // for (var task in payload) {
+        // _tasks = TaskResult.fromJson(payload["result"]);
+        // }
+        // }
 
         notifyListeners();
         _taskLoading = false;

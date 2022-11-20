@@ -9,27 +9,27 @@ class Tasks {
     this.count,
     this.next,
     this.previous,
-    this.taskResults,
+    this.results,
   });
 
   int? count;
   String? next;
   String? previous;
-  List<TaskResult>? taskResults;
+  List<TaskResult>? results;
 
   factory Tasks.fromJson(Map<String, dynamic> json) => Tasks(
         count: json["count"],
         next: json["next"],
         previous: json["previous"],
-        taskResults: List<TaskResult>.from(
-            json["TaskResults"].map((x) => TaskResult.fromJson(x))),
+        results: List<TaskResult>.from(
+            json["results"].map((x) => TaskResult.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "count": count,
         "next": next,
         "previous": previous,
-        "TaskResults": List<dynamic>.from(taskResults.map((x) => x.toJson())),
+        "results": List<dynamic>.from(results!.map((x) => x.toJson())),
       };
 }
 

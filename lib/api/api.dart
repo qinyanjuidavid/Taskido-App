@@ -302,7 +302,6 @@ class Api {
         "Authorization": "Bearer $token",
       },
     );
-    print(response.body);
     return response;
   }
 
