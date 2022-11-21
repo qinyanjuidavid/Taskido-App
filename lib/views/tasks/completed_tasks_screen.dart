@@ -166,7 +166,8 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
               var completedTasks = taskService.tasks
                   .where((element) => element.completed == true)
                   .toList();
-              if (taskService.taskLoading == true) {
+              if (taskService.taskLoading == true ||
+                  taskService.taskUpdateLoading == true) {
                 return const Center(
                   child: CircularProgressIndicator(),
                 );
@@ -246,9 +247,6 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
                                   );
 
                                   await taskService.fetchTasks();
-                                  // await Provider.of<TaskService>(context,
-                                  //         listen: false)
-                                  //     .fetchTasks();
                                 },
                               ),
                               Column(

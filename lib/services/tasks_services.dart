@@ -226,6 +226,14 @@ class TaskService extends ChangeNotifier {
   bool _taskLoading = false;
   bool get taskLoading => _taskLoading;
 
+  int? _taskCount;
+  String? _taskNext;
+  String? _taskPrevious;
+
+  int? get taskCount => _taskCount;
+  String? get taskNext => _taskNext;
+  String? get taskPrevious => _taskPrevious;
+
   Future fetchTasks({int? categoryId}) async {
     _tasks = [];
     _taskLoading = true;
@@ -235,6 +243,9 @@ class TaskService extends ChangeNotifier {
       if (response.statusCode == 200) {
         var payload = json.decode(response.body);
         Tasks taskJson = Tasks.fromJson(payload);
+        _taskCount = taskJson.count;
+        _next = taskJson.next;
+        _previous = taskJson.previous;
         if (categoryId != null) {
           for (var task in payload["results"]) {
             if (task["category"] == categoryId) {
@@ -325,8 +336,66 @@ class TaskService extends ChangeNotifier {
     });
   }
 
-  bool _taskUpdateTaskLoading = false;
-  bool get taskUpdateTaskLoading => _taskUpdateTaskLoading;
+  void taskUpdateSuccessToast() {
+    Fluttertoast.showToast(
+        msg: "Task was successfully updated",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 16.0);
+  }
+
+  void taskUpdateErrorToast(msg) {
+    Fluttertoast.showToast(
+        msg: msg,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0);
+  }
+
+  ScrollController? _taskScrollController;
+  ScrollController? get taskScrollController => _scrollController;
+
+  Future<void> taskSetScrollController() async {
+    String? token = authService.loginDetails.access;
+    String? refreshToken = authService.loginDetails.refresh;
+
+    if (_taskScrollController!.position.pixels ==
+        _taskScrollController!.position.maxScrollExtent) {
+      if (_taskNext != null && _taskCount != _tasks.length) {
+        return await client.get(
+          Uri.parse("$_next"),
+          headers: {
+            HttpHeaders.contentTypeHeader: 'application/json',
+            HttpHeaders.authorizationHeader: 'Bearer $token',
+          },
+        ).then((response) async {
+          if (response.statusCode == 200) {
+            var payload = jsonDecode(response.body);
+            Tasks taskJson = Tasks.fromJson(payload);
+            _tasks.addAll(taskJson.results!.toList());
+            notifyListeners();
+          } else if (response.statusCode == 401) {
+            await authService.refreshToken(refreshToken);
+            fetchTasks();
+          } else {
+            var payload = jsonDecode(response.body);
+            print(payload);
+          }
+        }).catchError((error) {
+          print("Error occured while fetching tasks $error");
+        });
+      }
+    }
+  }
+
+  bool _taskUpdateLoading = false;
+  bool get taskUpdateLoading => _taskUpdateLoading;
   Future updateTask({
     String? task,
     int? category,
@@ -337,7 +406,7 @@ class TaskService extends ChangeNotifier {
     int? taskID,
   }) async {
     String? refreshToken = authService.loginDetails.refresh;
-    _taskUpdateTaskLoading = true;
+    _taskUpdateLoading = true;
     return await Api.updateTask(
       category: category,
       completed: completed,
@@ -349,18 +418,22 @@ class TaskService extends ChangeNotifier {
     ).then((response) async {
       var payload = json.decode(response.body);
       if (response.statusCode == 201) {
-        _taskUpdateTaskLoading = false;
+        notifyListeners();
+        taskUpdateSuccessToast();
+        _taskUpdateLoading = false;
         return payload;
       } else if (response.statusCode == 401) {
         await authService.refreshToken(refreshToken);
-        _taskUpdateTaskLoading = false;
+        _taskUpdateLoading = false;
         // updateTask(task, category, note, dueDate, important, completed, taskID);
       } else {
         print("payload----> $payload");
-        _taskUpdateTaskLoading = false;
+        taskUpdateErrorToast(payload);
+        _taskUpdateLoading = false;
       }
     }).catchError((error) {
-      _taskUpdateTaskLoading = false;
+      taskUpdateErrorToast(error);
+      _taskUpdateLoading = false;
       print("error occured while updating task $error");
     });
   }
