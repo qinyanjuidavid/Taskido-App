@@ -34,6 +34,7 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
   Future<void> _refresh() async {
     var taskService = Provider.of<TaskService>(context, listen: false);
     await taskService.fetchTasks();
+    await taskService.taskSetScrollController();
   }
 
   void _taskUpdateFnc(int? taskID) async {
@@ -173,6 +174,7 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
                 );
               }
               return ListView.builder(
+                controller: taskService.taskScrollController,
                 itemCount: completedTasks.length,
                 itemBuilder: (context, index) {
                   var task = completedTasks[index];

@@ -364,7 +364,7 @@ class TaskService extends ChangeNotifier {
   Future<void> taskSetScrollController() async {
     String? token = authService.loginDetails.access;
     String? refreshToken = authService.loginDetails.refresh;
-
+    print("Pixel---->:::${_taskScrollController!.position.pixels}");
     if (_taskScrollController!.position.pixels ==
         _taskScrollController!.position.maxScrollExtent) {
       if (_taskNext != null && _taskCount != _tasks.length) {
