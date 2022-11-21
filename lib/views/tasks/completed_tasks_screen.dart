@@ -23,6 +23,7 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
   TextEditingController categoryTextEditingController = TextEditingController();
   TextEditingController importantTextEditingController =
       TextEditingController();
+  TextEditingController dueTimeTextEditingController = TextEditingController();
 
   @override
   void initState() {
@@ -37,12 +38,27 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
 
   void _taskUpdateFnc(int? taskID) async {
     if (taskUpdateKey.currentState!.validate()) {
+      DateTime dueDate = DateFormat("dd/MM/yyyy")
+          .parse(dueDateTextEditingController.text.toString().split(" ")[0]);
+      TimeOfDay dueTime = TimeOfDay(
+          hour: int.parse(
+              dueTimeTextEditingController.text.toString().split(":")[0]),
+          minute: int.parse(
+              dueTimeTextEditingController.text.toString().split(":")[1]));
+
+      var dueDateAndTime = DateTime(
+        dueDate.year,
+        dueDate.month,
+        dueDate.day,
+        dueTime.hour,
+        dueTime.minute,
+      ).toString();
       await taskService
           .updateTask(
         taskID: taskID,
         task: taskUpdateTextEditingController.text,
         note: noteUpdateTextEditingController.text,
-        dueDate: dueDateTextEditingController.text,
+        dueDate: dueDateAndTime,
         important: false,
         completed: true,
         category: int.tryParse(
@@ -53,6 +69,36 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
         if (value != null) {
           _refresh();
         }
+      });
+    }
+  }
+
+  _selectTime(BuildContext context, String? dueDate) async {
+    TimeOfDay initTime;
+    if (dueDate != null) {
+      DateTime dueDay = DateTime.parse(dueDate);
+      initTime = TimeOfDay(
+        hour: dueDay.hour,
+        minute: dueDay.minute,
+      );
+    } else {
+      initTime = TimeOfDay.now();
+    }
+
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: initTime,
+      builder: (BuildContext context, Widget? child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+          child: child!,
+        );
+      },
+    );
+    if (picked != null) {
+      setState(() {
+        dueTimeTextEditingController.text =
+            picked.format(context).split(" ")[0];
       });
     }
   }
@@ -70,11 +116,10 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
       firstDate: DateTime(2015, 8),
       lastDate: DateTime(2101),
     );
-    if (picked != null
-        // && picked != DateTime.now()
-        ) {
+    if (picked != null) {
       setState(() {
-        dueDateTextEditingController.text = picked.toString();
+        dueDateTextEditingController.text =
+            DateFormat('dd/MM/yyyy').format(picked);
       });
     }
   }
@@ -145,8 +190,10 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
                       await taskService.fetchTaskDetails(task.id);
                       if (task.dueDate != null) {
                         dueDateTextEditingController.text = dueDateFormatted;
+                        dueTimeTextEditingController.text = dueTime;
                       } else {
                         dueDateTextEditingController.text = "";
+                        dueTimeTextEditingController.text = "";
                       }
 
                       taskUpdateTextEditingController.text =
@@ -188,8 +235,7 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
                                 value: task.completed,
                                 onChanged: (value) {
                                   taskService.fetchTaskDetails(task.id);
-                                  print(task.task);
-
+                                  _refresh();
                                   taskService.updateTask(
                                     completed: value,
                                     taskID: task.id,
@@ -199,7 +245,6 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
                                     important: task.important,
                                     category: task.category,
                                   );
-                                  _refresh();
                                 },
                               ),
                               Column(
@@ -402,6 +447,12 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
                     ),
                     prefixIcon: const Icon(Icons.calendar_today),
                   ),
+                  validator: (value) {
+                    if (value!.isEmpty || value == null) {
+                      return "Please enter due date";
+                    }
+                    return null;
+                  },
                   style: const TextStyle(
                     fontSize: 16,
                     color: Color.fromARGB(255, 106, 106, 106),
@@ -409,6 +460,54 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
                   readOnly: true,
                   onTap: () async {
                     _selectDate(context, dueDate);
+                  },
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Due time",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      color: Color.fromARGB(255, 106, 106, 106),
+                      fontSize: 15,
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                TextFormField(
+                  autofocus: false,
+                  textInputAction: TextInputAction.next,
+                  controller: dueTimeTextEditingController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    fillColor: const Color.fromARGB(255, 245, 170, 51),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                          color: Color.fromARGB(255, 20, 106, 218), width: 2.0),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    prefixIcon: const Icon(Icons.access_time),
+                  ),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return "Please enter due time";
+                    }
+                    return null;
+                  },
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Color.fromARGB(255, 106, 106, 106),
+                  ),
+                  readOnly: true,
+                  onTap: () async {
+                    _selectTime(context, dueDate);
                   },
                 ),
                 const SizedBox(
