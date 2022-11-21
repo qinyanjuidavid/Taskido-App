@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:taskido/services/tasks_services.dart';
 import 'package:provider/provider.dart';
 import 'package:taskido/widgets/buttons/auth_button.dart';
@@ -52,6 +53,28 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
         if (value != null) {
           _refresh();
         }
+      });
+    }
+  }
+
+  _selectDate(BuildContext context, String? dueDate) async {
+    DateTime initDate;
+    if (dueDate != null) {
+      initDate = DateTime.parse(dueDate);
+    } else {
+      initDate = DateTime.now();
+    }
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: initDate,
+      firstDate: DateTime(2015, 8),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null
+        // && picked != DateTime.now()
+        ) {
+      setState(() {
+        dueDateTextEditingController.text = picked.toString();
       });
     }
   }
@@ -120,15 +143,19 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
                   return InkWell(
                     onTap: () async {
                       await taskService.fetchTaskDetails(task.id);
+                      if (task.dueDate != null) {
+                        dueDateTextEditingController.text = dueDateFormatted;
+                      } else {
+                        dueDateTextEditingController.text = "";
+                      }
+
                       taskUpdateTextEditingController.text =
                           task.task.toString();
                       noteUpdateTextEditingController.text =
                           task.note.toString();
                       categoryTextEditingController.text =
                           task.category.toString();
-                      dueDateTextEditingController.text =
-                          task.dueDate.toString();
-                      _taskUpdateBottomSheet(task.id);
+                      _taskUpdateBottomSheet(task.id, task.dueDate);
                     },
                     child: Container(
                       margin: const EdgeInsets.only(
@@ -260,7 +287,7 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
     );
   }
 
-  void _taskUpdateBottomSheet(int? taskID) {
+  void _taskUpdateBottomSheet(int? taskID, String? dueDate) {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
@@ -341,6 +368,48 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
                   ),
                   maxLines: 5,
                   minLines: 5,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Due date",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      color: Color.fromARGB(255, 106, 106, 106),
+                      fontSize: 15,
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                TextFormField(
+                  autofocus: false,
+                  textInputAction: TextInputAction.next,
+                  controller: dueDateTextEditingController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    fillColor: const Color.fromARGB(255, 245, 170, 51),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                          color: Color.fromARGB(255, 20, 106, 218), width: 2.0),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    prefixIcon: const Icon(Icons.calendar_today),
+                  ),
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Color.fromARGB(255, 106, 106, 106),
+                  ),
+                  readOnly: true,
+                  onTap: () async {
+                    _selectDate(context, dueDate);
+                  },
                 ),
                 const SizedBox(
                   height: 30,
