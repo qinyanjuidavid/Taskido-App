@@ -107,6 +107,16 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
                 itemCount: completedTasks.length,
                 itemBuilder: (context, index) {
                   var task = completedTasks[index];
+                  //convert dueDate from string to DateTime
+                  var dueDateFormatted;
+                  var dueTime;
+                  if (task.dueDate != null) {
+                    var dueDate = DateTime.parse(task.dueDate!);
+                    dueDateFormatted =
+                        "${dueDate.day}/${dueDate.month}/${dueDate.year}";
+                    dueTime = "${dueDate.hour}:${dueDate.minute}";
+                  }
+
                   return InkWell(
                     onTap: () async {
                       await taskService.fetchTaskDetails(task.id);
@@ -150,19 +160,17 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
                               Checkbox(
                                 value: task.completed,
                                 onChanged: (value) {
-                                  // taskService.updateTask(task.copyWith(
-                                  //   completed: value,
-                                  // ));
+                                  taskService.fetchTaskDetails(task.id);
+                                  print(task.task);
+
                                   taskService.updateTask(
                                     completed: value,
                                     taskID: task.id,
-                                    task: taskUpdateTextEditingController.text,
-                                    note: noteUpdateTextEditingController.text,
-                                    dueDate: dueDateTextEditingController.text,
-                                    category: int.tryParse(
-                                      categoryTextEditingController.text,
-                                    ),
-                                    important: false,
+                                    task: task.task,
+                                    note: task.note,
+                                    dueDate: task.dueDate,
+                                    important: task.important,
+                                    category: task.category,
                                   );
                                   _refresh();
                                 },
@@ -185,31 +193,55 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
                                     ),
                                   ),
                                   const SizedBox(
-                                    height: 10,
+                                    height: 20,
                                   ),
                                   Container(
                                     margin: const EdgeInsets.only(
                                       left: 10,
                                     ),
-                                    child: Row(
-                                      children: [
-                                        const Icon(
-                                          Icons.calendar_today,
-                                          color: Colors.black,
-                                          size: 20,
-                                        ),
-                                        const SizedBox(
-                                          width: 5,
-                                        ),
-                                        Text(
-                                          task.createdAt.toString(),
-                                          style: const TextStyle(
-                                            color: Colors.grey,
-                                            fontSize: 14,
+                                    child: task.dueDate == null
+                                        ? const Text("")
+                                        : Row(
+                                            children: [
+                                              const Icon(
+                                                Icons.calendar_today,
+                                                color: Colors.black,
+                                                size: 20,
+                                              ),
+                                              const SizedBox(
+                                                width: 8,
+                                              ),
+                                              Text(
+                                                task.dueDate == null
+                                                    ? ""
+                                                    : dueDateFormatted,
+                                                style: const TextStyle(
+                                                  color: Colors.grey,
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                width: 5,
+                                              ),
+                                              const Icon(
+                                                Icons.access_time,
+                                                color: Colors.black,
+                                                size: 20,
+                                              ),
+                                              const SizedBox(
+                                                width: 3,
+                                              ),
+                                              Text(
+                                                task.dueDate == null
+                                                    ? ""
+                                                    : dueTime,
+                                                style: const TextStyle(
+                                                  color: Colors.grey,
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                        ),
-                                      ],
-                                    ),
                                   )
                                 ],
                               )

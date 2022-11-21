@@ -244,19 +244,6 @@ class TaskService extends ChangeNotifier {
         } else {
           _tasks = taskJson.results!;
         }
-
-        // if (categoryId != null) {
-        //   for (var task in payload) {
-        //     if (task['category'] == categoryId) {
-        //       _tasks.add(TaskResult.fromJson(task));
-        //     }
-        //   }
-        // } else {
-        // for (var task in payload) {
-        // _tasks = TaskResult.fromJson(payload["result"]);
-        // }
-        // }
-
         notifyListeners();
         _taskLoading = false;
       } else if (response.statusCode == 401) {
@@ -315,8 +302,8 @@ class TaskService extends ChangeNotifier {
     });
   }
 
-  Tasks _taskDetails = Tasks();
-  Tasks get taskDetails => _taskDetails;
+  TaskResult _taskDetails = TaskResult();
+  TaskResult get taskDetails => _taskDetails;
 
   Future fetchTaskDetails(int? taskID) async {
     String? refreshToken = authService.loginDetails.refresh;
@@ -324,7 +311,7 @@ class TaskService extends ChangeNotifier {
     return await Api.getTaskDetails(taskID).then((response) async {
       var payload = json.decode(response.body);
       if (response.statusCode == 200) {
-        _taskDetails = Tasks.fromJson(payload);
+        _taskDetails = TaskResult.fromJson(payload);
         notifyListeners();
         return payload;
       } else if (response.statusCode == 401) {
