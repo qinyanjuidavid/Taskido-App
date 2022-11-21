@@ -233,10 +233,9 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
                             children: [
                               Checkbox(
                                 value: task.completed,
-                                onChanged: (value) {
+                                onChanged: (value) async {
                                   taskService.fetchTaskDetails(task.id);
-                                  _refresh();
-                                  taskService.updateTask(
+                                  await taskService.updateTask(
                                     completed: value,
                                     taskID: task.id,
                                     task: task.task,
@@ -245,6 +244,11 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
                                     important: task.important,
                                     category: task.category,
                                   );
+
+                                  await taskService.fetchTasks();
+                                  // await Provider.of<TaskService>(context,
+                                  //         listen: false)
+                                  //     .fetchTasks();
                                 },
                               ),
                               Column(
