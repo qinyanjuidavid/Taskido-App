@@ -234,8 +234,16 @@ class TaskService extends ChangeNotifier {
   String? get taskNext => _taskNext;
   String? get taskPrevious => _taskPrevious;
 
+  List<TaskResult> _completedTasks = [];
+  List<TaskResult> get completedTasks => _completedTasks;
+
+  List<TaskResult> _uncompletedTasks = [];
+  List<TaskResult> get unCompletedTasks => _completedTasks;
+
   Future fetchTasks({int? categoryId}) async {
     _tasks = [];
+    _uncompletedTasks = [];
+    _completedTasks = [];
     _taskLoading = true;
     String? refreshToken = authService.loginDetails.refresh;
 
@@ -254,6 +262,13 @@ class TaskService extends ChangeNotifier {
           }
         } else {
           _tasks = taskJson.results!;
+        }
+        for (var task in payload["results"]) {
+          if (task["completed"] == true) {
+            _completedTasks.add(TaskResult.fromJson(task));
+          } else {
+            _uncompletedTasks.add(TaskResult.fromJson(task));
+          }
         }
         notifyListeners();
         _taskLoading = false;

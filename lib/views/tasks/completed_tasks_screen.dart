@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:taskido/widgets/buttons/auth_button.dart';
 import 'package:taskido/widgets/category/task_add_bottom_sheet.dart';
 import 'package:taskido/widgets/inputs/text_field_with_label.dart';
+import 'package:taskido/widgets/tasks/task_base.dart';
 import 'package:taskido/widgets/tasks/tasks_container.dart';
 
 class CompletedTasksScreen extends StatefulWidget {
@@ -161,282 +162,288 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
             ),
           ],
         ),
-        body: RefreshIndicator(
-          onRefresh: _refresh,
-          child: Consumer<TaskService>(
-            builder: (context, taskService, child) {
-              var completedTasks = taskService.tasks
-                  .where((element) => element.completed == true)
-                  .toList();
-              if (taskService.taskLoading == true ||
-                  taskService.taskUpdateLoading == true) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-              return ListView.builder(
-                controller: taskService.taskScrollController,
-                itemCount: completedTasks.length,
-                itemBuilder: (context, index) {
-                  var task = completedTasks[index];
-                  var dueDateFormatted;
-                  var dueTime;
-                  if (task.dueDate != null) {
-                    var dueDate = DateTime.parse(task.dueDate!);
-                    dueDateFormatted =
-                        "${dueDate.day}/${dueDate.month}/${dueDate.year}";
-                    dueTime = "${dueDate.hour}:${dueDate.minute}";
-                  }
+        body: 
+        // Taskbase(taskValue: taskService.completedTasks
+        //     // taskService.tasks
+        //     //     .where((element) => element.completed == true)
+        //     //     .toList(),
+        //     ),
+        // body: RefreshIndicator(
+        //   onRefresh: _refresh,
+        //   child: Consumer<TaskService>(
+        //     builder: (context, taskService, child) {
+        //       var completedTasks = taskService.tasks
+        //           .where((element) => element.completed == true)
+        //           .toList();
+        //       if (taskService.taskLoading == true ||
+        //           taskService.taskUpdateLoading == true) {
+        //         return const Center(
+        //           child: CircularProgressIndicator(),
+        //         );
+        //       }
+        //       return ListView.builder(
+        //         controller: taskService.taskScrollController,
+        //         itemCount: completedTasks.length,
+        //         itemBuilder: (context, index) {
+        //           var task = completedTasks[index];
+        //           var dueDateFormatted;
+        //           var dueTime;
+        //           if (task.dueDate != null) {
+        //             var dueDate = DateTime.parse(task.dueDate!);
+        //             dueDateFormatted =
+        //                 "${dueDate.day}/${dueDate.month}/${dueDate.year}";
+        //             dueTime = "${dueDate.hour}:${dueDate.minute}";
+        //           }
 
-                  return TaskContainer(
-                    onTap: () async {
-                      await taskService.fetchTaskDetails(task.id);
-                      if (task.dueDate != null) {
-                        dueDateTextEditingController.text = dueDateFormatted;
-                        dueTimeTextEditingController.text = dueTime;
-                      } else {
-                        dueDateTextEditingController.text = "";
-                        dueTimeTextEditingController.text = "";
-                      }
+        //           return TaskContainer(
+        //             onTap: () async {
+        //               await taskService.fetchTaskDetails(task.id);
+        //               if (task.dueDate != null) {
+        //                 dueDateTextEditingController.text = dueDateFormatted;
+        //                 dueTimeTextEditingController.text = dueTime;
+        //               } else {
+        //                 dueDateTextEditingController.text = "";
+        //                 dueTimeTextEditingController.text = "";
+        //               }
 
-                      taskUpdateTextEditingController.text =
-                          task.task.toString();
-                      noteUpdateTextEditingController.text =
-                          task.note.toString();
-                      categoryTextEditingController.text =
-                          task.category.toString();
-                      _taskUpdateBottomSheet(task.id, task.dueDate);
-                    },
-                    value: task.completed!,
-                    onChanged: (value) async {
-                      taskService.fetchTaskDetails(task.id);
-                      await taskService.updateTask(
-                        completed: value,
-                        taskID: task.id,
-                        task: task.task,
-                        note: task.note,
-                        dueDate: task.dueDate,
-                        important: task.important,
-                        category: task.category,
-                      );
-                      await taskService.fetchTasks();
-                    },
-                    task: task.task.toString(),
-                    dueDate: task.dueDate.toString(),
-                    dueDateFormatted: dueDateFormatted,
-                    dueTime: dueTime,
-                  );
-                },
-              );
-            },
-          ),
-        ),
+        //               taskUpdateTextEditingController.text =
+        //                   task.task.toString();
+        //               noteUpdateTextEditingController.text =
+        //                   task.note.toString();
+        //               categoryTextEditingController.text =
+        //                   task.category.toString();
+        //               _taskUpdateBottomSheet(task.id, task.dueDate);
+        //             },
+        //             value: task.completed!,
+        //             onChanged: (value) async {
+        //               taskService.fetchTaskDetails(task.id);
+        //               await taskService.updateTask(
+        //                 completed: value,
+        //                 taskID: task.id,
+        //                 task: task.task,
+        //                 note: task.note,
+        //                 dueDate: task.dueDate,
+        //                 important: task.important,
+        //                 category: task.category,
+        //               );
+        //               await taskService.fetchTasks();
+        //             },
+        //             task: task.task.toString(),
+        //             dueDate: task.dueDate.toString(),
+        //             dueDateFormatted: dueDateFormatted,
+        //             dueTime: dueTime,
+        //           );
+        //         },
+        //       );
+        //     },
+        //   ),
+        // ),
       ),
     );
   }
 
-  void _taskUpdateBottomSheet(int? taskID, String? dueDate) {
-    showModalBottomSheet(
-      isScrollControlled: true,
-      context: context,
-      backgroundColor: Colors.transparent,
-      builder: (context) {
-        return TaskBottomSheet(
-          taskForm: Form(
-            key: taskUpdateKey,
-            child: Column(
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(top: 0),
-                  height: 5,
-                  width: 50,
-                  decoration: BoxDecoration(
-                    color: Colors.grey,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                const SizedBox(
-                  height: 3,
-                ),
-                const Center(
-                  child: Text(
-                    "Update task",
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                TextFieldWithLabel(
-                  title: "Task",
-                  controller: taskUpdateTextEditingController,
-                  hintText: "Enter task",
-                  keyboardType: TextInputType.text,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return "Please enter task";
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                const Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Note",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      color: Color.fromARGB(255, 106, 106, 106),
-                      fontSize: 15,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                TextFormField(
-                  autofocus: false,
-                  controller: noteUpdateTextEditingController,
-                  keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    fillColor: const Color.fromARGB(255, 245, 170, 51),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                          color: Color.fromARGB(255, 20, 106, 218), width: 2.0),
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    hintText: "Enter description",
-                  ),
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Color.fromARGB(255, 106, 106, 106),
-                  ),
-                  maxLines: 5,
-                  minLines: 5,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                const Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Due date",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      color: Color.fromARGB(255, 106, 106, 106),
-                      fontSize: 15,
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                TextFormField(
-                  autofocus: false,
-                  textInputAction: TextInputAction.next,
-                  controller: dueDateTextEditingController,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    fillColor: const Color.fromARGB(255, 245, 170, 51),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                          color: Color.fromARGB(255, 20, 106, 218), width: 2.0),
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    prefixIcon: const Icon(Icons.calendar_today),
-                  ),
-                  validator: (value) {
-                    if (value!.isEmpty || value == null) {
-                      return "Please enter due date";
-                    }
-                    return null;
-                  },
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Color.fromARGB(255, 106, 106, 106),
-                  ),
-                  readOnly: true,
-                  onTap: () async {
-                    _selectDate(context, dueDate);
-                  },
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                const Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Due time",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      color: Color.fromARGB(255, 106, 106, 106),
-                      fontSize: 15,
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                TextFormField(
-                  autofocus: false,
-                  textInputAction: TextInputAction.next,
-                  controller: dueTimeTextEditingController,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    fillColor: const Color.fromARGB(255, 245, 170, 51),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                          color: Color.fromARGB(255, 20, 106, 218), width: 2.0),
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    prefixIcon: const Icon(Icons.access_time),
-                  ),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return "Please enter due time";
-                    }
-                    return null;
-                  },
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Color.fromARGB(255, 106, 106, 106),
-                  ),
-                  readOnly: true,
-                  onTap: () async {
-                    _selectTime(context, dueDate);
-                  },
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                AuthButton(
-                  onPressed: () {
-                    _taskUpdateFnc(taskID);
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text(
-                    "Update",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
+  // void _taskUpdateBottomSheet(int? taskID, String? dueDate) {
+  //   showModalBottomSheet(
+  //     isScrollControlled: true,
+  //     context: context,
+  //     backgroundColor: Colors.transparent,
+  //     builder: (context) {
+  //       return TaskBottomSheet(
+  //         taskForm: Form(
+  //           key: taskUpdateKey,
+  //           child: Column(
+  //             children: [
+  //               Container(
+  //                 margin: const EdgeInsets.only(top: 0),
+  //                 height: 5,
+  //                 width: 50,
+  //                 decoration: BoxDecoration(
+  //                   color: Colors.grey,
+  //                   borderRadius: BorderRadius.circular(10),
+  //                 ),
+  //               ),
+  //               const SizedBox(
+  //                 height: 3,
+  //               ),
+  //               const Center(
+  //                 child: Text(
+  //                   "Update task",
+  //                   style: TextStyle(
+  //                     fontSize: 24,
+  //                     fontWeight: FontWeight.bold,
+  //                   ),
+  //                 ),
+  //               ),
+  //               TextFieldWithLabel(
+  //                 title: "Task",
+  //                 controller: taskUpdateTextEditingController,
+  //                 hintText: "Enter task",
+  //                 keyboardType: TextInputType.text,
+  //                 validator: (value) {
+  //                   if (value!.isEmpty) {
+  //                     return "Please enter task";
+  //                   }
+  //                   return null;
+  //                 },
+  //               ),
+  //               const SizedBox(
+  //                 height: 20,
+  //               ),
+  //               const Align(
+  //                 alignment: Alignment.centerLeft,
+  //                 child: Text(
+  //                   "Note",
+  //                   style: TextStyle(
+  //                     fontWeight: FontWeight.w700,
+  //                     color: Color.fromARGB(255, 106, 106, 106),
+  //                     fontSize: 15,
+  //                   ),
+  //                 ),
+  //               ),
+  //               const SizedBox(height: 8),
+  //               TextFormField(
+  //                 autofocus: false,
+  //                 controller: noteUpdateTextEditingController,
+  //                 keyboardType: TextInputType.text,
+  //                 decoration: InputDecoration(
+  //                   border: OutlineInputBorder(
+  //                     borderRadius: BorderRadius.circular(5),
+  //                   ),
+  //                   fillColor: const Color.fromARGB(255, 245, 170, 51),
+  //                   focusedBorder: OutlineInputBorder(
+  //                     borderSide: const BorderSide(
+  //                         color: Color.fromARGB(255, 20, 106, 218), width: 2.0),
+  //                     borderRadius: BorderRadius.circular(5),
+  //                   ),
+  //                   hintText: "Enter description",
+  //                 ),
+  //                 style: const TextStyle(
+  //                   fontSize: 16,
+  //                   color: Color.fromARGB(255, 106, 106, 106),
+  //                 ),
+  //                 maxLines: 5,
+  //                 minLines: 5,
+  //               ),
+  //               const SizedBox(
+  //                 height: 20,
+  //               ),
+  //               const Align(
+  //                 alignment: Alignment.centerLeft,
+  //                 child: Text(
+  //                   "Due date",
+  //                   style: TextStyle(
+  //                     fontWeight: FontWeight.w700,
+  //                     color: Color.fromARGB(255, 106, 106, 106),
+  //                     fontSize: 15,
+  //                   ),
+  //                 ),
+  //               ),
+  //               const SizedBox(
+  //                 height: 8,
+  //               ),
+  //               TextFormField(
+  //                 autofocus: false,
+  //                 textInputAction: TextInputAction.next,
+  //                 controller: dueDateTextEditingController,
+  //                 decoration: InputDecoration(
+  //                   border: OutlineInputBorder(
+  //                     borderRadius: BorderRadius.circular(5),
+  //                   ),
+  //                   fillColor: const Color.fromARGB(255, 245, 170, 51),
+  //                   focusedBorder: OutlineInputBorder(
+  //                     borderSide: const BorderSide(
+  //                         color: Color.fromARGB(255, 20, 106, 218), width: 2.0),
+  //                     borderRadius: BorderRadius.circular(5),
+  //                   ),
+  //                   prefixIcon: const Icon(Icons.calendar_today),
+  //                 ),
+  //                 validator: (value) {
+  //                   if (value!.isEmpty || value == null) {
+  //                     return "Please enter due date";
+  //                   }
+  //                   return null;
+  //                 },
+  //                 style: const TextStyle(
+  //                   fontSize: 16,
+  //                   color: Color.fromARGB(255, 106, 106, 106),
+  //                 ),
+  //                 readOnly: true,
+  //                 onTap: () async {
+  //                   _selectDate(context, dueDate);
+  //                 },
+  //               ),
+  //               const SizedBox(
+  //                 height: 20,
+  //               ),
+  //               const Align(
+  //                 alignment: Alignment.centerLeft,
+  //                 child: Text(
+  //                   "Due time",
+  //                   style: TextStyle(
+  //                     fontWeight: FontWeight.w700,
+  //                     color: Color.fromARGB(255, 106, 106, 106),
+  //                     fontSize: 15,
+  //                   ),
+  //                 ),
+  //               ),
+  //               const SizedBox(
+  //                 height: 8,
+  //               ),
+  //               TextFormField(
+  //                 autofocus: false,
+  //                 textInputAction: TextInputAction.next,
+  //                 controller: dueTimeTextEditingController,
+  //                 decoration: InputDecoration(
+  //                   border: OutlineInputBorder(
+  //                     borderRadius: BorderRadius.circular(5),
+  //                   ),
+  //                   fillColor: const Color.fromARGB(255, 245, 170, 51),
+  //                   focusedBorder: OutlineInputBorder(
+  //                     borderSide: const BorderSide(
+  //                         color: Color.fromARGB(255, 20, 106, 218), width: 2.0),
+  //                     borderRadius: BorderRadius.circular(5),
+  //                   ),
+  //                   prefixIcon: const Icon(Icons.access_time),
+  //                 ),
+  //                 validator: (value) {
+  //                   if (value!.isEmpty) {
+  //                     return "Please enter due time";
+  //                   }
+  //                   return null;
+  //                 },
+  //                 style: const TextStyle(
+  //                   fontSize: 16,
+  //                   color: Color.fromARGB(255, 106, 106, 106),
+  //                 ),
+  //                 readOnly: true,
+  //                 onTap: () async {
+  //                   _selectTime(context, dueDate);
+  //                 },
+  //               ),
+  //               const SizedBox(
+  //                 height: 30,
+  //               ),
+  //               AuthButton(
+  //                 onPressed: () {
+  //                   _taskUpdateFnc(taskID);
+  //                   Navigator.of(context).pop();
+  //                 },
+  //                 child: const Text(
+  //                   "Update",
+  //                   style: TextStyle(
+  //                     color: Colors.white,
+  //                     fontSize: 18,
+  //                   ),
+  //                 ),
+  //               ),
+  //               const SizedBox(
+  //                 height: 30,
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 }
