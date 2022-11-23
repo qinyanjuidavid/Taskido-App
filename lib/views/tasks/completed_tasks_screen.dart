@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:taskido/widgets/buttons/auth_button.dart';
 import 'package:taskido/widgets/category/task_add_bottom_sheet.dart';
 import 'package:taskido/widgets/inputs/text_field_with_label.dart';
+import 'package:taskido/widgets/tasks/tasks_container.dart';
 
 class CompletedTasksScreen extends StatefulWidget {
   CompletedTasksScreen({Key? key}) : super(key: key);
@@ -178,7 +179,6 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
                 itemCount: completedTasks.length,
                 itemBuilder: (context, index) {
                   var task = completedTasks[index];
-                  //convert dueDate from string to DateTime
                   var dueDateFormatted;
                   var dueTime;
                   if (task.dueDate != null) {
@@ -187,8 +187,8 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
                         "${dueDate.day}/${dueDate.month}/${dueDate.year}";
                     dueTime = "${dueDate.hour}:${dueDate.minute}";
                   }
-
-                  return InkWell(
+                  void _onTapFnc() async {}
+                  return TaskContainer(
                     onTap: () async {
                       await taskService.fetchTaskDetails(task.id);
                       if (task.dueDate != null) {
@@ -207,125 +207,24 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
                           task.category.toString();
                       _taskUpdateBottomSheet(task.id, task.dueDate);
                     },
-                    child: Container(
-                      margin: const EdgeInsets.only(
-                        top: 10,
-                        left: 10,
-                        right: 10,
-                      ),
-                      padding: const EdgeInsets.only(
-                        top: 20,
-                        bottom: 20,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(5),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 5,
-                            blurRadius: 7,
-                            offset: const Offset(
-                                0, 3), // changes position of shadow
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              Checkbox(
-                                value: task.completed,
-                                onChanged: (value) async {
-                                  taskService.fetchTaskDetails(task.id);
-                                  await taskService.updateTask(
-                                    completed: value,
-                                    taskID: task.id,
-                                    task: task.task,
-                                    note: task.note,
-                                    dueDate: task.dueDate,
-                                    important: task.important,
-                                    category: task.category,
-                                  );
-
-                                  await taskService.fetchTasks();
-                                },
-                              ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    margin: const EdgeInsets.only(
-                                      left: 10,
-                                    ),
-                                    child: Text(
-                                      task.task.toString(),
-                                      style: const TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
-                                  Container(
-                                    margin: const EdgeInsets.only(
-                                      left: 10,
-                                    ),
-                                    child: task.dueDate == null
-                                        ? const Text("")
-                                        : Row(
-                                            children: [
-                                              const Icon(
-                                                Icons.calendar_today,
-                                                color: Colors.black,
-                                                size: 20,
-                                              ),
-                                              const SizedBox(
-                                                width: 8,
-                                              ),
-                                              Text(
-                                                task.dueDate == null
-                                                    ? ""
-                                                    : dueDateFormatted,
-                                                style: const TextStyle(
-                                                  color: Colors.grey,
-                                                  fontSize: 16,
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                width: 5,
-                                              ),
-                                              const Icon(
-                                                Icons.access_time,
-                                                color: Colors.black,
-                                                size: 20,
-                                              ),
-                                              const SizedBox(
-                                                width: 3,
-                                              ),
-                                              Text(
-                                                task.dueDate == null
-                                                    ? ""
-                                                    : dueTime,
-                                                style: const TextStyle(
-                                                  color: Colors.grey,
-                                                  fontSize: 16,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                  )
-                                ],
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
+                    value: task.completed!,
+                    onChanged: (value) async {
+                      taskService.fetchTaskDetails(task.id);
+                      await taskService.updateTask(
+                        completed: value,
+                        taskID: task.id,
+                        task: task.task,
+                        note: task.note,
+                        dueDate: task.dueDate,
+                        important: task.important,
+                        category: task.category,
+                      );
+                      await taskService.fetchTasks();
+                    },
+                    task: task.task.toString(),
+                    dueDate: task.dueDate.toString(),
+                    dueDateFormatted: dueDateFormatted,
+                    dueTime: dueTime,
                   );
                 },
               );
