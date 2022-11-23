@@ -187,7 +187,7 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
                         "${dueDate.day}/${dueDate.month}/${dueDate.year}";
                     dueTime = "${dueDate.hour}:${dueDate.minute}";
                   }
-                  void _onTapFnc() async {}
+
                   return TaskContainer(
                     onTap: () async {
                       await taskService.fetchTaskDetails(task.id);
